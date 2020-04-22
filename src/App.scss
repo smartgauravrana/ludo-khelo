@@ -1,7 +1,31 @@
-.title {
-  color: red;
-  font-size: 30px;
-  font-weight: bold;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+#root,
+.App,
+.ant-layout {
+  height: 100%;
+}
+
+footer {
+  text-align: center;
+}
+
+.drawable-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__title {
+  color: white;
+  font-size: 22px;
+}
+
+.header__menu--icon {
+  color: white;
+  font-size: 26px;
 }
