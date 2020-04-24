@@ -5,6 +5,7 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
+  mode: "development",
   entry: "./src/index.jsx",
   output: {
     path: path.resolve(__dirname, "build"),
@@ -15,6 +16,7 @@ module.exports = {
       chunks: "all"
     }
   },
+  devtool: "inline-source-map",
   module: {
     rules: [
       {
