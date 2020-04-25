@@ -1,0 +1,109 @@
+import React from "react";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { Button } from "antd";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+import { register } from "redux/modules/userDetails";
+import TextInput from "components/TextInput";
+import "./RegisterForm.scss";
+
+const registerFields = [
+  {
+    name: "name",
+    type: "text",
+    placeholder: "Full Name"
+    // label: "Full Name"
+  },
+  {
+    name: "username",
+    type: "text",
+    placeholder: "Username"
+    // label: "Username"
+  },
+  {
+    name: "phone",
+    type: "text",
+    placeholder: "Whatsapp Number"
+    // label: "Whatsapp Number"
+  },
+  {
+    name: "password",
+    type: "text",
+    placeholder: "Password"
+    // label: "Password"
+  },
+  {
+    name: "confirmPassword",
+    type: "text",
+    placeholder: "Confirm Password"
+    // label: "Confrim Password"
+  }
+];
+
+function RegisterForm({ register }) {
+  return (
+    <div>
+      <Formik
+        initialValues={{
+          name: "",
+          username: "",
+          phone: "",
+          password: "",
+          confirmPassword: "",
+          agreeToTerms: false
+        }}
+        validationSchema={Yup.object({
+          name: Yup.string().required("Required!"),
+          username: Yup.string().required("Required!"),
+          phone: Yup.string()
+            .required("Required!")
+            .length(10, "Mobile should be of 10 digits"),
+          password: Yup.string().required("Required!"),
+          confirmPassword: Yup.string()
+            .required("Required!")
+            .test("passwords-match", "Passwords must match!", function (value) {
+              return this.parent.password === value;
+            }),
+          agreeToTerms: Yup.bool().oneOf(
+            [true],
+            "Accept Terms & Conditions is required"
+          )
+        })}
+        onSubmit={values => register(values)}
+      >
+        {props => (
+          <Form>
+            {registerFields.map(field => (
+              <TextInput key={field.name} {...field} />
+            ))}
+            <div className="termsCheckbox">
+              <Field type="checkbox" name="agreeToTerms" />
+              <label htmlFor="agreeToTerms">
+                I Agree that I am 18 years or older and not a resident of
+                Telangana, Assam, Orissa, Kerala, Sikkim, Nagaland or Gujarat.
+              </label>
+            </div>
+            <div className="input-error">{props.errors.agreeToTerms}</div>
+            <Button
+              type="primary"
+              onClick={() => props.isValid && props.submitForm()}
+            >
+              Submit
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+}
+
+export default connect(null, { register })(RegisterForm);
+
+RegisterForm.propTypes = {
+  submitForm: PropTypes.func,
+  register: PropTypes.func,
+  isValid: PropTypes.bool,
+  errors: PropTypes.object
+};

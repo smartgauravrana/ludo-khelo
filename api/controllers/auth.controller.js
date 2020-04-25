@@ -8,11 +8,11 @@ module.exports.login = (req, res) => {
 };
 
 module.exports.register = async (req, res) => {
-  const { fullname, username, phone, password } = req.body;
+  const { name, username, phone, password } = req.body;
   const { hash, salt } = genPassword(password);
   try {
     const user = await new User({
-      fullname,
+      name,
       username,
       phone,
       password: hash,

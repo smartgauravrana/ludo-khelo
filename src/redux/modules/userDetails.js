@@ -24,6 +24,25 @@ export const login = (loginData, cbSuccess, cbError) => async dispatch => {
   }
 };
 
+export const register = (
+  registerData,
+  cbSuccess,
+  cbError
+) => async dispatch => {
+  try {
+    const res = await call({
+      method: "post",
+      url: endpoints.register,
+      data: registerData
+    });
+    const { data } = res;
+    dispatch({ type: SET_USER_DETAILS, payload: data });
+    cbSuccess && cbSuccess(data);
+  } catch (e) {
+    cbError && cbError(e);
+  }
+};
+
 const getReducer = {
   [SET_USER_DETAILS]: ({ state, action: { payload } }) => {
     return {

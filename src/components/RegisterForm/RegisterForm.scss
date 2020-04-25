@@ -1,0 +1,9 @@
+.termsCheckbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  input {
+    margin-right: 4px;
+  }
+}
