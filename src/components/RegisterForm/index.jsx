@@ -4,9 +4,11 @@ import * as Yup from "yup";
 import { Button } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import { register } from "redux/modules/userDetails";
 import TextInput from "components/TextInput";
+import routePaths from "Routes/routePaths";
 import "./RegisterForm.scss";
 
 const registerFields = [
@@ -43,6 +45,7 @@ const registerFields = [
 ];
 
 function RegisterForm({ register }) {
+  const history = useHistory();
   return (
     <div>
       <Formik
@@ -71,7 +74,11 @@ function RegisterForm({ register }) {
             "Accept Terms & Conditions is required"
           )
         })}
-        onSubmit={values => register(values)}
+        onSubmit={values =>
+          register(values, () => {
+            history.push(routePaths.HOME);
+          })
+        }
       >
         {props => (
           <Form>

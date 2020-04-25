@@ -1,12 +1,14 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import { login } from "redux/modules/userDetails";
 import TextInput from "components/TextInput";
+import routePaths from "Routes/routePaths";
 import "./LoginForm.scss";
 
 const loginFields = [
@@ -25,6 +27,7 @@ const loginFields = [
 ];
 
 function LoginForm({ login }) {
+  const history = useHistory();
   return (
     <div>
       <Formik
@@ -38,7 +41,15 @@ function LoginForm({ login }) {
             .length(10, "Mobile should be of 10 digits"),
           password: Yup.string().required("Required!")
         })}
-        onSubmit={values => login(values)}
+        onSubmit={values =>
+          login(values, userDetails => {
+            message.success("Success");
+            if (userDetails.isAdmin) {
+              return history.push(routePaths.ADMIN.default);
+            }
+            history.push(routePaths.HOME);
+          })
+        }
       >
         {props => (
           <Form>

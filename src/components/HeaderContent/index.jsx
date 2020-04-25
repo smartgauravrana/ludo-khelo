@@ -3,10 +3,11 @@ import { Drawer } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import "./HeaderContent.scss";
 
-export default function HeaderContent({ onMenuClick, drawerVisible }) {
+function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
   return (
     <>
       <div className="header">
@@ -21,19 +22,31 @@ export default function HeaderContent({ onMenuClick, drawerVisible }) {
         visible={drawerVisible}
       >
         <div className="drawable-items">
-          <Link to="/login" onClick={onMenuClick}>
-            Login
-          </Link>
-          <Link to="/register" onClick={onMenuClick}>
-            Register
-          </Link>
+          {!userDetails._id ? (
+            <>
+              <Link to="/login" onClick={onMenuClick}>
+                Login
+              </Link>
+              <Link to="/register" onClick={onMenuClick}>
+                Register
+              </Link>
+            </>
+          ) : (
+            <a href="/api/logout">Logout</a>
+          )}
         </div>
       </Drawer>
     </>
   );
 }
 
+export default connect(
+  ({ userDetails }) => ({ userDetails }),
+  null
+)(HeaderContent);
+
 HeaderContent.propTypes = {
   onMenuClick: PropTypes.func,
-  drawerVisible: PropTypes.bool
+  drawerVisible: PropTypes.bool,
+  userDetails: PropTypes.object
 };

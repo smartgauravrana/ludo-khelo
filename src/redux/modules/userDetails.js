@@ -3,9 +3,7 @@ import endpoints from "api/endpoints";
 
 const SET_USER_DETAILS = "userDetails/SET_USER_DETAILS";
 
-const initialState = {
-  userDataLoading: false
-};
+const initialState = {};
 
 export const login = (loginData, cbSuccess, cbError) => async dispatch => {
   try {
@@ -43,12 +41,17 @@ export const register = (
   }
 };
 
+export const checkLogin = cbSuccess => async dispatch => {
+  const res = await call({ url: endpoints.currentUser });
+  cbSuccess && cbSuccess(res.data || {});
+  dispatch({ type: SET_USER_DETAILS, payload: res.data });
+};
+
 const getReducer = {
   [SET_USER_DETAILS]: ({ state, action: { payload } }) => {
     return {
       ...state,
-      ...payload,
-      userDataLoading: false
+      ...payload
     };
   }
 };

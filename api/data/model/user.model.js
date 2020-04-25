@@ -8,6 +8,7 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   verified: { type: Boolean, default: false },
   chips: { type: Number, default: 0 },
+  isAdmin: { type: Boolean, default: false },
   salt: String
 });
 

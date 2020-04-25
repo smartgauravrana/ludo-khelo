@@ -1,12 +1,30 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import AppLayout from "components/AppLayout";
 import PrivateRoute from "components/PrivateRoute";
 import { publicRoutes, privateRoutes } from "Routes";
+import { checkLogin } from "redux/modules/userDetails";
 import "./App.scss";
+import routePaths from "../Routes/routePaths";
 
-export default function App() {
+function App(props) {
+  const { checkLogin } = props;
+  const history = useHistory();
+
+  useEffect(() => {
+    checkLogin(user => {
+      if (user._id) {
+        user.isAdmin
+          ? history.replace(routePaths.ADMIN.default)
+          : history.replace(routePaths.HOME);
+      } else {
+        history.replace(routePaths.LOGIN);
+      }
+    });
+  }, []);
   return (
     <div className="App">
       <AppLayout>
@@ -22,3 +40,12 @@ export default function App() {
     </div>
   );
 }
+
+export default connect(({ userDetails }) => ({ userDetails }), { checkLogin })(
+  App
+);
+
+App.propTypes = {
+  userDetails: PropTypes.object,
+  checkLogin: PropTypes.func
+};
