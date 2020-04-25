@@ -7,6 +7,8 @@
     "start": "npm-run-all --parallel dev:*",
     "dev:client-build": "webpack-dev-server --mode=development --open",
     "dev:start": "nodemon app.js",
+    "prod:build-client": "webpack --config webpack.client.js --mode=production",
+    "prod:start": "node app.js",
     "build": "webpack -w"
   },
   "author": "",

@@ -28,6 +28,15 @@ require("./services/passport");
 
 app.use("/api", routes);
 
+// TODO chnage according to env
+// only for production
+app.use(express.static("build"));
+
+const path = require("path");
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "build", "index.html"));
+});
+
 app.listen(3000, () => {
   console.log("Server is running at port 3000 ;)");
 });
