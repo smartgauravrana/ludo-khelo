@@ -2,8 +2,8 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 
 import AppLayout from "components/AppLayout";
-import Login from "pages/Login";
-import Register from "pages/Register";
+import PrivateRoute from "components/PrivateRoute";
+import { publicRoutes, privateRoutes } from "Routes";
 import "./App.scss";
 
 export default function App() {
@@ -11,8 +11,12 @@ export default function App() {
     <div className="App">
       <AppLayout>
         <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
+          {publicRoutes.map(route => (
+            <Route key={route.path} {...route} />
+          ))}
+          {privateRoutes.map(route => (
+            <PrivateRoute key={route.path} {...route} />
+          ))}
         </Switch>
       </AppLayout>
     </div>
