@@ -32,7 +32,10 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
               </Link>
             </>
           ) : (
-            <a href="/api/logout">Logout</a>
+            <>
+              <a href="/api/logout">Logout</a>
+              <div>Chips: {userDetails.chips}</div>
+            </>
           )}
         </div>
       </Drawer>

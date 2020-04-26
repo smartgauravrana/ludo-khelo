@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
+const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
@@ -83,6 +84,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html"
     }),
+    new MomentLocalesPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
       chunkFilename: "[name].[contenthash].css",

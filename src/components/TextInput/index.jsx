@@ -8,7 +8,7 @@ export default function TextInput({ label, ...props }) {
   const [field, meta] = useField(props);
   return (
     <div className="form-control">
-      <label htmlFor={props.name}>{label}</label>
+      {label && <label htmlFor={props.name}>{label}</label>}
       <input {...field} {...props} />
       {meta.touched && meta.error ? (
         <div className="input-error">{meta.error}</div>

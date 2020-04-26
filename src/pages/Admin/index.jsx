@@ -7,6 +7,8 @@ import PropTypes from "prop-types";
 
 import TextInput from "components/TextInput";
 import { postMatch } from "redux/modules/matchDetails";
+import Matches from "components/Matches";
+import "./Admin.scss";
 
 class Admin extends Component {
   constructor() {
@@ -58,7 +60,7 @@ class Admin extends Component {
                 onOk={props.submitForm}
                 confirmLoading={confirmLoading}
                 onCancel={this.handleCancel}
-                // afterClose={}
+                afterClose={props.resetForm}
               >
                 <TextInput
                   name="amount"
@@ -70,6 +72,7 @@ class Admin extends Component {
             )}
           </Formik>
         </div>
+        <Matches />
       </div>
     );
   }

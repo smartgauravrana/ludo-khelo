@@ -3,6 +3,7 @@ import routePaths from "./routePaths";
 import Login from "pages/Login";
 import Register from "pages/Register";
 import Admin from "pages/Admin";
+import Home from "pages/Home";
 
 export const publicRoutes = [
   {
@@ -13,6 +14,11 @@ export const publicRoutes = [
   {
     path: routePaths.REGISTER,
     component: Register,
+    exact: true
+  },
+  {
+    path: routePaths.HOME,
+    component: Home,
     exact: true
   }
 ];

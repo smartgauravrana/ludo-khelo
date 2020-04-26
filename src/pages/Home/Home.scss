@@ -1,0 +1,16 @@
+.Home {
+  .Home__message {
+    color: red;
+    padding: 0 8px;
+  }
+
+  .Home__setChallenge {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+    .ant-btn {
+      margin-left: 5px;
+    }
+  }
+}

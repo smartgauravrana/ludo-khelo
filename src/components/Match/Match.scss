@@ -1,0 +1,20 @@
+.ant-card-body {
+  padding: 8px;
+  border: 1px solid lightgreen;
+}
+
+.Match {
+  .ant-card {
+    position: relative;
+  }
+  .Match__createdDate {
+    font-size: 12px;
+    top: 4px;
+    left: 8px;
+    position: absolute;
+  }
+
+  .Match__info {
+    margin-top: 14px;
+  }
+}
