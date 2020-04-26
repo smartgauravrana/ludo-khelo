@@ -1,5 +1,6 @@
 // db related stuff
 require("./api/data/db");
+require("./api/data/model/match.model");
 require("./api/data/model/user.model");
 
 const express = require("express");

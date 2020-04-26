@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 
 const authCtrl = require("../controllers/auth.controller");
+const matchCtrl = require("../controllers/match.controller");
 const { isLogin } = require("../../middlewares");
 
 router.post(
@@ -18,5 +19,14 @@ router.get("/current_user", authCtrl.getCurrentUser);
 router.get("/logout", authCtrl.logout);
 
 router.post("/verifyOtp", isLogin, authCtrl.verfiyOtp);
+
+// MATCHES ROUTES
+router
+  .get("/matches", isLogin, matchCtrl.getAll)
+  .post("/matches", isLogin, matchCtrl.addMatch);
+
+router
+  .post("/matches/:matchId", isLogin, matchCtrl.update)
+  .delete("/matches/:matchId", isLogin, matchCtrl.delete);
 
 module.exports = router;

@@ -4,7 +4,6 @@ import { Route } from "react-router-dom";
 import PropTypes from "prop-types";
 
 function PrivateRoute({ isAdmin, ...rest }) {
-  console.log(rest);
   return isAdmin ? <Route {...rest} /> : null;
 }
 
