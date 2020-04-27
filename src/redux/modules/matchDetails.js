@@ -3,6 +3,7 @@ import endpoints from "api/endpoints";
 
 const SET_MATCH_DETAILS = "matchDetails/SET_MATCH_DETAILS";
 const SET_MATCH_LIST = "matchDetails/SET_MATCH_LIST";
+const ADD_MATCH = "matchDetails/ADD_MATCH";
 
 const initialState = {
   matchList: []
@@ -49,6 +50,8 @@ export const getAllMatches = (cbSuccess, cbError) => async (
   }
 };
 
+export const addMatch = match => ({ type: ADD_MATCH, payload: match });
+
 const getReducer = {
   [SET_MATCH_DETAILS]: ({ state, action: { payload } }) => {
     return {
@@ -61,6 +64,9 @@ const getReducer = {
       ...state,
       matchList: [...payload]
     };
+  },
+  [ADD_MATCH]: ({ state, action: { payload } }) => {
+    return { ...state, matchList: [payload, ...state.matchList] };
   }
 };
 

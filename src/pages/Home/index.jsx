@@ -4,19 +4,32 @@ import * as Yup from "yup";
 import { connect } from "react-redux";
 import { Button } from "antd";
 import PropTypes from "prop-types";
+import socketIOClient from "socket.io-client";
 
-import { getAllMatches, postMatch } from "redux/modules/matchDetails";
+import { getAllMatches, postMatch, addMatch } from "redux/modules/matchDetails";
 import TextInput from "components/TextInput";
 import Matches from "components/Matches";
+import { SOCKET_EVENTS } from "../../../constants/index";
 import "./Home.scss";
 
+const ENDPOINT = "http://127.0.0.1:3000";
 class Home extends Component {
   componentDidMount() {
+    console.log(SOCKET_EVENTS);
     this.props.getAllMatches();
+    this.socket = socketIOClient(ENDPOINT);
+    this.socket.on(SOCKET_EVENTS.serverMatchUpdates, data => {
+      this.props.addMatch(data[0]);
+    });
   }
 
   onChallengeSet = values => {
-    this.props.postMatch(values);
+    console.log("values: ", values);
+    this.props.postMatch(values, () => {
+      this.socket.emit(SOCKET_EVENTS.clientMatchPosted, {
+        id: this.props.userDetails._id
+      });
+    });
   };
 
   render() {
@@ -44,7 +57,7 @@ class Home extends Component {
                 type="primary"
                 onClick={() => {
                   props.submitForm();
-                  props.resetForm();
+                  // props.resetForm();
                 }}
               >
                 Set
@@ -58,9 +71,15 @@ class Home extends Component {
   }
 }
 
-export default connect(null, { getAllMatches, postMatch })(Home);
+export default connect(({ userDetails }) => ({ userDetails }), {
+  getAllMatches,
+  postMatch,
+  addMatch
+})(Home);
 
 Home.propTypes = {
   getAllMatches: PropTypes.func,
-  postMatch: PropTypes.func
+  postMatch: PropTypes.func,
+  userDetails: PropTypes.object,
+  addMatch: PropTypes.func
 };

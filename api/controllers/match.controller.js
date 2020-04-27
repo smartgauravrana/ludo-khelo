@@ -16,7 +16,11 @@ module.exports.addMatch = async (req, res) => {
 module.exports.getAll = async (req, res) => {
   const { isOfficial } = req.query;
 
-  const matches = await Match.find({ isOfficial: isOfficial || false });
+  const matches = await Match.find({ isOfficial: isOfficial || false })
+    .sort({
+      _id: -1
+    })
+    .limit(20);
   res.send(matches);
 };
 

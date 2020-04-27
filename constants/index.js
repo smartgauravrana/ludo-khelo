@@ -3,3 +3,8 @@ module.exports.MATCH_STATUS = {
   inProgress: "inProgress",
   completed: "completed"
 };
+
+module.exports.SOCKET_EVENTS = {
+  clientMatchPosted: "clientMatchPosted",
+  serverMatchUpdates: "serverMatchUpdates"
+};
