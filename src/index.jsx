@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import App from "components/App";
 import createStore from "redux/create";
 import "antd/dist/antd.css";
+import "./index.scss";
 
 const app = (
   <Provider store={createStore()}>

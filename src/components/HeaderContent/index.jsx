@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+import routePaths from "Routes/routePaths";
+
 import "./HeaderContent.scss";
 
 function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
@@ -33,6 +35,15 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
             </>
           ) : (
             <>
+              <Link to={routePaths.BUY} onClick={onMenuClick}>
+                Buy Chips
+              </Link>
+              <Link to={routePaths.SELL} onClick={onMenuClick}>
+                Sell Chips
+              </Link>
+              <Link to={routePaths.TERMS} onClick={onMenuClick}>
+                Terms &amp; Conditions
+              </Link>
               <a href="/api/logout">Logout</a>
               <div>Chips: {userDetails.chips}</div>
             </>
