@@ -1,3 +1,31 @@
-.Buy__Header {
-  text-align: center;
+.Buy {
+  height: 100%;
+  overflow: auto;
+
+  .Buy__Header {
+    text-align: center;
+  }
+
+  .Buy__paymentNumber {
+    display: flex;
+    justify-content: center;
+  }
+
+  .Buy__form {
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .Load_btn {
+    color: white;
+    background: #5ae776;
+  }
+
+  .Buy__QA {
+    text-align: center;
+    margin: 10px;
+    background: white;
+    padding: 10px;
+    border: 1px solid black;
+  }
 }
