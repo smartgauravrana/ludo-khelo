@@ -88,7 +88,7 @@ function Sell({ userDetails }) {
                 type="success"
                 onClick={() => props.isValid && props.submitForm()}
               >
-                Load
+                Sell
               </Button>
             </Form>
           )}

@@ -2,6 +2,7 @@
 require("./api/data/db");
 require("./api/data/model/match.model");
 require("./api/data/model/user.model");
+require("./api/data/model/sellRequest.model");
 
 const express = require("express");
 const http = require("http");
