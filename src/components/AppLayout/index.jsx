@@ -3,7 +3,7 @@ import { Layout } from "antd";
 import PropTypes from "prop-types";
 import HeaderContent from "components/HeaderContent";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 export default function AppLayout(props) {
   const [visible, setVisible] = useState(false);
@@ -16,7 +16,7 @@ export default function AppLayout(props) {
         <HeaderContent onMenuClick={showDrawer} drawerVisible={visible} />
       </Header>
       <Content>{props.children}</Content>
-      <Footer>CopyRights RANA Team ;) 2020</Footer>
+      {/* <Footer>CopyRights RANA Team ;) 2020</Footer> */}
     </Layout>
   );
 }

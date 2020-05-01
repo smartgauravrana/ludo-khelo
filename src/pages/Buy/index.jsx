@@ -23,6 +23,11 @@ const BuyFields = [
 ];
 
 function Buy({ userDetails }) {
+  function copy() {
+    var copyText = document.querySelector("#paymentNumber");
+    copyText.select();
+    document.execCommand("copy");
+  }
   const noticeInfo = (
     <>
       <CustomTitle title="Buy Chips" />
@@ -57,7 +62,9 @@ function Buy({ userDetails }) {
           value="9729343885"
         />
         <div className="input-group-append">
-          <button id="copyButton">Copy</button>
+          <button id="copyButton" onClick={copy}>
+            Copy
+          </button>
         </div>
       </div>
       <div className="Buy__form">
