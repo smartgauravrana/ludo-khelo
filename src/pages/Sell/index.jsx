@@ -1,13 +1,14 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import CustomTitle from "components/CustomTitle";
 import SelectInput from "components/SelectInput";
 import TextInput from "components/TextInput";
-import { connect } from "react-redux";
+import { sellChips } from "redux/modules/userDetails";
 import "./Sell.scss";
 import TermsCheckbox from "components/TermsCheckbox";
 
@@ -24,7 +25,7 @@ const sellFields = [
   }
 ];
 
-function Sell({ userDetails }) {
+function Sell({ userDetails, sellChips }) {
   const noticeInfo = (
     <>
       <CustomTitle title="Sell Chips" />
@@ -73,7 +74,15 @@ function Sell({ userDetails }) {
               "Accept Terms & Conditions is required"
             )
           })}
-          onSubmit={console.log}
+          onSubmit={values => {
+            sellChips(
+              values,
+              () => message.success("Success"),
+              e => {
+                console.log(e);
+              }
+            );
+          }}
         >
           {props => (
             <Form>
@@ -98,10 +107,13 @@ function Sell({ userDetails }) {
   );
 }
 
-export default connect(({ userDetails }) => ({ userDetails }))(Sell);
+export default connect(({ userDetails }) => ({ userDetails }), {
+  sellChips
+})(Sell);
 
 Sell.propTypes = {
   userDetails: PropTypes.object,
   isValid: PropTypes.bool,
-  submitForm: PropTypes.func
+  submitForm: PropTypes.func,
+  sellChips: PropTypes.func
 };

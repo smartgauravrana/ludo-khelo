@@ -47,6 +47,23 @@ export const checkLogin = cbSuccess => async dispatch => {
   dispatch({ type: SET_USER_DETAILS, payload: res.data });
 };
 
+export const sellChips = (sellData, cbSuccess, cbError) => async dispatch => {
+  try {
+    const res = await call({
+      method: "POST",
+      url: endpoints.sell,
+      data: sellData
+    });
+    const { data } = res;
+    console.log(data);
+    dispatch({ type: SET_USER_DETAILS, payload: data });
+    cbSuccess && cbSuccess(data);
+  } catch (e) {
+    console.log("Selling chips api err: ", e);
+    cbError && cbError(e);
+  }
+};
+
 const getReducer = {
   [SET_USER_DETAILS]: ({ state, action: { payload } }) => {
     return {

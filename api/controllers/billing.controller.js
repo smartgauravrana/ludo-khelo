@@ -18,11 +18,12 @@ module.exports.getAllSellRequests = async (req, res) => {
 };
 
 module.exports.addSellRequest = async (req, res) => {
-  const { amount } = req.body;
-  if (req.user.chips > amount && amount >= 50) {
+  const { amount, phone } = req.body;
+  if (req.user.chips >= amount && amount >= 50) {
     await new SellRequest({
       amount,
       userId: req.body._id,
+      phone,
       status: SELLING_STATUS.active
     }).save();
     req.user.chips -= amount;
