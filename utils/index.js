@@ -18,7 +18,18 @@ function genPassword(password) {
   };
 }
 
+function getPaytmDetails(text) {
+  const amountRegex = /₹\s\d+/;
+  const idRegex = /Transaction Id:\s\d+/;
+  const [amountString] = text.match(amountRegex);
+  const [idString] = text.match(idRegex);
+  const amount = +amountString.split(" ").pop().trim();
+  const transactionId = idString.split(" ").pop().trim();
+  return { amount, transactionId };
+}
+
 module.exports = {
   validPassword,
-  genPassword
+  genPassword,
+  getPaytmDetails
 };

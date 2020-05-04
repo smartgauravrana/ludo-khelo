@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 const SellRequest = mongoose.model("sellRequests");
 const { SELLING_STATUS } = require("../../constants");
+const { getMailServer, getUnseenMail } = require("../../services/mailbox");
+const { getPaytmDetails } = require("../../utils");
 
 module.exports.buyChips = async (req, res) => {
-  // const {transactionId, amount} = req.body
+  // const { transactionId, amount } = req.body;
+  const mailServer = getMailServer();
+  getUnseenMail(mailServer, mailText => {
+    console.log(getPaytmDetails(mailText));
+  });
   res.send(req.user);
 };
 
