@@ -6,11 +6,12 @@ const getUnseenMail = ({ server, data }, getMailCb) => {
   server.openBox("INBOX", false, function (err, box) {
     if (err) {
       console.log(err);
-      return getMailCb(null);
+      return getMailCb(err);
     }
     server.search(["UNSEEN", ["TEXT", data]], function (err, results) {
       if (err) {
-        return console.log("fetch unseen mail err! ", err);
+        console.log("fetch unseen mail err! ", err);
+        return getMailCb(err);
       }
       if (results && results.length) {
         const f = server.fetch(results, { bodies: "" });
@@ -25,7 +26,7 @@ const getUnseenMail = ({ server, data }, getMailCb) => {
             simpleParser(stream, (err, parsed) => {
               if (!err) {
                 // console.log(parsed.text);
-                getMailCb(parsed.text, uid);
+                getMailCb(null, { mailText: parsed.text, uid });
               }
             });
           });
@@ -42,7 +43,7 @@ const getUnseenMail = ({ server, data }, getMailCb) => {
           return Promise.reject(err);
         });
       } else {
-        getMailCb(null);
+        getMailCb(null, {});
       }
     });
   });

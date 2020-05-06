@@ -9,7 +9,9 @@ module.exports.buyChips = async (req, res) => {
   const mailServer = getMailServer();
   getUnseenMail(
     { server: mailServer, data: transactionId },
-    async (mailText, uid) => {
+    async (err, data) => {
+      if (err) return res.status(500).send({ msg: "Something went wrong!" });
+      const { mailText, uid } = data;
       if (mailText) {
         const transaction = getPaytmDetails(mailText);
         if (
@@ -26,7 +28,7 @@ module.exports.buyChips = async (req, res) => {
           res.status(400).send({ msg: "Wrong details supplied!" });
         }
       } else {
-        res.status(404).send();
+        res.status(404).send({ msg: "Transaction Id not exist!" });
       }
     }
   );
