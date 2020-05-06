@@ -3,6 +3,8 @@ require("./api/data/db");
 require("./api/data/model/match.model");
 require("./api/data/model/user.model");
 require("./api/data/model/sellRequest.model");
+// for inject env variables from config
+require("dotenv").config();
 
 const express = require("express");
 const http = require("http");
@@ -39,13 +41,6 @@ app.use(passport.session());
 require("./services/passport");
 
 app.use("/api", routes);
-
-// io.on("connection", socket => {
-//   console.log("User connected: ", socket);
-//   socket.on("disconnect", () => {
-//     console.log("Client disconnected");
-//   });
-// });
 
 server.listen(3000, () => {
   console.log("Server is running at port 3000 ;)");

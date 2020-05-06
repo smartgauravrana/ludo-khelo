@@ -5,12 +5,31 @@ const { getMailServer, getUnseenMail } = require("../../services/mailbox");
 const { getPaytmDetails } = require("../../utils");
 
 module.exports.buyChips = async (req, res) => {
-  // const { transactionId, amount } = req.body;
+  const { transactionId, amount } = req.body;
   const mailServer = getMailServer();
-  getUnseenMail(mailServer, mailText => {
-    console.log(getPaytmDetails(mailText));
-  });
-  res.send(req.user);
+  getUnseenMail(
+    { server: mailServer, data: transactionId },
+    async (mailText, uid) => {
+      if (mailText) {
+        const transaction = getPaytmDetails(mailText);
+        if (
+          transactionId === transaction.transactionId &&
+          parseInt(amount, 10) === transaction.amount
+        ) {
+          mailServer.setFlags(uid, ["\\SEEN"], err => {
+            if (err) console.log("error while setting flag", err);
+          });
+          req.user.chips += transaction.amount;
+          const user = await req.user.save();
+          res.send(user);
+        } else {
+          res.status(400).send({ msg: "Wrong details supplied!" });
+        }
+      } else {
+        res.status(404).send();
+      }
+    }
+  );
 };
 
 module.exports.getAllSellRequests = async (req, res) => {

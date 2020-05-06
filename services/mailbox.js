@@ -1,14 +1,14 @@
 const Imap = require("imap");
 // const inspect = require("util").inspect;
 
-const getUnseenMail = (server, getMailCb) => {
+const getUnseenMail = ({ server, data }, getMailCb) => {
   console.log("unseen mail called!");
   server.openBox("INBOX", false, function (err, box) {
     if (err) {
       console.log(err);
-      return;
+      return getMailCb(null);
     }
-    server.search(["UNSEEN", ["TEXT", "28568591941"]], function (err, results) {
+    server.search(["UNSEEN", ["TEXT", data]], function (err, results) {
       if (err) {
         return console.log("fetch unseen mail err! ", err);
       }
@@ -25,7 +25,7 @@ const getUnseenMail = (server, getMailCb) => {
             simpleParser(stream, (err, parsed) => {
               if (!err) {
                 // console.log(parsed.text);
-                getMailCb(parsed.text);
+                getMailCb(parsed.text, uid);
               }
             });
           });
@@ -41,6 +41,8 @@ const getUnseenMail = (server, getMailCb) => {
         f.once("error", function (err) {
           return Promise.reject(err);
         });
+      } else {
+        getMailCb(null);
       }
     });
   });
@@ -57,8 +59,8 @@ function startMailServer() {
     return mailServer;
   }
   mailServer = new Imap({
-    user: "ludokhelo99@gmail.com",
-    password: "vodafone8053",
+    user: process.env.MAIL_ID,
+    password: process.env.MAIL_PWD,
     host: "imap.gmail.com",
     port: 993,
     tls: true,
@@ -74,41 +76,12 @@ function startMailServer() {
       if (err) throw err;
       console.log("message", "server1 ready");
     });
-
-    // mail operation
-    // getUnseenMail(mailServer);
   });
-  mailServer.on("mail", function (num) {
-    console.log("new mail ", num);
-  });
+  // new mail listener
+  // mailServer.on("mail", function (num) {
+  //   console.log("new mail ", num);
+  // });
   mailServer.connect();
 }
-
-// const mailServer = new Imap({
-//   user: "ludokhelo99@gmail.com",
-//   password: "vodafone8053",
-//   host: "imap.gmail.com",
-//   port: 993,
-//   tls: true,
-//   tlsOptions: {
-//     rejectUnauthorized: false
-//   },
-//   authTimeout: 3000
-// }).once("error", function (err) {
-//   console.log("Source Server Error:- ", err);
-// });
-// mailServer.once("ready", function () {
-//   mailServer.openBox("INBOX", true, function (err, box) {
-//     if (err) throw err;
-//     console.log("message", "server1 ready");
-//   });
-
-//   // mail operation
-//   getUnseenMail(mailServer);
-// });
-// mailServer.on("mail", function (num) {
-//   console.log("new mail ", num);
-// });
-// mailServer.connect();
 
 module.exports = { getMailServer, getUnseenMail, startMailServer };
