@@ -9,6 +9,8 @@ module.exports.addMatch = async (req, res) => {
     createdBy: req.user._id,
     createdOn: new Date()
   }).save();
+  req.user.chips -= amount;
+  req.user.save();
 
   res.send(match);
 };

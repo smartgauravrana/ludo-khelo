@@ -12,7 +12,10 @@ const initialState = {
   matchList: []
 };
 
-export const postMatch = (match, cbSuccess, cbError) => async dispatch => {
+export const postMatch = (match, cbSuccess, cbError) => async (
+  dispatch,
+  getState
+) => {
   try {
     const res = await call({
       method: "post",
@@ -21,7 +24,14 @@ export const postMatch = (match, cbSuccess, cbError) => async dispatch => {
     });
     const { data } = res;
     cbSuccess && cbSuccess(data);
+    const { userDetails } = getState();
     dispatch({ type: SET_MATCH_DETAILS, payload: data });
+    dispatch(
+      setUserDetails({
+        ...userDetails,
+        chips: userDetails.chips - match.amount
+      })
+    );
   } catch (e) {
     console.log("post match err");
     cbError && cbError(e);
@@ -54,7 +64,6 @@ export const getAllMatches = (cbSuccess, cbError) => async (
 };
 
 export const addMatch = match => {
-  console.log("add Match called");
   return { type: ADD_MATCH, payload: match };
 };
 
