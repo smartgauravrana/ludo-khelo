@@ -32,8 +32,9 @@ module.exports.update = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
   const { matchId } = req.params;
-  await Match.findOne({ _id: matchId, createdBy: req.user._id })
-    .deleteOne()
-    .exec();
-  res.send();
+  const match = await Match.findOne({ _id: matchId, createdBy: req.user._id });
+  req.user.chips += match.amount;
+  match.delete();
+  const user = await req.user.save();
+  res.send(user);
 };

@@ -74,7 +74,6 @@ export const sellChips = (sellData, cbSuccess, cbError) => async dispatch => {
       data: sellData
     });
     const { data } = res;
-    console.log(data);
     dispatch({ type: SET_USER_DETAILS, payload: data });
     cbSuccess && cbSuccess(data);
   } catch (e) {
@@ -82,6 +81,11 @@ export const sellChips = (sellData, cbSuccess, cbError) => async dispatch => {
     cbError && cbError(e);
   }
 };
+
+export const setUserDetails = userDetails => ({
+  type: SET_USER_DETAILS,
+  payload: userDetails
+});
 
 const getReducer = {
   [SET_USER_DETAILS]: ({ state, action: { payload } }) => {

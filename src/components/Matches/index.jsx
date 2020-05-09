@@ -3,12 +3,15 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import Match from "components/Match";
-import { getAllMatches } from "redux/modules/matchDetails";
+import { getAllMatches, resetMatches } from "redux/modules/matchDetails";
 import "./Matches.scss";
 
-function Matches({ getAllMatches, matchList, userDetails }) {
+function Matches({ getAllMatches, matchList, userDetails, resetMatches }) {
   useEffect(() => {
     getAllMatches();
+    return () => {
+      resetMatches();
+    };
   }, []);
   return (
     <div className="Matches">
@@ -30,12 +33,14 @@ export default connect(
     userDetails
   }),
   {
-    getAllMatches
+    getAllMatches,
+    resetMatches
   }
 )(Matches);
 
 Matches.propTypes = {
   matchList: PropTypes.array,
   getAllMatches: PropTypes.func,
-  userDetails: PropTypes.object
+  userDetails: PropTypes.object,
+  resetMatches: PropTypes.func
 };
