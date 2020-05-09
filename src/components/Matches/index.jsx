@@ -6,18 +6,18 @@ import Match from "components/Match";
 import { getAllMatches } from "redux/modules/matchDetails";
 import "./Matches.scss";
 
-function Matches({ getAllMatches, matchList, isAdmin }) {
+function Matches({ getAllMatches, matchList, userDetails }) {
   useEffect(() => {
     getAllMatches();
   }, []);
   return (
     <div className="Matches">
       <div className="Matches__heading">
-        Recently Created Matches {isAdmin && "by Admin"}
+        Recently Created Matches {userDetails.isAdmin && "by Admin"}
       </div>
       <div className="Matches__list">
         {matchList.map(match => (
-          <Match key={match._id} content={match} />
+          <Match key={match._id} content={match} user={userDetails} />
         ))}
       </div>
     </div>
@@ -25,8 +25,9 @@ function Matches({ getAllMatches, matchList, isAdmin }) {
 }
 
 export default connect(
-  ({ matchDetails: { matchList }, userDetails: { isAdmin } }) => ({
-    matchList
+  ({ matchDetails: { matchList }, userDetails }) => ({
+    matchList,
+    userDetails
   }),
   {
     getAllMatches
@@ -36,5 +37,5 @@ export default connect(
 Matches.propTypes = {
   matchList: PropTypes.array,
   getAllMatches: PropTypes.func,
-  isAdmin: PropTypes.bool
+  userDetails: PropTypes.object
 };

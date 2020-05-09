@@ -35,6 +35,9 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
             </>
           ) : (
             <>
+              <Link to={routePaths.HOME} onClick={onMenuClick}>
+                Play
+              </Link>
               <Link to={routePaths.BUY} onClick={onMenuClick}>
                 Buy Chips
               </Link>

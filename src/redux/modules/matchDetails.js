@@ -4,6 +4,7 @@ import endpoints from "api/endpoints";
 const SET_MATCH_DETAILS = "matchDetails/SET_MATCH_DETAILS";
 const SET_MATCH_LIST = "matchDetails/SET_MATCH_LIST";
 const ADD_MATCH = "matchDetails/ADD_MATCH";
+const DELETE_MATCH = "matchDetails/DELETE_MATCH";
 
 const initialState = {
   matchList: []
@@ -52,6 +53,32 @@ export const getAllMatches = (cbSuccess, cbError) => async (
 
 export const addMatch = match => ({ type: ADD_MATCH, payload: match });
 
+export const deleteMatch = (match, cbSuccess, cbError) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    await call({
+      url: `${endpoints.matches}/${match._id}`,
+      method: "DELETE"
+    });
+    const {
+      matchDetails: { matchList }
+    } = getState();
+    const newMatchList = matchList.filter(el => el._id !== match._id);
+    dispatch({
+      type: DELETE_MATCH,
+      payload: newMatchList
+    });
+  } catch (e) {
+    console.log("match joining err ", e);
+  }
+};
+
+export const acceptInvite = () => {};
+
+export const sendInvite = () => {};
+
 const getReducer = {
   [SET_MATCH_DETAILS]: ({ state, action: { payload } }) => {
     return {
@@ -67,6 +94,9 @@ const getReducer = {
   },
   [ADD_MATCH]: ({ state, action: { payload } }) => {
     return { ...state, matchList: [payload, ...state.matchList] };
+  },
+  [DELETE_MATCH]: ({ state, action: { payload } }) => {
+    return { ...state, matchList: [...payload] };
   }
 };
 
