@@ -1,6 +1,7 @@
 module.exports.MATCH_STATUS = {
-  active: "active",
-  inProgress: "inProgress",
+  created: "created",
+  playRequested: "playRequested",
+  playAccepted: "playAccepted",
   completed: "completed"
 };
 
