@@ -32,6 +32,7 @@ class Home extends Component {
 
   componentWillUnmount() {
     // this.props.resetMatches();
+    this.socket.removeAllListeners(SOCKET_EVENTS.serverMatchUpdates);
   }
 
   onChallengeSet = values => {

@@ -5,6 +5,7 @@ export default {
   BUY: "/buy",
   SELL: "/sell",
   TERMS: "/terms",
+  MATCH_DETAIL: "/match/:matchId",
   ADMIN: {
     default: "/admin"
   }

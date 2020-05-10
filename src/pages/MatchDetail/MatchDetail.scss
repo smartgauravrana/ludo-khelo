@@ -1,0 +1,16 @@
+.MatchDetail {
+  text-align: center;
+  .MatchDetail__Room {
+    .form__container {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    label {
+      flex: 1 1 100%;
+      text-align: center;
+    }
+  }
+}

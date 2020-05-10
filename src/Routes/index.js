@@ -7,6 +7,7 @@ import Home from "pages/Home";
 import Buy from "pages/Buy";
 import Sell from "pages/Sell";
 import TermCondition from "pages/TermCondition";
+import MatchDetail from "pages/MatchDetail";
 
 export const publicRoutes = [
   {
@@ -37,6 +38,11 @@ export const publicRoutes = [
   {
     path: routePaths.TERMS,
     component: TermCondition,
+    exact: true
+  },
+  {
+    path: routePaths.MATCH_DETAIL,
+    component: MatchDetail,
     exact: true
   }
 ];

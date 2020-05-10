@@ -91,11 +91,38 @@ export const deleteMatch = (match, cbSuccess, cbError) => async (
   }
 };
 
+const updateMatch = async (data, id) => {
+  const res = await call({
+    url: `${endpoints.matches}/${id}`,
+    method: "PUT",
+    data
+  });
+  return res;
+};
+
 export const resetMatches = () => ({ type: RESET_MATCHES });
 
 export const acceptInvite = () => {};
 
-export const sendInvite = () => {};
+export const sendInvite = (match, cbSuccess, cbError) => async (
+  dispatch,
+  getState
+) => {
+  const updateObj = { isJoinee: true };
+  const res = await updateMatch(updateObj, match._id);
+  const { data } = res;
+  const {
+    matchDetails: { matchList }
+  } = getState();
+  const newList = matchList.map(el => {
+    if (el._id === match._id) {
+      return data;
+    }
+    return el;
+  });
+  dispatch({ type: SET_MATCH_LIST, payload: newList });
+  dispatch(setUserDetails(data.joinee));
+};
 
 const getReducer = {
   [SET_MATCH_DETAILS]: ({ state, action: { payload } }) => {

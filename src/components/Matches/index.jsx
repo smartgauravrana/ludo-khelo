@@ -10,7 +10,7 @@ function Matches({ getAllMatches, matchList, userDetails, resetMatches }) {
   useEffect(() => {
     getAllMatches();
     return () => {
-      resetMatches();
+      // resetMatches();
     };
   }, []);
   return (

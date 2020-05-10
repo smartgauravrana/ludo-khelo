@@ -21,6 +21,7 @@ module.exports.getAll = async (req, res) => {
 
   const matches = await Match.find({ isOfficial: isOfficial || false })
     .populate("createdBy")
+    .populate("joinee")
     .sort({
       _id: -1
     })
@@ -40,8 +41,8 @@ module.exports.update = async (req, res) => {
       status: MATCH_STATUS.playRequested
     };
   }
-  let match = await Match.findByIdAndUpdate(matchId, {
-    $set: updateObj
+  let match = await Match.findByIdAndUpdate(matchId, updateObj, {
+    new: true
   }).populate("createdBy");
   req.user.chips -= match.amount;
   req.user.save();

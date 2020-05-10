@@ -1,19 +1,30 @@
 import React from "react";
 import { Card, Button } from "antd";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
 import Moment from "moment";
 import { connect } from "react-redux";
 
-import { deleteMatch } from "redux/modules/matchDetails";
+import { deleteMatch, sendInvite } from "redux/modules/matchDetails";
 import { MATCH_STATUS } from "../../../constants";
+import routePaths from "Routes/routePaths";
 
 import "./Match.scss";
 
-function Match({ content, user, deleteMatch }) {
+function Match({ content, user, deleteMatch, sendInvite }) {
+  const history = useHistory();
+  const playRequest = () => {
+    sendInvite(content);
+  };
+
   const renderActionBtn = () => {
     if (content.status === MATCH_STATUS.created) {
       if (content.createdBy._id !== user._id) {
-        return <Button type="primary">Play</Button>;
+        return (
+          <Button type="primary" onClick={playRequest}>
+            Play
+          </Button>
+        );
       } else {
         return (
           <Button
@@ -33,7 +44,7 @@ function Match({ content, user, deleteMatch }) {
             <Button
               type="primary"
               className="Load_btn"
-              onClick={() => deleteMatch(content)}
+              onClick={() => history.push(`/match/${content._id}`)}
             >
               Accept
             </Button>
@@ -62,7 +73,7 @@ function Match({ content, user, deleteMatch }) {
 
   return (
     <div className="Match">
-      <Card style={{ width: 300 }}>
+      <Card className="Match__card">
         <div className="Match__createdDate">
           Created: {Moment(content.createdOn).fromNow()}
         </div>
@@ -80,10 +91,11 @@ function Match({ content, user, deleteMatch }) {
   );
 }
 
-export default connect(null, { deleteMatch })(Match);
+export default connect(null, { deleteMatch, sendInvite })(Match);
 
 Match.propTypes = {
   content: PropTypes.object,
   user: PropTypes.object,
-  deleteMatch: PropTypes.func
+  deleteMatch: PropTypes.func,
+  sendInvite: PropTypes.func
 };
