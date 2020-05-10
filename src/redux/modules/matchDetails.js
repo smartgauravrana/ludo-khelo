@@ -102,7 +102,24 @@ const updateMatch = async (data, id) => {
 
 export const resetMatches = () => ({ type: RESET_MATCHES });
 
-export const acceptInvite = () => {};
+export const acceptInvite = ({ match, roomId }, cbSuccess, cbError) => async (
+  dispatch,
+  getState
+) => {
+  const updateObj = { roomId };
+  const res = await updateMatch(updateObj, match._id);
+  const { data } = res;
+  const {
+    matchDetails: { matchList }
+  } = getState();
+  const newList = matchList.map(el => {
+    if (el._id === match._id) {
+      return data;
+    }
+    return el;
+  });
+  dispatch({ type: SET_MATCH_LIST, payload: newList });
+};
 
 export const sendInvite = (match, cbSuccess, cbError) => async (
   dispatch,

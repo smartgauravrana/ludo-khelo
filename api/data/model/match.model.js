@@ -10,6 +10,7 @@ const matchSchema = new Schema({
   joinee: { type: Schema.Types.ObjectId, ref: "users" },
   createdBy: { type: Schema.Types.ObjectId, ref: "users" },
   winner: { type: Schema.Types.ObjectId },
+  roomId: { type: String },
   createdOn: Date
 });
 

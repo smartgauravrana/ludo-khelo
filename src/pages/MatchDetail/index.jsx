@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+import { acceptInvite } from "redux/modules/matchDetails";
 import RecordingMessage from "./RecordingMessage";
 import PenaltyMessage from "./PenaltyMessage";
 import NoticeBoard from "./PenaltyMessage/NoticeBoard";
+import PostResult from "./PostResult";
 import "./MatchDetail.scss";
 
-function MatchDetail({ matchList, match }) {
+function MatchDetail({ matchList, match, acceptInvite }) {
   const [matchDetail, setMatchDetail] = useState(null);
   const [roomInput, setRoomInput] = useState("");
   useEffect(() => {
@@ -16,6 +18,15 @@ function MatchDetail({ matchList, match }) {
     );
     setMatchDetail(matchFound);
   }, []);
+
+  function copy() {
+    var copyText = document.querySelector("#roomId");
+    copyText.select();
+    document.execCommand("copy");
+  }
+  const onRoomSubmit = () => {
+    acceptInvite({ match: matchDetail, roomId: roomInput });
+  };
 
   const form = (
     <div className="MatchDetail__Room">
@@ -33,12 +44,31 @@ function MatchDetail({ matchList, match }) {
           onChange={() => setRoomInput(event.target.value)}
         />
         <button
-          type="submit"
           className="btn btn-primary waves-effect waves-light"
           disabled={!roomInput}
+          onClick={() => onRoomSubmit()}
         >
           Set Room Code
         </button>
+      </div>
+    </div>
+  );
+
+  const roomIdDetails = (
+    <div className="MatchDetail__Room">
+      <div className="MatchDetail__Room--info">
+        <input
+          id="roomId"
+          type="number"
+          name="roomId"
+          readOnly
+          value={matchDetail && matchDetail.roomId}
+        />
+        <div className="input-group-append">
+          <button id="copyButton" onClick={copy}>
+            Copy
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -47,22 +77,25 @@ function MatchDetail({ matchList, match }) {
     <div className="MatchDetail">
       <NoticeBoard matchDetail={matchDetail} />
       <hr />
-      {form}
+      {matchDetail.roomId ? roomIdDetails : form}
       <hr />
       <RecordingMessage />
       <hr />
       <PenaltyMessage />
+      <hr />
+      <PostResult />
     </div>
   ) : (
     <div>loading....</div>
   );
 }
 
-export default connect(({ matchDetails: { matchList } }) => ({ matchList }))(
-  MatchDetail
-);
+export default connect(({ matchDetails: { matchList } }) => ({ matchList }), {
+  acceptInvite
+})(MatchDetail);
 
 MatchDetail.propTypes = {
   matchList: PropTypes.array,
-  match: PropTypes.object
+  match: PropTypes.object,
+  acceptInvite: PropTypes.func
 };

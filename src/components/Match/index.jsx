@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 
 import { deleteMatch, sendInvite } from "redux/modules/matchDetails";
 import { MATCH_STATUS } from "../../../constants";
-import routePaths from "Routes/routePaths";
+// import routePaths from "Routes/routePaths";
 
 import "./Match.scss";
 
@@ -65,6 +65,18 @@ function Match({ content, user, deleteMatch, sendInvite }) {
       return (
         <Button type="ghost" disabled>
           Can&apos;t join
+        </Button>
+      );
+    }
+
+    if (content.status === MATCH_STATUS.playAccepted) {
+      return (
+        <Button
+          type="primary"
+          className="Load_btn"
+          onClick={() => history.push(`/match/${content._id}`)}
+        >
+          View
         </Button>
       );
     }

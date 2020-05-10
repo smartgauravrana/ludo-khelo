@@ -32,7 +32,7 @@ module.exports.getAll = async (req, res) => {
 
 module.exports.update = async (req, res) => {
   const { matchId } = req.params;
-  const { isJoinee } = req.body;
+  const { isJoinee, roomId } = req.body;
   let updateObj = {};
   if (isJoinee) {
     updateObj = {
@@ -41,11 +41,21 @@ module.exports.update = async (req, res) => {
       status: MATCH_STATUS.playRequested
     };
   }
+
+  if (roomId) {
+    updateObj = {
+      ...updateObj,
+      status: MATCH_STATUS.playAccepted,
+      roomId
+    };
+  }
   let match = await Match.findByIdAndUpdate(matchId, updateObj, {
     new: true
   }).populate("createdBy");
-  req.user.chips -= match.amount;
-  req.user.save();
+  if (isJoinee) {
+    req.user.chips -= match.amount;
+    req.user.save();
+  }
   match = match.toObject();
   match.joinee = req.user;
   res.send(match);

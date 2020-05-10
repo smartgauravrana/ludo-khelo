@@ -42,8 +42,7 @@ export const publicRoutes = [
   },
   {
     path: routePaths.MATCH_DETAIL,
-    component: MatchDetail,
-    exact: true
+    component: MatchDetail
   }
 ];
 
