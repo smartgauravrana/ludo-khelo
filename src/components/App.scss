@@ -2,4 +2,8 @@
 .App,
 .ant-layout {
   height: 100%;
+
+  .ant-layout-content {
+    min-height: 0;
+  }
 }

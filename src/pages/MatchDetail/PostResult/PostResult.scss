@@ -1,0 +1,47 @@
+.PostResult {
+  .PostResult__select {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+
+  .PostResult__item {
+    min-width: 94px;
+    padding: 8px;
+    border: 1px solid cyan;
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #9e9e9e;
+
+    &--selected {
+      background: white;
+      box-shadow: 1px 10px 10px;
+      border: none;
+    }
+  }
+
+  #cancelReasonBlock {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    & > * {
+      margin: 10px 0;
+    }
+
+    .form-group {
+      width: 100%;
+    }
+
+    .form-control {
+      width: 90%;
+      margin: 0 20px;
+    }
+  }
+
+  .screenShot-upload img {
+    height: 150px;
+  }
+}

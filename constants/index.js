@@ -14,3 +14,9 @@ module.exports.SELLING_STATUS = {
   active: "active",
   completed: "completed"
 };
+
+module.exports.RESULT_OPTIONS = {
+  won: "won",
+  lost: "lost",
+  cancel: "cancel"
+};

@@ -1,5 +1,7 @@
 .MatchDetail {
   text-align: center;
+  overflow: auto;
+  height: 100%;
   .MatchDetail__Room {
     .form__container {
       display: flex;
