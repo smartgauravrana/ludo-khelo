@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import { connect } from "react-redux";
 import { Button } from "antd";
 import PropTypes from "prop-types";
-import socketIOClient from "socket.io-client";
 
 import {
   getAllMatches,
@@ -14,16 +13,14 @@ import {
 } from "redux/modules/matchDetails";
 import TextInput from "components/TextInput";
 import Matches from "components/Matches";
-import { SOCKET_EVENTS } from "../../../constants/index";
+import { SOCKET_EVENTS } from "../../../constants";
 import "./Home.scss";
 
-const ENDPOINT = "http://127.0.0.1:3000";
 class Home extends Component {
   componentDidMount() {
-    console.log(SOCKET_EVENTS);
     this.props.getAllMatches();
-    this.socket = socketIOClient(ENDPOINT);
-    this.socket.on(SOCKET_EVENTS.serverMatchUpdates, data => {
+    const { socket } = this.props;
+    socket.on(SOCKET_EVENTS.serverMatchUpdates, data => {
       const match = data[0];
       match.createdBy !== this.props.userDetails._id &&
         this.props.addMatch(data[0]);
@@ -31,14 +28,14 @@ class Home extends Component {
   }
 
   componentWillUnmount() {
-    // this.props.resetMatches();
-    this.socket.removeAllListeners(SOCKET_EVENTS.serverMatchUpdates);
+    const { socket } = this.props;
+    socket.removeAllListeners(SOCKET_EVENTS.serverMatchUpdates);
   }
 
   onChallengeSet = values => {
-    console.log("values: ", values);
+    const { socket } = this.props;
     this.props.postMatch(values, () => {
-      this.socket.emit(SOCKET_EVENTS.clientMatchPosted, {
+      socket.emit(SOCKET_EVENTS.clientMatchPosted, {
         id: this.props.userDetails._id
       });
     });
@@ -95,5 +92,6 @@ Home.propTypes = {
   postMatch: PropTypes.func,
   userDetails: PropTypes.object,
   addMatch: PropTypes.func,
-  resetMatches: PropTypes.func
+  resetMatches: PropTypes.func,
+  socket: PropTypes.object
 };

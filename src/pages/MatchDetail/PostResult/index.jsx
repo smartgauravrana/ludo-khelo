@@ -152,16 +152,17 @@ export default function PostResult() {
         ))}
         {choice === RESULT_OPTIONS.cancel && cancelReason}
         {choice === RESULT_OPTIONS.won && screenshotBlock}
-        <button
-          disabled={
-            !choice ||
-            (choice === RESULT_OPTIONS.cancel && !cancelText) ||
-            (choice === RESULT_OPTIONS.won && !imageAsUrl.imgUrl)
-          }
-        >
-          Post Result
-        </button>
       </div>
+      <button
+        className="PostResult__Button"
+        disabled={
+          !choice ||
+          (choice === RESULT_OPTIONS.cancel && !cancelText) ||
+          (choice === RESULT_OPTIONS.won && !imageAsUrl.imgUrl)
+        }
+      >
+        Post Result
+      </button>
     </div>
   );
 }

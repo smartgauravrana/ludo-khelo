@@ -5,16 +5,29 @@ import { useHistory } from "react-router-dom";
 import Moment from "moment";
 import { connect } from "react-redux";
 
-import { deleteMatch, sendInvite } from "redux/modules/matchDetails";
-import { MATCH_STATUS } from "../../../constants";
+import {
+  deleteMatch,
+  sendInvite,
+  updateMatchStatus
+} from "redux/modules/matchDetails";
+import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
 // import routePaths from "Routes/routePaths";
-
 import "./Match.scss";
 
-function Match({ content, user, deleteMatch, sendInvite }) {
+function Match({
+  content,
+  user,
+  deleteMatch,
+  sendInvite,
+  socket,
+  updateMatchStatus
+}) {
   const history = useHistory();
+
   const playRequest = () => {
-    sendInvite(content);
+    sendInvite(content, () => {
+      socket.emit(SOCKET_EVENTS.clientPlayRequested, { matchId: content._id });
+    });
   };
 
   const renderActionBtn = () => {
@@ -103,11 +116,15 @@ function Match({ content, user, deleteMatch, sendInvite }) {
   );
 }
 
-export default connect(null, { deleteMatch, sendInvite })(Match);
+export default connect(null, { deleteMatch, sendInvite, updateMatchStatus })(
+  Match
+);
 
 Match.propTypes = {
   content: PropTypes.object,
   user: PropTypes.object,
   deleteMatch: PropTypes.func,
-  sendInvite: PropTypes.func
+  sendInvite: PropTypes.func,
+  socket: PropTypes.object,
+  updateMatchStatus: PropTypes.func
 };

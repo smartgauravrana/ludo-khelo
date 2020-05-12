@@ -139,6 +139,20 @@ export const sendInvite = (match, cbSuccess, cbError) => async (
   });
   dispatch({ type: SET_MATCH_LIST, payload: newList });
   dispatch(setUserDetails(data.joinee));
+  cbSuccess && cbSuccess(data);
+};
+
+export const updateMatchStatus = (matchId, status) => (dispatch, getState) => {
+  const {
+    matchDetails: { matchList }
+  } = getState();
+  const newList = matchList.map(el => {
+    if (el._id === matchId) {
+      return { ...el, status };
+    }
+    return el;
+  });
+  dispatch({ type: SET_MATCH_LIST, payload: newList });
 };
 
 const getReducer = {

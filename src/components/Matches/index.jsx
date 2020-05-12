@@ -3,14 +3,32 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import Match from "components/Match";
-import { getAllMatches, resetMatches } from "redux/modules/matchDetails";
+import {
+  getAllMatches,
+  resetMatches,
+  updateMatchStatus
+} from "redux/modules/matchDetails";
+import SocketContext from "context/socket-context";
+import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
 import "./Matches.scss";
 
-function Matches({ getAllMatches, matchList, userDetails, resetMatches }) {
+function Matches({
+  getAllMatches,
+  matchList,
+  userDetails,
+  resetMatches,
+  updateMatchStatus,
+  socket
+}) {
   useEffect(() => {
     getAllMatches();
+    socket.on(SOCKET_EVENTS.serverPlayRequested, data => {
+      console.log("play requested for my match");
+      updateMatchStatus(data.matchId, MATCH_STATUS.playRequested);
+    });
     return () => {
       // resetMatches();
+      socket.removeAllListeners(SOCKET_EVENTS.serverPlayRequested);
     };
   }, []);
   return (
@@ -20,12 +38,23 @@ function Matches({ getAllMatches, matchList, userDetails, resetMatches }) {
       </div>
       <div className="Matches__list">
         {matchList.map(match => (
-          <Match key={match._id} content={match} user={userDetails} />
+          <Match
+            key={match._id}
+            content={match}
+            user={userDetails}
+            socket={socket}
+          />
         ))}
       </div>
     </div>
   );
 }
+
+const MatchesWithSocket = props => (
+  <SocketContext.Consumer>
+    {socket => <Matches {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
 
 export default connect(
   ({ matchDetails: { matchList }, userDetails }) => ({
@@ -34,13 +63,16 @@ export default connect(
   }),
   {
     getAllMatches,
-    resetMatches
+    resetMatches,
+    updateMatchStatus
   }
-)(Matches);
+)(MatchesWithSocket);
 
 Matches.propTypes = {
   matchList: PropTypes.array,
   getAllMatches: PropTypes.func,
   userDetails: PropTypes.object,
-  resetMatches: PropTypes.func
+  resetMatches: PropTypes.func,
+  socket: PropTypes.object,
+  updateMatchStatus: PropTypes.func
 };

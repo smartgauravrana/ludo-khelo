@@ -1,4 +1,6 @@
+import React from "react";
 import routePaths from "./routePaths";
+import SocketContext from "context/socket-context";
 
 import Login from "pages/Login";
 import Register from "pages/Register";
@@ -22,7 +24,13 @@ export const publicRoutes = [
   },
   {
     path: routePaths.HOME,
-    component: Home,
+    component: function HomeWithSocket(props) {
+      return (
+        <SocketContext.Consumer>
+          {socket => <Home {...props} socket={socket} />}
+        </SocketContext.Consumer>
+      );
+    },
     exact: true
   },
   {

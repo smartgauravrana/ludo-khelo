@@ -2,12 +2,17 @@ module.exports.MATCH_STATUS = {
   created: "created",
   playRequested: "playRequested",
   playAccepted: "playAccepted",
+  onHold: "onHold",
   completed: "completed"
 };
 
 module.exports.SOCKET_EVENTS = {
   clientMatchPosted: "clientMatchPosted",
-  serverMatchUpdates: "serverMatchUpdates"
+  serverMatchUpdates: "serverMatchUpdates",
+  clientPlayRequested: "clientPlayRequested",
+  serverPlayRequested: "serverPlayRequested",
+  clientPlayAccepted: "clientPlayAccepted",
+  serverPlayAccepted: "serverPlayAccepted"
 };
 
 module.exports.SELLING_STATUS = {

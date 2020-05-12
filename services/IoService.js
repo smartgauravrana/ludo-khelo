@@ -15,12 +15,18 @@ module.exports = class IoService {
         console.log("User connected: ");
 
         socket.on(SOCKET_EVENTS.clientMatchPosted, async data => {
-          console.log("Data received from client: ", data);
+          console.log("match created from client: ", data);
           const match = await Match.find({ createdBy: data.id })
             .sort({ _id: -1 })
             .limit(1)
             .exec();
           socket.broadcast.emit(SOCKET_EVENTS.serverMatchUpdates, match);
+        });
+
+        // server playRequested
+        socket.on(SOCKET_EVENTS.clientPlayRequested, async data => {
+          console.log("Play requested from client: ", data);
+          socket.broadcast.emit(SOCKET_EVENTS.serverPlayRequested, data);
         });
         socket.on("disconnect", () => {
           console.log("Client disconnected");
