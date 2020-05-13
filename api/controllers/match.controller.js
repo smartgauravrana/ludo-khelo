@@ -16,6 +16,15 @@ module.exports.addMatch = async (req, res) => {
   res.send(match);
 };
 
+module.exports.getOne = async (req, res) => {
+  const { matchId } = req.params;
+
+  const match = await Match.findOne({ _id: matchId })
+    .populate("createdBy")
+    .populate("joinee");
+  res.send(match);
+};
+
 module.exports.getAll = async (req, res) => {
   const { isOfficial } = req.query;
 

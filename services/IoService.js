@@ -24,10 +24,17 @@ module.exports = class IoService {
         });
 
         // server playRequested
-        socket.on(SOCKET_EVENTS.clientPlayRequested, async data => {
+        socket.on(SOCKET_EVENTS.clientPlayRequested, data => {
           console.log("Play requested from client: ", data);
           socket.broadcast.emit(SOCKET_EVENTS.serverPlayRequested, data);
         });
+
+        // server playAccepted
+        socket.on(SOCKET_EVENTS.clientPlayAccepted, data => {
+          console.log("Play requested from client: ", data);
+          socket.broadcast.emit(SOCKET_EVENTS.serverPlayAccepted, data);
+        });
+
         socket.on("disconnect", () => {
           console.log("Client disconnected");
         });

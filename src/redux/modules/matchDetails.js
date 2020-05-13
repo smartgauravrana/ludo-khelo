@@ -38,6 +38,33 @@ export const postMatch = (match, cbSuccess, cbError) => async (
   }
 };
 
+export const getMatch = (matchId, cbSuccess, cbError) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    console.log("calling getMatch");
+    const res = await call({
+      url: `${endpoints.matches}/${matchId}`
+    });
+    const { data } = res;
+    const {
+      matchDetails: { matchList }
+    } = getState();
+    const newList = matchList.map(el => {
+      if (el._id === matchId) {
+        return data;
+      }
+      return el;
+    });
+    cbSuccess && cbSuccess(data);
+    dispatch({ type: SET_MATCH_LIST, payload: newList });
+  } catch (e) {
+    console.log("get match err");
+    cbError && cbError(e);
+  }
+};
+
 export const getAllMatches = (cbSuccess, cbError) => async (
   dispatch,
   getState
@@ -118,6 +145,7 @@ export const acceptInvite = ({ match, roomId }, cbSuccess, cbError) => async (
     }
     return el;
   });
+  cbSuccess && cbSuccess(data);
   dispatch({ type: SET_MATCH_LIST, payload: newList });
 };
 

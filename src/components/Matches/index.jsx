@@ -6,7 +6,8 @@ import Match from "components/Match";
 import {
   getAllMatches,
   resetMatches,
-  updateMatchStatus
+  updateMatchStatus,
+  getMatch
 } from "redux/modules/matchDetails";
 import SocketContext from "context/socket-context";
 import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
@@ -18,17 +19,24 @@ function Matches({
   userDetails,
   resetMatches,
   updateMatchStatus,
+  getMatch,
   socket
 }) {
   useEffect(() => {
     getAllMatches();
     socket.on(SOCKET_EVENTS.serverPlayRequested, data => {
       console.log("play requested for my match");
-      updateMatchStatus(data.matchId, MATCH_STATUS.playRequested);
+      getMatch(data.matchId);
+    });
+
+    socket.on(SOCKET_EVENTS.serverPlayAccepted, data => {
+      console.log("play accepted for my match: ", getMatch);
+      getMatch(data.matchId);
     });
     return () => {
       // resetMatches();
       socket.removeAllListeners(SOCKET_EVENTS.serverPlayRequested);
+      socket.removeAllListeners(SOCKET_EVENTS.serverPlayAccepted);
     };
   }, []);
   return (
@@ -64,7 +72,8 @@ export default connect(
   {
     getAllMatches,
     resetMatches,
-    updateMatchStatus
+    updateMatchStatus,
+    getMatch
   }
 )(MatchesWithSocket);
 
@@ -74,5 +83,6 @@ Matches.propTypes = {
   userDetails: PropTypes.object,
   resetMatches: PropTypes.func,
   socket: PropTypes.object,
-  updateMatchStatus: PropTypes.func
+  updateMatchStatus: PropTypes.func,
+  getMatch: PropTypes.func
 };

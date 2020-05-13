@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+import SocketContext from "context/socket-context";
+import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
 import { acceptInvite } from "redux/modules/matchDetails";
 import RecordingMessage from "./RecordingMessage";
 import PenaltyMessage from "./PenaltyMessage";
@@ -9,7 +11,7 @@ import NoticeBoard from "./PenaltyMessage/NoticeBoard";
 import PostResult from "./PostResult";
 import "./MatchDetail.scss";
 
-function MatchDetail({ matchList, match, acceptInvite }) {
+function MatchDetail({ matchList, match, acceptInvite, socket }) {
   const [matchDetail, setMatchDetail] = useState(null);
   const [roomInput, setRoomInput] = useState("");
   useEffect(() => {
@@ -25,7 +27,11 @@ function MatchDetail({ matchList, match, acceptInvite }) {
     document.execCommand("copy");
   }
   const onRoomSubmit = () => {
-    acceptInvite({ match: matchDetail, roomId: roomInput });
+    acceptInvite({ match: matchDetail, roomId: roomInput }, () => {
+      socket.emit(SOCKET_EVENTS.clientPlayAccepted, {
+        matchId: match.params.matchId
+      });
+    });
   };
 
   const form = (
@@ -72,7 +78,7 @@ function MatchDetail({ matchList, match, acceptInvite }) {
       </div>
     </div>
   );
-
+  console.log("matchdetails: ", matchDetail);
   return matchDetail ? (
     <div className="MatchDetail">
       <NoticeBoard matchDetail={matchDetail} />
@@ -90,12 +96,19 @@ function MatchDetail({ matchList, match, acceptInvite }) {
   );
 }
 
+const MatchDetailWithSocket = props => (
+  <SocketContext.Consumer>
+    {socket => <MatchDetail {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
+
 export default connect(({ matchDetails: { matchList } }) => ({ matchList }), {
   acceptInvite
-})(MatchDetail);
+})(MatchDetailWithSocket);
 
 MatchDetail.propTypes = {
   matchList: PropTypes.array,
   match: PropTypes.object,
-  acceptInvite: PropTypes.func
+  acceptInvite: PropTypes.func,
+  socket: PropTypes.object
 };

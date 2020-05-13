@@ -28,6 +28,7 @@ router
 
 router
   .route("/matches/:matchId")
+  .get(isLogin, matchCtrl.getOne)
   .put(isLogin, matchCtrl.update)
   .delete(isLogin, matchCtrl.delete);
 
