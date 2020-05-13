@@ -15,7 +15,9 @@ export default function AppLayout(props) {
       <Header>
         <HeaderContent onMenuClick={showDrawer} drawerVisible={visible} />
       </Header>
-      <Content>{props.children}</Content>
+      <Content>
+        <div className="container">{props.children}</div>
+      </Content>
       {/* <Footer>CopyRights RANA Team ;) 2020</Footer> */}
     </Layout>
   );

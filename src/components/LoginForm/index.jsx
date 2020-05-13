@@ -29,7 +29,7 @@ const loginFields = [
 function LoginForm({ login }) {
   const history = useHistory();
   return (
-    <div>
+    <div className="LoginForm">
       <Formik
         initialValues={{
           phone: "",
@@ -57,6 +57,7 @@ function LoginForm({ login }) {
               <TextInput key={field.name} {...field} />
             ))}
             <Button
+              className="LoginForm__LoginButton"
               type="primary"
               onClick={() => props.isValid && props.submitForm()}
             >

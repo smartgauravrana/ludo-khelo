@@ -1,6 +1,7 @@
 import React from "react";
 
 import LoginForm from "components/LoginForm";
+import "./Login.scss";
 
 export default function Login() {
   return (
