@@ -10,6 +10,7 @@ import Buy from "pages/Buy";
 import Sell from "pages/Sell";
 import TermCondition from "pages/TermCondition";
 import MatchDetail from "pages/MatchDetail";
+import Timeline from "pages/Timeline";
 
 export const publicRoutes = [
   {
@@ -51,6 +52,10 @@ export const publicRoutes = [
   {
     path: routePaths.MATCH_DETAIL,
     component: MatchDetail
+  },
+  {
+    path: routePaths.HISTORY,
+    component: Timeline
   }
 ];
 

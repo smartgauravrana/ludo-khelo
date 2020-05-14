@@ -26,16 +26,26 @@ module.exports.getOne = async (req, res) => {
 };
 
 module.exports.getAll = async (req, res) => {
-  const { isOfficial } = req.query;
-
-  const matches = await Match.find({ isOfficial: isOfficial || false })
-    .populate("createdBy")
-    .populate("joinee")
+  const { isOfficial, history, page } = req.query;
+  let query;
+  if (history) {
+    query = Match.find().or([
+      { createdBy: req.user._id },
+      { joinee: req.user._id }
+    ]);
+  }
+  if (isOfficial) {
+    query = Match.find({ isOfficial: isOfficial || false })
+      .populate("createdBy")
+      .populate("joinee");
+  }
+  query = query
     .sort({
       _id: -1
     })
-    .limit(20)
-    .exec();
+    .skip(page || 0)
+    .limit(10);
+  const matches = await query.exec();
   res.send(matches);
 };
 

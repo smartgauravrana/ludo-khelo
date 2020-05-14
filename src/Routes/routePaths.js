@@ -6,6 +6,7 @@ export default {
   SELL: "/sell",
   TERMS: "/terms",
   MATCH_DETAIL: "/match/:matchId",
+  HISTORY: "/history",
   ADMIN: {
     default: "/admin"
   }
