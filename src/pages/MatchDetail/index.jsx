@@ -7,7 +7,7 @@ import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
 import { acceptInvite } from "redux/modules/matchDetails";
 import RecordingMessage from "./RecordingMessage";
 import PenaltyMessage from "./PenaltyMessage";
-import NoticeBoard from "./PenaltyMessage/NoticeBoard";
+import NoticeBoard from "./NoticeBoard";
 import PostResult from "./PostResult";
 import "./MatchDetail.scss";
 

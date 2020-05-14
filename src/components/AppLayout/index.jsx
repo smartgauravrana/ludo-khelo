@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Layout } from "antd";
 import PropTypes from "prop-types";
 import HeaderContent from "components/HeaderContent";
+import "./AppLayout.scss";
 
 const { Header, Content } = Layout;
 
