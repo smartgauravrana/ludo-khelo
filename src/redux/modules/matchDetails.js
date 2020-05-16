@@ -185,6 +185,31 @@ export const sendInvite = (match, cbSuccess, cbError) => async (
   cbSuccess && cbSuccess(data);
 };
 
+export const leaveMatch = (match, cbSuccess, cbError) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    const updateObj = { leaveMatch: true };
+    const res = await updateMatch(updateObj, match._id);
+    const { data } = res;
+    const {
+      matchDetails: { matchList }
+    } = getState();
+    const newList = matchList.map(el => {
+      if (el._id === match._id) {
+        return data;
+      }
+      return el;
+    });
+    dispatch({ type: SET_MATCH_LIST, payload: newList });
+    cbSuccess && cbSuccess(data);
+  } catch (e) {
+    console.log("leaving Match err!", e);
+    cbError && cbError(e);
+  }
+};
+
 export const updateMatchStatus = (matchId, status) => (dispatch, getState) => {
   const {
     matchDetails: { matchList }

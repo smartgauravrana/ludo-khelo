@@ -53,7 +53,7 @@ module.exports.getAll = async (req, res) => {
 
 module.exports.update = async (req, res) => {
   const { matchId } = req.params;
-  const { isJoinee, roomId } = req.body;
+  const { isJoinee, roomId, leaveMatch } = req.body;
   let updateObj = {};
   if (isJoinee) {
     updateObj = {
@@ -70,17 +70,32 @@ module.exports.update = async (req, res) => {
       roomId
     };
   }
-
   let match = await Match.findByIdAndUpdate(matchId, updateObj, {
     new: true
   }).populate("createdBy");
   if (isJoinee) {
     req.user.chips -= match.amount;
     req.user.matchInProgress = 1;
-    req.user.save();
   }
-  match = match.toObject();
-  match.joinee = req.user;
+  if (leaveMatch) {
+    if (
+      match.status === MATCH_STATUS.playRequested &&
+      match.joinee.toString() === req.user._id.toString()
+    ) {
+      match.status = MATCH_STATUS.created;
+      match.joinee = null;
+      req.user.chips += match.amount;
+      req.user.matchInProgress = 0;
+      await match.save();
+    } else {
+      return res.status(400).send({ msg: "Can't cancel now!" });
+    }
+  }
+  if (!leaveMatch) {
+    match = match.toObject();
+    match.joinee = req.user;
+  }
+  req.user.save();
   res.send(match);
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button } from "antd";
+import { Card, Button, message } from "antd";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import Moment from "moment";
@@ -13,6 +13,8 @@ import {
 import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
 // import routePaths from "Routes/routePaths";
 import "./Match.scss";
+import { leaveMatch } from "../../redux/modules/matchDetails";
+import { checkLogin } from "../../redux/modules/userDetails";
 
 function Match({
   content,
@@ -20,14 +22,33 @@ function Match({
   deleteMatch,
   sendInvite,
   socket,
-  updateMatchStatus
+  leaveMatch,
+  updateMatchStatus,
+  checkLogin
 }) {
   const history = useHistory();
 
   const playRequest = () => {
-    sendInvite(content, () => {
-      socket.emit(SOCKET_EVENTS.clientPlayRequested, { matchId: content._id });
-    });
+    if (!user.matchInProgress) {
+      sendInvite(content, () => {
+        socket.emit(SOCKET_EVENTS.clientPlayRequested, {
+          matchId: content._id
+        });
+      });
+    } else {
+      alert("First Post result for pending Match!");
+    }
+  };
+
+  const cancelRequest = () => {
+    leaveMatch(
+      content,
+      () => checkLogin(),
+      err => {
+        const { data } = err.response;
+        message.error(data.msg);
+      }
+    );
   };
 
   const renderActionBtn = () => {
@@ -69,9 +90,9 @@ function Match({
         return (
           <>
             <Button type="ghost" disabled>
-              Can&apos;t join
+              Requested
             </Button>
-            <Button>Cancel</Button>
+            <Button onClick={cancelRequest}>Cancel</Button>
           </>
         );
       }
@@ -116,9 +137,13 @@ function Match({
   );
 }
 
-export default connect(null, { deleteMatch, sendInvite, updateMatchStatus })(
-  Match
-);
+export default connect(null, {
+  deleteMatch,
+  sendInvite,
+  updateMatchStatus,
+  checkLogin,
+  leaveMatch
+})(Match);
 
 Match.propTypes = {
   content: PropTypes.object,
@@ -126,5 +151,7 @@ Match.propTypes = {
   deleteMatch: PropTypes.func,
   sendInvite: PropTypes.func,
   socket: PropTypes.object,
-  updateMatchStatus: PropTypes.func
+  updateMatchStatus: PropTypes.func,
+  checkLogin: PropTypes.func,
+  leaveMatch: PropTypes.func
 };
