@@ -64,7 +64,7 @@ function Buy({ userDetails, buyChips }) {
   return (
     <div className="Buy">
       <div className="Buy__Header">{noticeInfo}</div>
-      <div className="Buy__paymentNumber">
+      <div className="Buy__paymentNumber form-group">
         <input
           id="paymentNumber"
           type="number"

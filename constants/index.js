@@ -3,6 +3,7 @@ module.exports.MATCH_STATUS = {
   playRequested: "playRequested",
   playAccepted: "playAccepted",
   onHold: "onHold",
+  cancelled: "cancelled",
   completed: "completed"
 };
 

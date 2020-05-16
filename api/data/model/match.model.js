@@ -3,10 +3,16 @@ const { Schema } = mongoose;
 
 const { MATCH_STATUS } = require("../../../constants");
 
-const screenshotSchema = new Schema({
-  url: { type: String, required: true },
-  postedBy: { type: Schema.Types.ObjectId, ref: "users" }
-});
+// const resultSchema = new Schema({
+//   postedBy: { type: Schema.Types.ObjectId },
+//   imgUrl: { type: String }
+// });
+
+// const resultPostedSchema = new Schema({
+//   won: [resultSchema],
+//   lose: [resultSchema],
+//   cancel: [resultSchema]
+// });
 
 const matchSchema = new Schema({
   amount: { type: Number, required: true },
@@ -17,7 +23,14 @@ const matchSchema = new Schema({
   winner: { type: Schema.Types.ObjectId, ref: "users" },
   roomId: { type: String },
   resultId: { type: Schema.Types.ObjectId, ref: "users" },
-  screenshots: [screenshotSchema],
+  resultsPosted: {
+    type: Object,
+    default: {
+      won: [],
+      lost: [],
+      cancel: []
+    }
+  },
   createdOn: Date
 });
 

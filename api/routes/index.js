@@ -32,6 +32,9 @@ router
   .put(isLogin, matchCtrl.update)
   .delete(isLogin, matchCtrl.delete);
 
+// POST RESULT
+router.route("/result").post(isLogin, matchCtrl.postResult);
+
 // BUY CHIPS
 router.post("/buy", isLogin, billingCtrl.buyChips);
 
