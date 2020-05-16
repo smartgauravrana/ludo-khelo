@@ -11,6 +11,7 @@ import {
   addMatch,
   resetMatches
 } from "redux/modules/matchDetails";
+import { checkLogin } from "redux/modules/userDetails";
 import TextInput from "components/TextInput";
 import Matches from "components/Matches";
 import { SOCKET_EVENTS } from "../../../constants";
@@ -35,6 +36,7 @@ class Home extends Component {
   onChallengeSet = values => {
     const { socket } = this.props;
     this.props.postMatch(values, () => {
+      this.props.checkLogin();
       socket.emit(SOCKET_EVENTS.clientMatchPosted, {
         id: this.props.userDetails._id
       });
@@ -42,6 +44,7 @@ class Home extends Component {
   };
 
   render() {
+    const { userDetails } = this.props;
     return (
       <div className="Home">
         <div className="Home__message">
@@ -57,7 +60,13 @@ class Home extends Component {
               .required("Required!")
               .min(50, "Amount must be minimum 50")
           })}
-          onSubmit={values => this.onChallengeSet(values)}
+          onSubmit={values => {
+            if (!userDetails.matchInProgress) {
+              this.onChallengeSet(values);
+            } else {
+              alert("First, Post the result of pending match");
+            }
+          }}
         >
           {props => (
             <div className="Home__setChallenge">
@@ -84,7 +93,8 @@ export default connect(({ userDetails }) => ({ userDetails }), {
   getAllMatches,
   postMatch,
   addMatch,
-  resetMatches
+  resetMatches,
+  checkLogin
 })(Home);
 
 Home.propTypes = {
@@ -93,5 +103,6 @@ Home.propTypes = {
   userDetails: PropTypes.object,
   addMatch: PropTypes.func,
   resetMatches: PropTypes.func,
-  socket: PropTypes.object
+  socket: PropTypes.object,
+  checkLogin: PropTypes.func
 };

@@ -12,6 +12,21 @@ const initialState = {
   matchList: []
 };
 
+export const postResult = (postData, cbSuccess, cbError) => async dispatch => {
+  try {
+    const res = await call({
+      method: "post",
+      url: endpoints.result,
+      data: postData
+    });
+    const { data } = res;
+    cbSuccess && cbSuccess(data);
+  } catch (e) {
+    console.log("post result err");
+    cbError && cbError(e);
+  }
+};
+
 export const postMatch = (match, cbSuccess, cbError) => async (
   dispatch,
   getState

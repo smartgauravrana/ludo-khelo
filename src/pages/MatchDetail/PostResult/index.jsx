@@ -1,5 +1,10 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { message } from "antd";
 
+import { postResult } from "redux/modules/matchDetails";
+import { checkLogin } from "redux/modules/userDetails";
 import { storage } from "../../../firebase";
 import { RESULT_OPTIONS } from "../../../../constants";
 import "./PostResult.scss";
@@ -19,11 +24,31 @@ const resultOptions = [
   }
 ];
 
-export default function PostResult() {
+function PostResult({ postResult, checkLogin, matchId }) {
   const [choice, setChoice] = useState("");
   const [cancelText, setCancelText] = useState("");
   const [imageAsFile, setImageAsFile] = useState("");
   const [imageAsUrl, setImageAsUrl] = useState({});
+
+  const onPostResult = () => {
+    let postData = { resultType: choice, matchId };
+    switch (choice) {
+      case resultOptions.won:
+        postData = { ...postData, imgUrl: imageAsUrl };
+        break;
+      case resultOptions.cancel:
+        postData = { ...postData, cancelReason: cancelText };
+        break;
+    }
+    postResult(
+      postData,
+      () => checkLogin(),
+      err => {
+        const { data } = err.response;
+        message.error(data.msg);
+      }
+    );
+  };
 
   const cancelReason = (
     <div id="cancelReasonBlock">
@@ -160,9 +185,21 @@ export default function PostResult() {
           (choice === RESULT_OPTIONS.cancel && !cancelText) ||
           (choice === RESULT_OPTIONS.won && !imageAsUrl.imgUrl)
         }
+        onClick={onPostResult}
       >
         Post Result
       </button>
     </div>
   );
 }
+
+export default connect(null, {
+  postResult,
+  checkLogin
+})(PostResult);
+
+PostResult.propTypes = {
+  postResult: PropTypes.func,
+  checkLogin: PropTypes.func,
+  matchId: PropTypes.string
+};

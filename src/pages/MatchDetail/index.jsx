@@ -89,7 +89,7 @@ function MatchDetail({ matchList, match, acceptInvite, socket }) {
       <hr />
       <PenaltyMessage />
       <hr />
-      <PostResult />
+      <PostResult matchId={matchDetail._id} />
     </div>
   ) : (
     <div>loading....</div>

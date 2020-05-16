@@ -88,6 +88,7 @@ module.exports.delete = async (req, res) => {
   const { matchId } = req.params;
   const match = await Match.findOne({ _id: matchId, createdBy: req.user._id });
   req.user.chips += match.amount;
+  req.user.matchInProgress = 0;
   match.delete();
   const user = await req.user.save();
   res.send(user);
@@ -101,6 +102,10 @@ module.exports.postResult = async (req, res) => {
   const match = await Match.findById({ _id: matchId });
   if (!match) {
     res.status(404).send({ msg: "Match not found!" });
+  }
+
+  if (match.status === MATCH_STATUS.completed) {
+    res.status(400).send({ msg: "Match already completed! Refresh Page!!" });
   }
 
   let result;
