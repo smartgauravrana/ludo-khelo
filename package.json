@@ -7,7 +7,7 @@
     "start": "npm-run-all --parallel dev:*",
     "dev:build-client": "webpack-dev-server --mode=development  --env.NODE_ENV=development --open",
     "dev:start": "nodemon app.js",
-    "prod:build-client": "webpack --config webpack.client.js --mode=production --env.NODE_ENV=production",
+    "prod:build-client": "webpack --config webpack.config.js --mode=production --env.NODE_ENV=production",
     "prod:stop-server": "pm2 stop",
     "prod:start-server": "pm2 start app.js",
     "prod": "npm-run-all --serial prod:*"
