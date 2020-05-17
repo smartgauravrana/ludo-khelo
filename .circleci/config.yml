@@ -3,6 +3,10 @@ orbs:
   node: circleci/node@1.1.6
 jobs:
   deploy-job:
+    filters:
+      branches:
+        only:
+          - master
     machine:
       enabled: true
     steps:
