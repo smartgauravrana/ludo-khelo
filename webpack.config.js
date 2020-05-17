@@ -4,12 +4,13 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
+const BrotliPlugin = require("brotli-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = env => {
   const { NODE_ENV } = env;
   const config = {
-    mode: "development",
+    mode: NODE_ENV,
     entry: "./src/index.jsx",
     output: {
       path: path.resolve(__dirname, "build"),
@@ -20,7 +21,7 @@ module.exports = env => {
         chunks: "all"
       }
     },
-    devtool: "inline-source-map",
+    // devtool: "inline-source-map",
     module: {
       rules: [
         {
@@ -104,6 +105,12 @@ module.exports = env => {
         test: /\.js$|\.css$|\.html$/,
         threshold: 10240,
         minRatio: 0.8
+      }),
+      new BrotliPlugin({
+        asset: "[path].br[query]",
+        test: /\.js$|\.css$|\.html$/,
+        threshold: 10240,
+        minRatio: 0.8
       })
     ],
     devServer: {
@@ -124,6 +131,10 @@ module.exports = env => {
       port: 8080
     }
   };
+
+  if (NODE_ENV === "development") {
+    config.devtool = "inline-source-map";
+  }
 
   return config;
 };

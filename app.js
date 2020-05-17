@@ -12,6 +12,7 @@ const http = require("http");
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
+const expressStaticGzip = require("express-static-gzip");
 // const socketIo = require("socket.io");
 const IoService = require("./services/IoService");
 
@@ -44,7 +45,18 @@ require("./services/passport");
 app.use("/api", routes);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("build"));
+  app.use(
+    expressStaticGzip("build", {
+      enableBrotli: true,
+      customCompressions: [
+        {
+          encodingName: "deflate",
+          fileExtension: "zz"
+        }
+      ],
+      orderPreference: ["br", "gz"]
+    })
+  );
 
   const path = require("path");
   app.get("*", (req, res) => {
