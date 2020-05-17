@@ -7,9 +7,9 @@ jobs:
       image: ubuntu-1604:201903-01
     steps:
       - run:
-        name: Deploy Script
-        commands:
-          - ../build/deploy.sh`
+          name: Deploy Script
+          commands:
+            - ../build/deploy.sh`
 workflows:
   build-and-test:
     jobs:
