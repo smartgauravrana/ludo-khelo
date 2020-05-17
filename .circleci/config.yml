@@ -4,15 +4,22 @@ orbs:
 jobs:
   deploy-job:
     machine:
-      image: ubuntu-1604:201903-01
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "08 76 40 80 9E FF CD B5 42 FB B5 16 DC 2F BF E3 CF 2E 6F AD 8D 06 F1 33 BC 17 4C C3 A7 4E 62 4B"
-      - run:
-          name: Deploy Script
-          commands:
-            - ../build/deploy.sh`
+       enabled: true
+     steps:
+       - run:
+           name: Deploy Over SSH
+           command: |
+             ssh ubuntu@ec2-18-218-159-166.us-east-2.compute.amazonaws.com "./deploy.sh"
+    # machine:
+    #   image: ubuntu-1604:201903-01
+    # steps:
+    #   - add_ssh_keys:
+    #       fingerprints:
+    #         - "08 76 40 80 9E FF CD B5 42 FB B5 16 DC 2F BF E3 CF 2E 6F AD 8D 06 F1 33 BC 17 4C C3 A7 4E 62 4B"
+    #   - run:
+    #       name: Deploy Script
+    #       commands:
+    #         - ../build/deploy.sh`
 workflows:
   build-and-test:
     jobs:
