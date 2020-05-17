@@ -4,35 +4,47 @@ import * as Yup from "yup";
 import { connect } from "react-redux";
 import { Button } from "antd";
 import PropTypes from "prop-types";
-import socketIOClient from "socket.io-client";
 
-import { getAllMatches, postMatch, addMatch } from "redux/modules/matchDetails";
+import {
+  getAllMatches,
+  postMatch,
+  addMatch,
+  resetMatches
+} from "redux/modules/matchDetails";
+import { checkLogin } from "redux/modules/userDetails";
 import TextInput from "components/TextInput";
 import Matches from "components/Matches";
-import { SOCKET_EVENTS } from "../../../constants/index";
+import { SOCKET_EVENTS } from "../../../constants";
 import "./Home.scss";
 
-const ENDPOINT = "http://127.0.0.1:3000";
 class Home extends Component {
   componentDidMount() {
-    console.log(SOCKET_EVENTS);
     this.props.getAllMatches();
-    this.socket = socketIOClient(ENDPOINT);
-    this.socket.on(SOCKET_EVENTS.serverMatchUpdates, data => {
-      this.props.addMatch(data[0]);
+    const { socket } = this.props;
+    socket.on(SOCKET_EVENTS.serverMatchUpdates, data => {
+      const match = data[0];
+      match.createdBy !== this.props.userDetails._id &&
+        this.props.addMatch(data[0]);
     });
   }
 
+  componentWillUnmount() {
+    const { socket } = this.props;
+    socket.removeAllListeners(SOCKET_EVENTS.serverMatchUpdates);
+  }
+
   onChallengeSet = values => {
-    console.log("values: ", values);
+    const { socket } = this.props;
     this.props.postMatch(values, () => {
-      this.socket.emit(SOCKET_EVENTS.clientMatchPosted, {
+      this.props.checkLogin();
+      socket.emit(SOCKET_EVENTS.clientMatchPosted, {
         id: this.props.userDetails._id
       });
     });
   };
 
   render() {
+    const { userDetails } = this.props;
     return (
       <div className="Home">
         <div className="Home__message">
@@ -48,7 +60,13 @@ class Home extends Component {
               .required("Required!")
               .min(50, "Amount must be minimum 50")
           })}
-          onSubmit={values => this.onChallengeSet(values)}
+          onSubmit={values => {
+            if (!userDetails.matchInProgress) {
+              this.onChallengeSet(values);
+            } else {
+              alert("First, Post the result of pending match");
+            }
+          }}
         >
           {props => (
             <div className="Home__setChallenge">
@@ -74,12 +92,17 @@ class Home extends Component {
 export default connect(({ userDetails }) => ({ userDetails }), {
   getAllMatches,
   postMatch,
-  addMatch
+  addMatch,
+  resetMatches,
+  checkLogin
 })(Home);
 
 Home.propTypes = {
   getAllMatches: PropTypes.func,
   postMatch: PropTypes.func,
   userDetails: PropTypes.object,
-  addMatch: PropTypes.func
+  addMatch: PropTypes.func,
+  resetMatches: PropTypes.func,
+  socket: PropTypes.object,
+  checkLogin: PropTypes.func
 };

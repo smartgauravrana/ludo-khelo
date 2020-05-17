@@ -4,5 +4,6 @@ export default {
   currentUser: "/current_user",
   matches: "/matches",
   sell: "/sell",
-  buy: "/buy"
+  buy: "/buy",
+  result: "/result"
 };

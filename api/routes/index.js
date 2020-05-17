@@ -27,8 +27,13 @@ router
   .post("/matches", isLogin, matchCtrl.addMatch);
 
 router
-  .post("/matches/:matchId", isLogin, matchCtrl.update)
-  .delete("/matches/:matchId", isLogin, matchCtrl.delete);
+  .route("/matches/:matchId")
+  .get(isLogin, matchCtrl.getOne)
+  .put(isLogin, matchCtrl.update)
+  .delete(isLogin, matchCtrl.delete);
+
+// POST RESULT
+router.route("/result").post(isLogin, matchCtrl.postResult);
 
 // BUY CHIPS
 router.post("/buy", isLogin, billingCtrl.buyChips);

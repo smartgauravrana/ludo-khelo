@@ -1,8 +1,11 @@
+require("dotenv").config();
+
 // db related stuff
 require("./api/data/db");
 require("./api/data/model/match.model");
 require("./api/data/model/user.model");
 require("./api/data/model/sellRequest.model");
+// for inject env variables from config
 
 const express = require("express");
 const http = require("http");
@@ -17,6 +20,10 @@ const server = http.createServer(app);
 
 const io = new IoService(server);
 const routes = require("./api/routes");
+
+// Mail searching
+const { startMailServer } = require("./services/mailbox");
+startMailServer();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,13 +42,6 @@ app.use(passport.session());
 require("./services/passport");
 
 app.use("/api", routes);
-
-// io.on("connection", socket => {
-//   console.log("User connected: ", socket);
-//   socket.on("disconnect", () => {
-//     console.log("Client disconnected");
-//   });
-// });
 
 server.listen(3000, () => {
   console.log("Server is running at port 3000 ;)");

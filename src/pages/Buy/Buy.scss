@@ -9,11 +9,20 @@
   .Buy__paymentNumber {
     display: flex;
     justify-content: center;
+    padding: 0 20px;
   }
 
   .Buy__form {
     text-align: center;
     padding: 0 20px;
+  }
+
+  #paymentNumber {
+    background: #ddd;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
   }
 
   .Buy__QA {
@@ -22,5 +31,9 @@
     background: white;
     padding: 10px;
     border: 1px solid black;
+  }
+
+  #copyButton {
+    padding: 10px 32px;
   }
 }

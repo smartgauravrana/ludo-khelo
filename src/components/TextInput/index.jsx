@@ -7,7 +7,7 @@ import "./TextInput.scss";
 export default function TextInput({ label, ...props }) {
   const [field, meta] = useField(props);
   return (
-    <div className="form-control">
+    <div className="form-control form-group">
       {label && <label htmlFor={props.name}>{label}</label>}
       <input {...field} {...props} />
       {meta.touched && meta.error ? (

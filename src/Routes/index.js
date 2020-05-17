@@ -1,4 +1,6 @@
+import React from "react";
 import routePaths from "./routePaths";
+import SocketContext from "context/socket-context";
 
 import Login from "pages/Login";
 import Register from "pages/Register";
@@ -7,6 +9,8 @@ import Home from "pages/Home";
 import Buy from "pages/Buy";
 import Sell from "pages/Sell";
 import TermCondition from "pages/TermCondition";
+import MatchDetail from "pages/MatchDetail";
+import Timeline from "pages/Timeline";
 
 export const publicRoutes = [
   {
@@ -21,7 +25,13 @@ export const publicRoutes = [
   },
   {
     path: routePaths.HOME,
-    component: Home,
+    component: function HomeWithSocket(props) {
+      return (
+        <SocketContext.Consumer>
+          {socket => <Home {...props} socket={socket} />}
+        </SocketContext.Consumer>
+      );
+    },
     exact: true
   },
   {
@@ -38,6 +48,14 @@ export const publicRoutes = [
     path: routePaths.TERMS,
     component: TermCondition,
     exact: true
+  },
+  {
+    path: routePaths.MATCH_DETAIL,
+    component: MatchDetail
+  },
+  {
+    path: routePaths.HISTORY,
+    component: Timeline
   }
 ];
 

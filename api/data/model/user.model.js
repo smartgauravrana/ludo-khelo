@@ -9,6 +9,7 @@ const userSchema = new Schema({
   verified: { type: Boolean, default: false },
   chips: { type: Number, default: 0 },
   isAdmin: { type: Boolean, default: false },
+  matchInProgress: { type: Number, default: 0 },
   salt: String
 });
 

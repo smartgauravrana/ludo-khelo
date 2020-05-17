@@ -22,6 +22,8 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
         closable={true}
         onClose={onMenuClick}
         visible={drawerVisible}
+        bodyStyle={{ height: "unset" }}
+        height={350}
       >
         <div className="drawable-items">
           {!userDetails._id ? (
@@ -35,6 +37,12 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
             </>
           ) : (
             <>
+              <Link to={routePaths.HOME} onClick={onMenuClick}>
+                Play
+              </Link>
+              <Link to={routePaths.HISTORY} onClick={onMenuClick}>
+                History
+              </Link>
               <Link to={routePaths.BUY} onClick={onMenuClick}>
                 Buy Chips
               </Link>

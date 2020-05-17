@@ -47,7 +47,7 @@ const registerFields = [
 function RegisterForm({ register }) {
   const history = useHistory();
   return (
-    <div>
+    <div className="RegisterForm">
       <Formik
         initialValues={{
           name: "",
@@ -94,6 +94,7 @@ function RegisterForm({ register }) {
             </div>
             <div className="input-error">{props.errors.agreeToTerms}</div>
             <Button
+              className="RegisterForm__SubmitButton"
               type="primary"
               onClick={() => props.isValid && props.submitForm()}
             >

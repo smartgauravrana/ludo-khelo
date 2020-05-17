@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Layout } from "antd";
 import PropTypes from "prop-types";
 import HeaderContent from "components/HeaderContent";
+import "./AppLayout.scss";
 
 const { Header, Content } = Layout;
 
@@ -15,7 +16,9 @@ export default function AppLayout(props) {
       <Header>
         <HeaderContent onMenuClick={showDrawer} drawerVisible={visible} />
       </Header>
-      <Content>{props.children}</Content>
+      <Content>
+        <div className="container">{props.children}</div>
+      </Content>
       {/* <Footer>CopyRights RANA Team ;) 2020</Footer> */}
     </Layout>
   );

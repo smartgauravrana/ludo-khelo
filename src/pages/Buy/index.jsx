@@ -1,12 +1,13 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import CustomTitle from "components/CustomTitle";
 import TextInput from "components/TextInput";
+import { buyChips } from "redux/modules/userDetails";
 import "./Buy.scss";
 
 const BuyFields = [
@@ -22,7 +23,7 @@ const BuyFields = [
   }
 ];
 
-function Buy({ userDetails }) {
+function Buy({ userDetails, buyChips }) {
   function copy() {
     var copyText = document.querySelector("#paymentNumber");
     copyText.select();
@@ -49,10 +50,21 @@ function Buy({ userDetails }) {
     </>
   );
 
+  const onBuyChips = values => {
+    buyChips(
+      values,
+      () => message.success("Chips Added!"),
+      err => {
+        const { data } = err.response;
+        message.error(data.msg);
+      }
+    );
+  };
+
   return (
     <div className="Buy">
       <div className="Buy__Header">{noticeInfo}</div>
-      <div className="Buy__paymentNumber">
+      <div className="Buy__paymentNumber form-group">
         <input
           id="paymentNumber"
           type="number"
@@ -77,7 +89,7 @@ function Buy({ userDetails }) {
             transactionId: Yup.string().required("Required!"),
             amount: Yup.number().required("Required!")
           })}
-          onSubmit={console.log}
+          onSubmit={onBuyChips}
         >
           {props => (
             <Form>
@@ -87,7 +99,11 @@ function Buy({ userDetails }) {
               <Button
                 className="Load_btn"
                 type="success"
-                onClick={() => props.isValid && props.submitForm()}
+                onClick={() => {
+                  if (props.isValid) {
+                    props.submitForm();
+                  }
+                }}
               >
                 Load
               </Button>
@@ -118,11 +134,15 @@ export default connect(
   ({ userDetails }) => ({
     userDetails
   }),
-  null
+  {
+    buyChips
+  }
 )(Buy);
 
 Buy.propTypes = {
   userDetails: PropTypes.object,
   isValid: PropTypes.bool,
-  submitForm: PropTypes.func
+  submitForm: PropTypes.func,
+  buyChips: PropTypes.func,
+  resetForm: PropTypes.func
 };

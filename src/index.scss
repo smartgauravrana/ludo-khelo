@@ -1,5 +1,11 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 16px;
 }
 
 .text-danger {
@@ -25,4 +31,29 @@
 .Load_btn {
   color: white;
   background: #5ae776;
+}
+
+.danger__btn {
+  background: red;
+  border: none;
+}
+
+.cancel__btn {
+  background: yellow;
+  color: black;
+  border: none;
+}
+
+.challengeBetween {
+  color: coral;
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 15px 0;
+}
+
+.notice-msg {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: block;
 }

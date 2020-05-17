@@ -18,7 +18,26 @@ function genPassword(password) {
   };
 }
 
+function getPaytmDetails(text) {
+  const amountRegex = /₹\s\d+/;
+  const idRegex = /Transaction Id:\s\d+/;
+  const [amountString] = text.match(amountRegex);
+  const [idString] = text.match(idRegex);
+  const amount = +amountString.split(" ").pop().trim();
+  const transactionId = idString.split(" ").pop().trim();
+  return { amount, transactionId };
+}
+
+const isEmpty = value =>
+  value === null ||
+  value === undefined ||
+  (Array.isArray(value) && !value.length) ||
+  (typeof value === "object" && !Object.keys(value).length) ||
+  (typeof value === "string" && !value.trim().length);
+
 module.exports = {
   validPassword,
-  genPassword
+  genPassword,
+  getPaytmDetails,
+  isEmpty
 };
