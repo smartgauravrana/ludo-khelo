@@ -1,10 +1,11 @@
+require("dotenv").config();
+
 // db related stuff
 require("./api/data/db");
 require("./api/data/model/match.model");
 require("./api/data/model/user.model");
 require("./api/data/model/sellRequest.model");
 // for inject env variables from config
-require("dotenv").config();
 
 const express = require("express");
 const http = require("http");

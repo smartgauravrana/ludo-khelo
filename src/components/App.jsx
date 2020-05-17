@@ -9,10 +9,12 @@ import PrivateRoute from "components/PrivateRoute";
 import { publicRoutes, privateRoutes } from "Routes";
 import { checkLogin } from "redux/modules/userDetails";
 import SocketContext from "context/socket-context";
+import { SOCKET_CONFIG } from "config";
 import "./App.scss";
 import routePaths from "../Routes/routePaths";
 
-const ENDPOINT = "http://127.0.0.1:3000";
+const ENDPOINT = SOCKET_CONFIG.endpoint;
+console.log(ENDPOINT);
 const socket = socketIOClient(ENDPOINT);
 function App(props) {
   const { checkLogin } = props;

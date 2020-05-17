@@ -5,9 +5,12 @@
   "main": "app.js",
   "scripts": {
     "start": "npm-run-all --parallel dev:*",
-    "dev:client-build": "webpack-dev-server --mode=development --open",
+    "dev:build-client": "webpack-dev-server --mode=development  --env.NODE_ENV=development --open",
     "dev:start": "nodemon app.js",
-    "build": "webpack -w"
+    "prod:build-client": "webpack --config webpack.client.js --mode=production --env.NODE_ENV=production",
+    "prod:stop-server": "pm2 stop",
+    "prod:start-server": "pm2 start app.js",
+    "prod": "npm-run-all --serial prod:*"
   },
   "author": "",
   "license": "ISC",
