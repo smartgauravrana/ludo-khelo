@@ -3,13 +3,11 @@ orbs:
   node: circleci/node@1.1.6
 jobs:
   deploy-job:
-   branches:
+    machine:
+      image: ubuntu-1604:201903-01
+    branches:
       only:
         - master
-    executor:
-      name: node/default
-    commands:
-          - ./deploy.sh
     steps:
       - checkout
       - node/with-cache:
@@ -19,6 +17,6 @@ jobs:
               commands:
                 - ../build/deploy.sh`
 workflows:
-    build-and-test:
-      jobs:
-        - deploy-job
+  build-and-test:
+    jobs:
+      - deploy-job
