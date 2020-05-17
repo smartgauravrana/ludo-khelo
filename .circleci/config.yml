@@ -5,17 +5,11 @@ jobs:
   deploy-job:
     machine:
       image: ubuntu-1604:201903-01
-    branches:
-      only:
-        - master
     steps:
-      - checkout
-      - node/with-cache:
-          steps:
-            - run:
-              name: Deploy Script
-              commands:
-                - ../build/deploy.sh`
+      - run:
+        name: Deploy Script
+        commands:
+          - ../build/deploy.sh`
 workflows:
   build-and-test:
     jobs:
