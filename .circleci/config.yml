@@ -4,12 +4,12 @@ orbs:
 jobs:
   deploy-job:
     machine:
-       enabled: true
-     steps:
-       - run:
-           name: Deploy Over SSH
-           command: |
-             ssh ubuntu@ec2-18-218-159-166.us-east-2.compute.amazonaws.com "./deploy.sh"
+      enabled: true
+    steps:
+      - run:
+          name: Deploy Over SSH
+          command: |
+            ssh ubuntu@ec2-18-218-159-166.us-east-2.compute.amazonaws.com "./deploy.sh"
     # machine:
     #   image: ubuntu-1604:201903-01
     # steps:
