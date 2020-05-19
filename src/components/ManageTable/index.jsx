@@ -109,7 +109,11 @@ class ManageTable extends Component {
 
   closeModal = () =>
     this.setState({
-      showModal: false,
+      showModal: false
+    });
+
+  afterClose = () =>
+    this.setState({
       selectedRecord: null,
       selectedWinnerId: null,
       modalError: ""
@@ -127,7 +131,12 @@ class ManageTable extends Component {
 
   render() {
     const { matches, isMatchesLoading, total } = this.props;
-    const { selectedRecord, showModal, modalError } = this.state;
+    const {
+      selectedRecord,
+      showModal,
+      modalError,
+      selectedWinnerId
+    } = this.state;
     return (
       <div className="ManageTable">
         <DisplayTable
@@ -144,6 +153,7 @@ class ManageTable extends Component {
           onOk={this.onOkHandler}
           onCancel={this.closeModal}
           title="Select Winner"
+          afterClose={this.afterClose}
         >
           <div className="winner-choose">
             <div className="winner-choice">
@@ -152,6 +162,10 @@ class ManageTable extends Component {
                 name="winnerId"
                 value={selectedRecord && selectedRecord.createdBy._id}
                 onChange={() => this.selectWinner(selectedRecord.createdBy._id)}
+                checked={
+                  selectedWinnerId ===
+                  (selectedRecord && selectedRecord.createdBy._id)
+                }
               />
               <label>
                 {selectedRecord && selectedRecord.createdBy.username}
@@ -167,6 +181,12 @@ class ManageTable extends Component {
                   selectedRecord.joinee._id
                 }
                 onChange={() => this.selectWinner(selectedRecord.joinee._id)}
+                checked={
+                  selectedWinnerId ===
+                  (selectedRecord &&
+                    selectedRecord.joinee &&
+                    selectedRecord.joinee._id)
+                }
               />
               <label>
                 {selectedRecord &&
