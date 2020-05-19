@@ -10,6 +10,29 @@ import routePaths from "Routes/routePaths";
 import "./HeaderContent.scss";
 
 function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
+  const adminLinks = (
+    <Link to={routePaths.ADMIN.manage} onClick={onMenuClick}>
+      Manage
+    </Link>
+  );
+
+  const userLinks = (
+    <>
+      <Link to={routePaths.HOME} onClick={onMenuClick}>
+        Play
+      </Link>
+      <Link to={routePaths.HISTORY} onClick={onMenuClick}>
+        History
+      </Link>
+      <Link to={routePaths.BUY} onClick={onMenuClick}>
+        Buy Chips
+      </Link>
+      <Link to={routePaths.SELL} onClick={onMenuClick}>
+        Sell Chips
+      </Link>
+    </>
+  );
+
   return (
     <>
       <div className="header">
@@ -37,21 +60,7 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
             </>
           ) : (
             <>
-              <Link to={routePaths.ADMIN.manage} onClick={onMenuClick}>
-                Manage
-              </Link>
-              <Link to={routePaths.HOME} onClick={onMenuClick}>
-                Play
-              </Link>
-              <Link to={routePaths.HISTORY} onClick={onMenuClick}>
-                History
-              </Link>
-              <Link to={routePaths.BUY} onClick={onMenuClick}>
-                Buy Chips
-              </Link>
-              <Link to={routePaths.SELL} onClick={onMenuClick}>
-                Sell Chips
-              </Link>
+              {userDetails.isAdmin ? adminLinks : userLinks}
               <Link to={routePaths.TERMS} onClick={onMenuClick}>
                 Terms &amp; Conditions
               </Link>
