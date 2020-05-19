@@ -29,18 +29,33 @@ module.exports.getOne = async (req, res) => {
 };
 
 module.exports.getAll = async (req, res) => {
-  const { isOfficial, history, page } = req.query;
+  const { isOfficial, history, page, searchText, matchStatus } = req.query;
   let query;
+  let count;
   if (history) {
     query = Match.find().or([
       { createdBy: req.user._id },
       { joinee: req.user._id }
     ]);
+    count = await Match.countDocuments({
+      $or: [{ createdBy: req.user._id }, { joinee: req.user._id }]
+    });
   } else {
-    query = Match.find({ isOfficial: isOfficial || false })
-      .populate("createdBy")
-      .populate("joinee");
+    const findQuery = {};
+    if (isOfficial) {
+      findQuery.isOfficial = isOfficial || false;
+    }
+    if (searchText) {
+      findQuery._id = searchText;
+    }
+    if (matchStatus) {
+      findQuery.status = matchStatus;
+    }
+    console.log("query: ", findQuery);
+    query = Match.find(findQuery).populate("createdBy").populate("joinee");
+    count = await Match.countDocuments(findQuery);
   }
+  console.log("count: ", count);
   query = query
     .sort({
       _id: -1
@@ -48,7 +63,7 @@ module.exports.getAll = async (req, res) => {
     .skip(page || 0)
     .limit(10);
   const matches = await query.exec();
-  res.send(matches);
+  res.send({ total: count, data: matches });
 };
 
 module.exports.update = async (req, res) => {
@@ -208,6 +223,9 @@ module.exports.postResult = async (req, res) => {
           new: true
         }
       );
+      req.user.chips += match.amount;
+      req.user.matchInProgress = 0;
+      await req.user.save();
       break;
     default:
       return;

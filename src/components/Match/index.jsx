@@ -8,13 +8,14 @@ import { connect } from "react-redux";
 import {
   deleteMatch,
   sendInvite,
-  updateMatchStatus
+  updateMatchStatus,
+  leaveMatch
 } from "redux/modules/matchDetails";
 import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
+import { checkLogin } from "redux/modules/userDetails";
+import { isResultPosted } from "client-utils";
 // import routePaths from "Routes/routePaths";
 import "./Match.scss";
-import { leaveMatch } from "../../redux/modules/matchDetails";
-import { checkLogin } from "../../redux/modules/userDetails";
 
 function Match({
   content,
@@ -113,6 +114,26 @@ function Match({
           View
         </Button>
       );
+    }
+    if (content.status === MATCH_STATUS.onHold) {
+      // checking if result posted by user or not
+      if (!isResultPosted(content.resultsPosted, user._id)) {
+        return (
+          <Button
+            type="primary"
+            className="Load_btn"
+            onClick={() => history.push(`/match/${content._id}`)}
+          >
+            View
+          </Button>
+        );
+      } else {
+        return (
+          <Button type="ghost" disabled>
+            Processing
+          </Button>
+        );
+      }
     }
     return null;
   };

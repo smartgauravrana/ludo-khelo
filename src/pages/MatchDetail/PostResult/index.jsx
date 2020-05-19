@@ -5,6 +5,7 @@ import { message } from "antd";
 
 import { postResult } from "redux/modules/matchDetails";
 import { checkLogin } from "redux/modules/userDetails";
+import Loader from "components/Loader";
 import { storage } from "../../../firebase";
 import { RESULT_OPTIONS } from "../../../../constants";
 import "./PostResult.scss";
@@ -29,21 +30,27 @@ function PostResult({ postResult, checkLogin, matchId }) {
   const [cancelText, setCancelText] = useState("");
   const [imageAsFile, setImageAsFile] = useState("");
   const [imageAsUrl, setImageAsUrl] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const onPostResult = () => {
+    setIsLoading(true);
     let postData = { resultType: choice, matchId };
     switch (choice) {
-      case resultOptions.won:
-        postData = { ...postData, imgUrl: imageAsUrl };
+      case RESULT_OPTIONS.won:
+        postData = { ...postData, imgUrl: imageAsUrl.imgUrl };
         break;
-      case resultOptions.cancel:
+      case RESULT_OPTIONS.cancel:
         postData = { ...postData, cancelReason: cancelText };
         break;
     }
     postResult(
       postData,
-      () => checkLogin(),
+      () => {
+        setIsLoading(false);
+        checkLogin();
+      },
       err => {
+        setIsLoading(false);
         const { data } = err.response;
         message.error(data.msg);
       }
@@ -94,6 +101,7 @@ function PostResult({ postResult, checkLogin, matchId }) {
     if (imageAsFile === "") {
       console.error(`not an image, the image file is a ${typeof imageAsFile}`);
     }
+    setIsLoading(true);
     const uploadTask = storage
       .ref(`/images/${imageAsFile.name}`)
       .put(imageAsFile);
@@ -116,6 +124,7 @@ function PostResult({ postResult, checkLogin, matchId }) {
           .child(imageAsFile.name)
           .getDownloadURL()
           .then(fireBaseUrl => {
+            setIsLoading(false);
             setImageAsUrl(prevObject => ({
               ...prevObject,
               imgUrl: fireBaseUrl
@@ -157,6 +166,7 @@ function PostResult({ postResult, checkLogin, matchId }) {
 
   return (
     <div className="PostResult">
+      {isLoading && <Loader />}
       <h2>POST RESULT</h2>
       <div className="PostResult__select">
         {resultOptions.map(option => (

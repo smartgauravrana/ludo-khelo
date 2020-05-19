@@ -8,6 +8,7 @@ export default {
   MATCH_DETAIL: "/match/:matchId",
   HISTORY: "/history",
   ADMIN: {
-    default: "/admin"
+    default: "/admin",
+    manage: "/manage"
   }
 };

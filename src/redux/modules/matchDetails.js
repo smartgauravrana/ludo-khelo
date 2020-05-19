@@ -96,7 +96,7 @@ export const getAllMatches = (cbSuccess, cbError) => async (
       url: `${endpoints.matches}`,
       params
     });
-    const { data } = res;
+    const { data } = res.data;
     cbSuccess && cbSuccess(data);
     dispatch({ type: SET_MATCH_LIST, payload: data });
   } catch (e) {
