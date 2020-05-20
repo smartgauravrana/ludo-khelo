@@ -11,6 +11,7 @@ import { leaveMatch } from "redux/modules/matchDetails";
 import { checkLogin } from "redux/modules/userDetails";
 import "./HistoryTable.scss";
 import routePaths from "Routes/routePaths";
+import CopyData from "components/CopyData";
 
 class HistoryTable extends Component {
   componentDidMount() {
@@ -30,7 +31,13 @@ class HistoryTable extends Component {
     {
       title: "Match ID",
       dataIndex: "_id",
-      ellipsis: true
+      ellipsis: true,
+      render: _id => (
+        <div>
+          <div>{_id}</div>
+          <CopyData data={_id} title="Copy Match ID" />
+        </div>
+      )
     },
     {
       title: "Title VS",

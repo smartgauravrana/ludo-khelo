@@ -9,6 +9,7 @@ import routePaths from "Routes/routePaths";
 import { getMatches, updateMatches } from "redux/modules/manage";
 import { postResult } from "redux/modules/matchDetails";
 import DisplayTable from "components/DisplayTable";
+import CopyData from "components/CopyData";
 import "./ManageTable.scss";
 
 class ManageTable extends Component {
@@ -49,7 +50,13 @@ class ManageTable extends Component {
     {
       title: "Match ID",
       dataIndex: "_id",
-      ellipsis: true
+      ellipsis: true,
+      render: _id => (
+        <div>
+          <div>{_id}</div>
+          <CopyData data={_id} title="Copy Match ID" />
+        </div>
+      )
     },
     {
       title: "Title VS",

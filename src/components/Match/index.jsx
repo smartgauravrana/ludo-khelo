@@ -17,6 +17,7 @@ import { checkLogin } from "redux/modules/userDetails";
 import MatchActions from "components/MatchActions";
 // import routePaths from "Routes/routePaths";
 import "./Match.scss";
+import CopyData from "../CopyData";
 
 function Match({
   content,
@@ -163,6 +164,7 @@ function Match({
             />
           )}
         </div>
+        <CopyData data={content._id} title="Copy Match Id" />
       </Card>
     </div>
   );
