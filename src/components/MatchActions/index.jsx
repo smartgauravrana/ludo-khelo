@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button } from "antd";
+import { useHistory } from "react-router-dom";
 
 import { MATCH_STATUS } from "../../../constants";
 import { isResultPosted } from "client-utils";
@@ -12,6 +13,7 @@ export default function MatchActions({
   deleteMatch,
   user
 }) {
+  const history = useHistory();
   if (content.status === MATCH_STATUS.created) {
     if (content.createdBy._id !== user._id) {
       return (
