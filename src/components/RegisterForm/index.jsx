@@ -82,7 +82,7 @@ function RegisterForm({ register }) {
             values,
             () => {
               setIsLoading(false);
-              history.push(routePaths.HOME);
+              history.push(routePaths.LOGIN);
             },
             err => {
               setIsLoading(false);

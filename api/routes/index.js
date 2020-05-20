@@ -9,7 +9,24 @@ const { isLogin } = require("../../middlewares");
 
 router.post(
   "/login",
-  passport.authenticate("local", { failureRedirect: "/login" }),
+  function (req, res, next) {
+    console.log("inside login handler");
+    passport.authenticate("local", function (err, user, info) {
+      console.log("inside passport authenticate");
+      if (err) {
+        return res.status(500).send({ msg: "Something went wrong!" });
+      }
+      if (!user) {
+        return res.status(404).send({ msg: "User not exist!" });
+      }
+      req.logIn(user, function (err) {
+        if (err) {
+          return next(err);
+        }
+        return next();
+      });
+    })(req, res, next);
+  },
   authCtrl.login
 );
 

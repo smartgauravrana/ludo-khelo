@@ -4,13 +4,14 @@ const { genPassword } = require("../../utils");
 const User = mongoose.model("users");
 
 module.exports.login = (req, res) => {
+  console.log("inside auth controller");
   res.send(req.user);
 };
 
 module.exports.register = async (req, res) => {
   const { name, username, phone, password } = req.body;
   const { hash, salt } = genPassword(password);
-  const isUserExist = await User.find({ phone });
+  const isUserExist = await User.findOne({ phone });
   if (!isUserExist) {
     try {
       const user = await new User({

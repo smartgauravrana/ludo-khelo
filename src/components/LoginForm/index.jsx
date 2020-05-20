@@ -42,13 +42,20 @@ function LoginForm({ login }) {
           password: Yup.string().required("Required!")
         })}
         onSubmit={values =>
-          login(values, userDetails => {
-            message.success("Success");
-            if (userDetails.isAdmin) {
-              return history.push(routePaths.ADMIN.default);
+          login(
+            values,
+            userDetails => {
+              message.success("Success");
+              if (userDetails.isAdmin) {
+                return history.push(routePaths.ADMIN.default);
+              }
+              history.push(routePaths.HOME);
+            },
+            err => {
+              const { data } = err.response;
+              message.error(data.msg);
             }
-            history.push(routePaths.HOME);
-          })
+          )
         }
       >
         {props => (
