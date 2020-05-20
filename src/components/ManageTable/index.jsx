@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Button, Modal } from "antd";
+import { Button, Modal, message } from "antd";
+import { withRouter } from "react-router-dom";
 
-import { getMatches } from "redux/modules/manage";
+import { MATCH_STATUS } from "../../../constants";
+import routePaths from "Routes/routePaths";
+import { getMatches, updateMatches } from "redux/modules/manage";
+import { postResult } from "redux/modules/matchDetails";
 import DisplayTable from "components/DisplayTable";
 import "./ManageTable.scss";
 
@@ -14,12 +18,31 @@ class ManageTable extends Component {
       selectedRecord: null,
       showModal: false,
       selectedWinnerId: null,
-      modalError: ""
+      modalError: "",
+      matchFilter: MATCH_STATUS.onHold
     };
   }
 
   componentDidMount() {
-    this.props.getMatches({});
+    const { getMatches, location } = this.props;
+    const { matchFilter } = this.state;
+    const options = {
+      matchStatus: matchFilter,
+      page: location.search.split("?page=").pop() || 1
+    };
+    getMatches({ options });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { location, getMatches } = this.props;
+    const { matchFilter } = this.state;
+    if (prevProps.location.search !== location.search) {
+      const options = {
+        matchStatus: matchFilter,
+        page: location.search.split("?page=").pop() || 1
+      };
+      getMatches({ options });
+    }
   }
 
   columns = [
@@ -122,15 +145,31 @@ class ManageTable extends Component {
   selectWinner = id => this.setState({ selectedWinnerId: id });
 
   onOkHandler = () => {
-    if (!this.state.selectedWinnerId) {
+    const { selectedRecord, selectedWinnerId } = this.state;
+    if (!selectedWinnerId) {
       this.setState({ modalError: "Choose any winner!" });
     }
     this.setState({ modalError: "" });
-    console.log(this.state.selectedWinnerId);
+    this.props.postResult(
+      {
+        matchId: selectedRecord._id,
+        winner: selectedWinnerId,
+        resultType: "completed"
+      },
+      data => {
+        this.setState({ showModal: false });
+        this.props.updateMatches(data);
+        message.success("Action completed");
+      },
+      err => {
+        const { data } = err.response;
+        message.error(data.msg);
+      }
+    );
   };
 
   render() {
-    const { matches, isMatchesLoading, total } = this.props;
+    const { matches, isMatchesLoading, total, history } = this.props;
     const {
       selectedRecord,
       showModal,
@@ -145,7 +184,14 @@ class ManageTable extends Component {
           columns={this.columns}
           loading={isMatchesLoading}
           paginationProps={{
-            total: total
+            total: total,
+            onChange: currentPage => {
+              history.push(
+                `${routePaths.ADMIN.manage}${
+                  currentPage !== 1 ? "?page=" + currentPage : ""
+                }`
+              );
+            }
           }}
         />
         <Modal
@@ -202,20 +248,28 @@ class ManageTable extends Component {
   }
 }
 
-export default connect(
-  ({ manage: { matches, isMatchesLoading, total } }) => ({
-    matches,
-    isMatchesLoading,
-    total
-  }),
-  {
-    getMatches
-  }
-)(ManageTable);
+export default withRouter(
+  connect(
+    ({ manage: { matches, isMatchesLoading, total } }) => ({
+      matches,
+      isMatchesLoading,
+      total
+    }),
+    {
+      getMatches,
+      postResult,
+      updateMatches
+    }
+  )(ManageTable)
+);
 
 ManageTable.propTypes = {
   matches: PropTypes.array,
   total: PropTypes.number,
   isMatchesLoading: PropTypes.bool,
-  getMatches: PropTypes.func
+  getMatches: PropTypes.func,
+  postResult: PropTypes.func,
+  updateMatches: PropTypes.func,
+  location: PropTypes.object,
+  history: PropTypes.object
 };

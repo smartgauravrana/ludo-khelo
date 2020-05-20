@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import { register } from "redux/modules/userDetails";
 import TextInput from "components/TextInput";
 import routePaths from "Routes/routePaths";
+import Loader from "components/Loader";
 import "./RegisterForm.scss";
 
 const registerFields = [
@@ -46,6 +47,7 @@ const registerFields = [
 
 function RegisterForm({ register }) {
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <div className="RegisterForm">
       <Formik
@@ -74,11 +76,21 @@ function RegisterForm({ register }) {
             "Accept Terms & Conditions is required"
           )
         })}
-        onSubmit={values =>
-          register(values, () => {
-            history.push(routePaths.HOME);
-          })
-        }
+        onSubmit={values => {
+          setIsLoading(true);
+          register(
+            values,
+            () => {
+              setIsLoading(false);
+              history.push(routePaths.HOME);
+            },
+            err => {
+              setIsLoading(false);
+              const { data } = err.response;
+              message.error(data.msg);
+            }
+          );
+        }}
       >
         {props => (
           <Form>
@@ -103,6 +115,7 @@ function RegisterForm({ register }) {
           </Form>
         )}
       </Formik>
+      {isLoading && <Loader />}
     </div>
   );
 }

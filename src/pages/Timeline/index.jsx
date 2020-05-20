@@ -1,15 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+import HistoryTable from "components/HistoryTable";
 import { getTimeline } from "redux/modules/timeline";
 import "./Timeline.scss";
 
 function Timeline({ timeline, getTimeline }) {
-  useEffect(() => {
-    getTimeline(data => console.log("timeline: ", data));
-  }, []);
-  return <div>Timleine</div>;
+  return (
+    <div className="Timeline">
+      <HistoryTable />
+    </div>
+  );
 }
 
 export default connect(({ timeline }) => ({ timeline }), {

@@ -91,6 +91,7 @@ export const getAllMatches = (cbSuccess, cbError) => async (
   if (isAdmin) {
     params.isOfficial = true;
   }
+  params.contests = true;
   try {
     const res = await call({
       url: `${endpoints.matches}`,

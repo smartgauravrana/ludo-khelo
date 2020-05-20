@@ -10,18 +10,23 @@ module.exports.login = (req, res) => {
 module.exports.register = async (req, res) => {
   const { name, username, phone, password } = req.body;
   const { hash, salt } = genPassword(password);
-  try {
-    const user = await new User({
-      name,
-      username,
-      phone,
-      password: hash,
-      salt
-    }).save();
-    res.send(user);
-  } catch (e) {
-    console.log(e);
-    return res.status(500).send({ error: "Error while register" });
+  const isUserExist = await User.find({ phone });
+  if (!isUserExist) {
+    try {
+      const user = await new User({
+        name,
+        username,
+        phone,
+        password: hash,
+        salt
+      }).save();
+      res.send(user);
+    } catch (e) {
+      console.log(e);
+      return res.status(500).send({ error: "Error while register" });
+    }
+  } else {
+    res.status(400).send({ msg: "User with this phone already exists!" });
   }
 };
 

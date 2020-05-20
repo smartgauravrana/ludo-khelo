@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Match = mongoose.model("matches");
 const User = mongoose.model("users");
 const { MATCH_STATUS, RESULT_OPTIONS } = require("../../constants");
-const { isEmpty } = require("../../utils");
+const { isEmpty, genRewardAmount } = require("../../utils");
 
 module.exports.addMatch = async (req, res) => {
   const { amount } = req.body;
@@ -29,19 +29,27 @@ module.exports.getOne = async (req, res) => {
 };
 
 module.exports.getAll = async (req, res) => {
-  const { isOfficial, history, page, searchText, matchStatus } = req.query;
+  const {
+    isOfficial,
+    history,
+    page,
+    searchText,
+    matchStatus,
+    contests
+  } = req.query;
   let query;
   let count;
   if (history) {
-    query = Match.find().or([
-      { createdBy: req.user._id },
-      { joinee: req.user._id }
-    ]);
+    query = Match.find()
+      .or([{ createdBy: req.user._id }, { joinee: req.user._id }])
+      .populate("createdBy")
+      .populate("joinee");
     count = await Match.countDocuments({
       $or: [{ createdBy: req.user._id }, { joinee: req.user._id }]
     });
   } else {
-    const findQuery = {};
+    let findQuery = {};
+
     if (isOfficial) {
       findQuery.isOfficial = isOfficial || false;
     }
@@ -50,6 +58,10 @@ module.exports.getAll = async (req, res) => {
     }
     if (matchStatus) {
       findQuery.status = matchStatus;
+    }
+
+    if (contests) {
+      findQuery = { status: { $ne: MATCH_STATUS.completed } };
     }
     console.log("query: ", findQuery);
     query = Match.find(findQuery).populate("createdBy").populate("joinee");
@@ -60,7 +72,7 @@ module.exports.getAll = async (req, res) => {
     .sort({
       _id: -1
     })
-    .skip(page || 0)
+    .skip(10 * (page - 1 || 0))
     .limit(10);
   const matches = await query.exec();
   res.send({ total: count, data: matches });
@@ -126,7 +138,7 @@ module.exports.delete = async (req, res) => {
 
 module.exports.postResult = async (req, res) => {
   console.log("body: ", req.body);
-  const { matchId, resultType, cancelReason, imgUrl } = req.body;
+  const { matchId, resultType, cancelReason, imgUrl, winner } = req.body;
 
   // finding match
   const match = await Match.findById({ _id: matchId });
@@ -205,7 +217,7 @@ module.exports.postResult = async (req, res) => {
       req.user.matchInProgress = 0;
       await req.user.save();
       await User.findByIdAndUpdate(otherUserId, {
-        $inc: { chips: match.amount },
+        $inc: { chips: genRewardAmount(match.amount) },
         $set: { matchInProgress: 0 }
       }).exec();
       break;
@@ -227,11 +239,30 @@ module.exports.postResult = async (req, res) => {
       req.user.matchInProgress = 0;
       await req.user.save();
       break;
+    case "completed":
+      // chnage status and reqard money
+      if (req.user.isAdmin) {
+        result = await Match.findByIdAndUpdate(
+          matchId,
+          {
+            $set: { status: MATCH_STATUS.completed, winner: winner }
+          },
+          {
+            new: true
+          }
+        );
+        User.findByIdAndUpdate(winner, {
+          $inc: { chips: genRewardAmount(match.amount) }
+        }).exec();
+      } else {
+        return res
+          .status(400)
+          .send({ msg: "You don't have permissions for action" });
+      }
+      break;
+
     default:
       return;
   }
-
-  // match.resultsPosted[resultType].push({ postedBy: "gaurav" });
-  // await match.save();
   res.send(result);
 };

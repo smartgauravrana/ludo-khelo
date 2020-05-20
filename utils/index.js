@@ -18,6 +18,25 @@ function genPassword(password) {
   };
 }
 
+function genRewardAmount(matchAmount) {
+  let reward;
+  if (matchAmount < 250) {
+    // charge 10%
+    reward = matchAmount - matchAmount * 0.1;
+  }
+  if (matchAmount >= 250 && matchAmount <= 500) {
+    // charge Rs.25
+    reward = matchAmount - 25;
+  }
+
+  if (matchAmount > 500) {
+    // charge 5%
+    reward = matchAmount - matchAmount * 0.05;
+  }
+
+  return Math.floor(reward);
+}
+
 function getPaytmDetails(text) {
   const amountRegex = /₹\s\d+/;
   const idRegex = /Transaction Id:\s\d+/;
@@ -39,5 +58,6 @@ module.exports = {
   validPassword,
   genPassword,
   getPaytmDetails,
-  isEmpty
+  isEmpty,
+  genRewardAmount
 };

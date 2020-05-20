@@ -22,11 +22,7 @@ function App(props) {
 
   useEffect(() => {
     checkLogin(user => {
-      if (user._id) {
-        user.isAdmin
-          ? history.replace(routePaths.ADMIN.default)
-          : history.replace(routePaths.HOME);
-      } else {
+      if (!user._id) {
         history.replace(routePaths.LOGIN);
       }
     });

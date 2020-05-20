@@ -17,6 +17,7 @@ export const getMatches = ({
   cbSuccess,
   cbError
 }) => async dispatch => {
+  console.log("options: ", options);
   dispatch({ type: SET_IS_MATCHES_LOADING, payload: true });
   try {
     const res = await call({
@@ -34,6 +35,15 @@ export const getMatches = ({
   } finally {
     dispatch({ type: SET_IS_MATCHES_LOADING, payload: false });
   }
+};
+
+export const updateMatches = match => async (dispatch, getState) => {
+  const {
+    manage: { matches, total }
+  } = getState();
+  const filteredMatches = matches.filter(el => el._id !== match._id);
+  dispatch({ type: SET_MATCHES, payload: filteredMatches });
+  dispatch({ type: SET_TOTAL, payload: total - 1 });
 };
 
 const getReducer = {
