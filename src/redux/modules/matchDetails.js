@@ -19,7 +19,7 @@ export const postResult = (postData, cbSuccess, cbError) => async dispatch => {
       url: endpoints.result,
       data: postData
     });
-    const { data } = res;
+    const { data } = res.data;
     cbSuccess && cbSuccess(data);
   } catch (e) {
     console.log("post result err");
@@ -37,7 +37,7 @@ export const postMatch = (match, cbSuccess, cbError) => async (
       url: endpoints.matches,
       data: match
     });
-    const { data } = res;
+    const { data } = res.data;
     cbSuccess && cbSuccess(data);
     const { userDetails } = getState();
     dispatch({ type: SET_MATCH_DETAILS, payload: data });
@@ -62,7 +62,7 @@ export const getMatch = (matchId, cbSuccess, cbError) => async (
     const res = await call({
       url: `${endpoints.matches}/${matchId}`
     });
-    const { data } = res;
+    const { data } = res.data;
     const {
       matchDetails: { matchList }
     } = getState();
@@ -91,7 +91,7 @@ export const getAllMatches = (cbSuccess, cbError) => async (
   if (isAdmin) {
     params.isOfficial = true;
   }
-  params.contests = true;
+  params["status[ne]"] = "completed";
   try {
     const res = await call({
       url: `${endpoints.matches}`,
@@ -119,7 +119,7 @@ export const deleteMatch = (match, cbSuccess, cbError) => async (
       url: `${endpoints.matches}/${match._id}`,
       method: "DELETE"
     });
-    const { data } = res;
+    const { data } = res.data;
     const {
       matchDetails: { matchList }
     } = getState();
@@ -151,7 +151,7 @@ export const acceptInvite = ({ match, roomId }, cbSuccess, cbError) => async (
 ) => {
   const updateObj = { roomId };
   const res = await updateMatch(updateObj, match._id);
-  const { data } = res;
+  const { data } = res.data;
   const {
     matchDetails: { matchList }
   } = getState();
@@ -171,7 +171,7 @@ export const sendInvite = (match, cbSuccess, cbError) => async (
 ) => {
   const updateObj = { isJoinee: true };
   const res = await updateMatch(updateObj, match._id);
-  const { data } = res;
+  const { data } = res.data;
   const {
     matchDetails: { matchList }
   } = getState();
@@ -193,7 +193,7 @@ export const leaveMatch = (match, cbSuccess, cbError) => async (
   try {
     const updateObj = { leaveMatch: true };
     const res = await updateMatch(updateObj, match._id);
-    const { data } = res;
+    const { data } = res.data;
     const {
       matchDetails: { matchList }
     } = getState();

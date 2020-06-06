@@ -1,43 +1,38 @@
 const mongoose = require("mongoose");
-const { genPassword } = require("../../utils");
+const { genPassword, ErrorResponse } = require("../../utils");
+const { asyncHandler } = require("../../middlewares");
 
 const User = mongoose.model("users");
 
 module.exports.login = (req, res) => {
-  console.log("inside auth controller");
-  res.send(req.user);
+  res.send({ success: true, data: req.user });
 };
 
-module.exports.register = async (req, res) => {
+module.exports.register = asyncHandler(async (req, res, next) => {
   const { name, username, phone, password } = req.body;
   const { hash, salt } = genPassword(password);
   const isUserExist = await User.findOne({ phone });
   if (!isUserExist) {
-    try {
-      const user = await new User({
-        name,
-        username,
-        phone,
-        password: hash,
-        salt
-      }).save();
-      res.send(user);
-    } catch (e) {
-      console.log(e);
-      return res.status(500).send({ error: "Error while register" });
-    }
+    const user = await new User({
+      name,
+      username,
+      phone,
+      password: hash,
+      salt
+    }).save();
+    res.send({ success: true, data: user });
   } else {
-    res.status(400).send({ msg: "User with this phone already exists!" });
+    next(new ErrorResponse("User with this phone already exists!", 400));
   }
-};
+});
 
 module.exports.getCurrentUser = (req, res) => {
-  res.send(req.user);
+  res.send({ success: true, data: req.user });
 };
 
 module.exports.logout = (req, res) => {
   req.logOut();
-  res.redirect("/login");
+  res.json({ success: true });
 };
 
 module.exports.verfiyOtp = async (req, res) => {

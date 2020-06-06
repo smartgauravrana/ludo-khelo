@@ -13,7 +13,7 @@ export const login = (loginData, cbSuccess, cbError) => async dispatch => {
       data: loginData
     });
     console.log("res: ", res);
-    const { data } = res;
+    const { data } = res.data;
     dispatch({ type: SET_USER_DETAILS, payload: data });
     cbSuccess && cbSuccess(data);
   } catch (e) {
@@ -33,7 +33,7 @@ export const register = (
       url: endpoints.register,
       data: registerData
     });
-    const { data } = res;
+    const { data } = res.data;
     dispatch({ type: SET_USER_DETAILS, payload: data });
     cbSuccess && cbSuccess(data);
   } catch (e) {
@@ -43,8 +43,9 @@ export const register = (
 
 export const checkLogin = cbSuccess => async dispatch => {
   const res = await call({ url: endpoints.currentUser });
-  cbSuccess && cbSuccess(res.data || {});
-  dispatch({ type: SET_USER_DETAILS, payload: res.data });
+  const { data } = res.data;
+  cbSuccess && cbSuccess(data || {});
+  dispatch({ type: SET_USER_DETAILS, payload: data });
 };
 
 export const buyChips = (
@@ -58,7 +59,7 @@ export const buyChips = (
       url: endpoints.buy,
       data: transactionData
     });
-    const { data } = res;
+    const { data } = res.data;
     cbSuccess && cbSuccess(data);
     dispatch({ type: SET_USER_DETAILS, payload: data });
   } catch (err) {
@@ -73,7 +74,7 @@ export const sellChips = (sellData, cbSuccess, cbError) => async dispatch => {
       url: endpoints.sell,
       data: sellData
     });
-    const { data } = res;
+    const { data } = res.data;
     dispatch({ type: SET_USER_DETAILS, payload: data });
     cbSuccess && cbSuccess(data);
   } catch (e) {

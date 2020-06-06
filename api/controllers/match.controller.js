@@ -20,7 +20,7 @@ module.exports.addMatch = asyncHandler(async (req, res) => {
   req.user.matchInProgress = 1;
   req.user.save();
   match.createdBy = req.user;
-  res.send(match);
+  res.send({ success: true, data: match });
 });
 
 // @desc      Get Single Match
@@ -132,7 +132,7 @@ module.exports.update = asyncHandler(async (req, res) => {
     match.joinee = req.user;
   }
   req.user.save();
-  res.send(match);
+  res.send({ sucess: true, data: match });
 });
 
 // @desc      Delete Single match

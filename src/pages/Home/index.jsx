@@ -19,7 +19,7 @@ import "./Home.scss";
 
 class Home extends Component {
   componentDidMount() {
-    this.props.getAllMatches();
+    // this.props.getAllMatches();
     const { socket } = this.props;
     socket.on(SOCKET_EVENTS.serverMatchUpdates, data => {
       const match = data[0];
