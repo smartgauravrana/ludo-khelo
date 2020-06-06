@@ -15,7 +15,7 @@ const { MATCH_STATUS } = require("../../../constants");
 // });
 
 const matchSchema = new Schema({
-  amount: { type: Number, required: true },
+  amount: { type: Number, required: [true, "Please add amount"] },
   status: { type: String, default: MATCH_STATUS.created },
   isOfficial: { type: Boolean, default: false },
   joinee: { type: Schema.Types.ObjectId, ref: "users" },

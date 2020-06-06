@@ -15,6 +15,7 @@ const passport = require("passport");
 const expressStaticGzip = require("express-static-gzip");
 // const socketIo = require("socket.io");
 const IoService = require("./services/IoService");
+const { errorHandler } = require("./middlewares");
 
 const app = express();
 const server = http.createServer(app);
@@ -43,6 +44,8 @@ app.use(passport.session());
 require("./services/passport");
 
 app.use("/api", routes);
+
+app.use(errorHandler);
 
 if (process.env.NODE_ENV === "production") {
   app.use(

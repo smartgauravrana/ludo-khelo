@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 const Match = mongoose.model("matches");
 const User = mongoose.model("users");
 const { MATCH_STATUS, RESULT_OPTIONS } = require("../../constants");
-const { isEmpty, genRewardAmount } = require("../../utils");
+const asyncHandler = require("../../middlewares/async");
+const { isEmpty, genRewardAmount, ErrorResponse } = require("../../utils");
 
-module.exports.addMatch = async (req, res) => {
+// @desc      Add Match
+// @route     POST /api/matches
+// @access    Private
+module.exports.addMatch = asyncHandler(async (req, res) => {
   const { amount } = req.body;
   const match = await new Match({
     amount,
@@ -17,68 +21,73 @@ module.exports.addMatch = async (req, res) => {
   req.user.save();
   match.createdBy = req.user;
   res.send(match);
-};
+});
 
-module.exports.getOne = async (req, res) => {
+// @desc      Get Single Match
+// @route     GET /api/matches/:matchId
+// @access    Private
+module.exports.getMatch = asyncHandler(async (req, res) => {
   const { matchId } = req.params;
 
   const match = await Match.findOne({ _id: matchId })
     .populate("createdBy")
     .populate("joinee");
-  res.send(match);
-};
+  res.send({ success: true, data: match });
+});
 
-module.exports.getAll = async (req, res) => {
-  const {
-    isOfficial,
-    history,
-    page,
-    searchText,
-    matchStatus,
-    contests
-  } = req.query;
-  let query;
-  let count;
-  if (history) {
-    query = Match.find()
-      .or([{ createdBy: req.user._id }, { joinee: req.user._id }])
-      .populate("createdBy")
-      .populate("joinee");
-    count = await Match.countDocuments({
-      $or: [{ createdBy: req.user._id }, { joinee: req.user._id }]
-    });
-  } else {
-    let findQuery = {};
+// @desc      Get All matches
+// @route     GET /api/matches
+// @access    Private
+module.exports.getMatches = asyncHandler(async (req, res, next) => {
+  res.status(200).json(res.advancedResults);
+  // const {
+  //   isOfficial,
+  //   history,
+  //   page,
+  //   searchText,
+  //   matchStatus,
+  //   contests
+  // } = req.query;
+  // let query;
+  // let count;
+  // if (history) {
+  //   query = Match.find()
+  //     .or([{ createdBy: req.user._id }, { joinee: req.user._id }])
+  //     .populate("createdBy")
+  //     .populate("joinee");
+  //   count = await Match.countDocuments({
+  //     $or: [{ createdBy: req.user._id }, { joinee: req.user._id }]
+  //   });
+  // } else {
+  //   let findQuery = {};
+  //   if (isOfficial) {
+  //     findQuery.isOfficial = isOfficial || false;
+  //   }
+  //   if (searchText) {
+  //     findQuery._id = searchText;
+  //   }
+  //   if (matchStatus) {
+  //     findQuery.status = matchStatus;
+  //   }
+  //   if (contests) {
+  //     findQuery = { status: { $ne: MATCH_STATUS.completed } };
+  //   }
+  //   console.log("query: ", findQuery);
+  //   query = Match.find(findQuery).populate("createdBy").populate("joinee");
+  //   count = await Match.countDocuments(findQuery);
+  // }
+  // console.log("count: ", count);
+  // query = query
+  //   .sort({
+  //     _id: -1
+  //   })
+  //   .skip(10 * (page - 1 || 0))
+  //   .limit(10);
+  // const matches = await query.exec();
+  // res.send({ total: count, data: matches });
+});
 
-    if (isOfficial) {
-      findQuery.isOfficial = isOfficial || false;
-    }
-    if (searchText) {
-      findQuery._id = searchText;
-    }
-    if (matchStatus) {
-      findQuery.status = matchStatus;
-    }
-
-    if (contests) {
-      findQuery = { status: { $ne: MATCH_STATUS.completed } };
-    }
-    console.log("query: ", findQuery);
-    query = Match.find(findQuery).populate("createdBy").populate("joinee");
-    count = await Match.countDocuments(findQuery);
-  }
-  console.log("count: ", count);
-  query = query
-    .sort({
-      _id: -1
-    })
-    .skip(10 * (page - 1 || 0))
-    .limit(10);
-  const matches = await query.exec();
-  res.send({ total: count, data: matches });
-};
-
-module.exports.update = async (req, res) => {
+module.exports.update = asyncHandler(async (req, res) => {
   const { matchId } = req.params;
   const { isJoinee, roomId, leaveMatch } = req.body;
   let updateObj = {};
@@ -124,30 +133,37 @@ module.exports.update = async (req, res) => {
   }
   req.user.save();
   res.send(match);
-};
+});
 
-module.exports.delete = async (req, res) => {
+// @desc      Delete Single match
+// @route     DELETE /api/matches/:matchId
+// @access    Private
+module.exports.delete = asyncHandler(async (req, res, next) => {
   const { matchId } = req.params;
   const match = await Match.findOne({ _id: matchId, createdBy: req.user._id });
+  if (!match) {
+    return next(new ErrorResponse("Match not found", 404));
+  }
   req.user.chips += match.amount;
   req.user.matchInProgress = 0;
   match.delete();
   const user = await req.user.save();
-  res.send(user);
-};
+  res.send({ success: true, data: user });
+});
 
-module.exports.postResult = async (req, res) => {
-  console.log("body: ", req.body);
+module.exports.postResult = asyncHandler(async (req, res, next) => {
   const { matchId, resultType, cancelReason, imgUrl, winner } = req.body;
 
   // finding match
   const match = await Match.findById({ _id: matchId });
   if (!match) {
-    res.status(404).send({ msg: "Match not found!" });
+    return next(new ErrorResponse("Match not found!", 404));
   }
 
   if (match.status === MATCH_STATUS.completed) {
-    res.status(400).send({ msg: "Match already completed! Refresh Page!!" });
+    return next(
+      new ErrorResponse("Match already completed! Refresh Page!!", 400)
+    );
   }
 
   let result;
@@ -264,5 +280,5 @@ module.exports.postResult = async (req, res) => {
     default:
       return;
   }
-  res.send(result);
-};
+  res.send({ success: true, data: result });
+});

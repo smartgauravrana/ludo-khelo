@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const ErrorResponse = require("./errorResponse");
 
 function validPassword(password, hash, salt) {
   var hashVerify = crypto
@@ -59,5 +60,6 @@ module.exports = {
   genPassword,
   getPaytmDetails,
   isEmpty,
-  genRewardAmount
+  genRewardAmount,
+  ErrorResponse
 };

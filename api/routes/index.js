@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const mongoose = require("mongoose");
 
+const Match = mongoose.model("matches");
 const authCtrl = require("../controllers/auth.controller");
 const matchCtrl = require("../controllers/match.controller");
 const billingCtrl = require("../controllers/billing.controller");
-const { isLogin } = require("../../middlewares");
+const { isLogin, advancedResults } = require("../../middlewares");
 
 router.post(
   "/login",
@@ -40,12 +42,17 @@ router.post("/verifyOtp", isLogin, authCtrl.verfiyOtp);
 
 // MATCHES ROUTES
 router
-  .get("/matches", isLogin, matchCtrl.getAll)
+  .get(
+    "/matches",
+    isLogin,
+    advancedResults(Match, ["createdBy", "joinee"]),
+    matchCtrl.getMatches
+  )
   .post("/matches", isLogin, matchCtrl.addMatch);
 
 router
   .route("/matches/:matchId")
-  .get(isLogin, matchCtrl.getOne)
+  .get(isLogin, matchCtrl.getMatch)
   .put(isLogin, matchCtrl.update)
   .delete(isLogin, matchCtrl.delete);
 
