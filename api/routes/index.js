@@ -7,7 +7,12 @@ const Match = mongoose.model("matches");
 const authCtrl = require("../controllers/auth.controller");
 const matchCtrl = require("../controllers/match.controller");
 const billingCtrl = require("../controllers/billing.controller");
-const { isLogin, advancedResults } = require("../../middlewares");
+const {
+  isLogin,
+  advancedResults,
+  verifyTransaction,
+  asyncHandler
+} = require("../../middlewares");
 
 router.post(
   "/login",
@@ -60,7 +65,12 @@ router
 router.route("/result").post(isLogin, matchCtrl.postResult);
 
 // BUY CHIPS
-router.post("/buy", isLogin, billingCtrl.buyChips);
+router.post(
+  "/buy",
+  isLogin,
+  asyncHandler(verifyTransaction),
+  billingCtrl.buyChips
+);
 
 // SELL ROUTES
 router
