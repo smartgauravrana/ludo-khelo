@@ -84,7 +84,7 @@ router.delete("/sell/:sellId", isLogin(), billingCtrl.deleteSellRequest);
 // ADMIN SETTINGS ROUTES
 router
   .route("/settings")
-  .get(isLogin(), settingsCtrl.getSettings)
+  .get(settingsCtrl.getSettings)
   .post(isLogin(true), settingsCtrl.addSettings)
   .put(isLogin(true), settingsCtrl.updateSettings);
 
