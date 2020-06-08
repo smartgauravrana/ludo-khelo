@@ -52,7 +52,7 @@ function PostResult({ postResult, checkLogin, matchId }) {
       err => {
         setIsLoading(false);
         const { data } = err.response;
-        message.error(data.msg);
+        message.error(data.error);
       }
     );
   };

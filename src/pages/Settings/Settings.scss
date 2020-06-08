@@ -1,0 +1,12 @@
+.Settings {
+  margin: 0 20px;
+
+  &__Actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__Actions > * {
+    margin: 20px;
+  }
+}

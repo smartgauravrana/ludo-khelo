@@ -17,6 +17,26 @@ export const fetchSettings = () => async dispatch => {
   }
 };
 
+export const updateSettings = (
+  settingsData,
+  cbSuccess,
+  cbError
+) => async dispatch => {
+  try {
+    const res = await call({
+      url: endpoints.settings,
+      method: "put",
+      data: settingsData
+    });
+    const { data } = res.data;
+    dispatch({ type: SET_SETTINGS, payload: data });
+    cbSuccess && cbSuccess(data);
+  } catch (e) {
+    console.log(e);
+    cbError && cbError(e);
+  }
+};
+
 const getReducer = {
   [SET_SETTINGS]: ({ state, action: { payload } }) => {
     return {

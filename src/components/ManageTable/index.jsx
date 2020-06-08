@@ -170,7 +170,7 @@ class ManageTable extends Component {
       },
       err => {
         const { data } = err.response;
-        message.error(data.msg);
+        message.error(data.error);
       }
     );
   };

@@ -53,7 +53,7 @@ function LoginForm({ login }) {
             },
             err => {
               const { data } = err.response;
-              message.error(data.msg);
+              message.error(data.error);
             }
           )
         }

@@ -87,7 +87,7 @@ function RegisterForm({ register }) {
             err => {
               setIsLoading(false);
               const { data } = err.response;
-              message.error(data.msg);
+              message.error(data.error);
             }
           );
         }}

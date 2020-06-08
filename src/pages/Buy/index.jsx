@@ -57,7 +57,7 @@ function Buy({ userDetails, buyChips, settings }) {
       () => message.success("Chips Added!"),
       err => {
         const { data } = err.response;
-        message.error(data.msg);
+        message.error(data.error);
       }
     );
   };
