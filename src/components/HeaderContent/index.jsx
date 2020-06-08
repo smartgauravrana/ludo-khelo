@@ -11,9 +11,14 @@ import "./HeaderContent.scss";
 
 function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
   const adminLinks = (
-    <Link to={routePaths.ADMIN.manage} onClick={onMenuClick}>
-      Manage
-    </Link>
+    <>
+      <Link to={routePaths.ADMIN.manage} onClick={onMenuClick}>
+        Manage
+      </Link>
+      <Link to={routePaths.ADMIN.settings} onClick={onMenuClick}>
+        Settings
+      </Link>
+    </>
   );
 
   const userLinks = (

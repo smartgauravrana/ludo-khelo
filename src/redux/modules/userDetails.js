@@ -34,7 +34,7 @@ export const register = (
       data: registerData
     });
     const { data } = res.data;
-    dispatch({ type: SET_USER_DETAILS, payload: data });
+    // dispatch({ type: SET_USER_DETAILS, payload: data });
     cbSuccess && cbSuccess(data);
   } catch (e) {
     cbError && cbError(e);

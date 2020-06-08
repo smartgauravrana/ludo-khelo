@@ -9,6 +9,7 @@ export default {
   HISTORY: "/history",
   ADMIN: {
     default: "/admin",
-    manage: "/manage"
+    manage: "/manage",
+    settings: "/settings"
   }
 };

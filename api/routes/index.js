@@ -7,6 +7,7 @@ const Match = mongoose.model("matches");
 const authCtrl = require("../controllers/auth.controller");
 const matchCtrl = require("../controllers/match.controller");
 const billingCtrl = require("../controllers/billing.controller");
+const settingsCtrl = require("../controllers/settings.controller");
 const {
   isLogin,
   advancedResults,
@@ -43,31 +44,31 @@ router.get("/current_user", authCtrl.getCurrentUser);
 
 router.get("/logout", authCtrl.logout);
 
-router.post("/verifyOtp", isLogin, authCtrl.verfiyOtp);
+router.post("/verifyOtp", isLogin(), authCtrl.verfiyOtp);
 
 // MATCHES ROUTES
 router
   .get(
     "/matches",
-    isLogin,
+    isLogin(),
     advancedResults(Match, ["createdBy", "joinee"]),
     matchCtrl.getMatches
   )
-  .post("/matches", isLogin, matchCtrl.addMatch);
+  .post("/matches", isLogin(), matchCtrl.addMatch);
 
 router
   .route("/matches/:matchId")
-  .get(isLogin, matchCtrl.getMatch)
-  .put(isLogin, matchCtrl.update)
-  .delete(isLogin, matchCtrl.delete);
+  .get(isLogin(), matchCtrl.getMatch)
+  .put(isLogin(), matchCtrl.update)
+  .delete(isLogin(), matchCtrl.delete);
 
 // POST RESULT
-router.route("/result").post(isLogin, matchCtrl.postResult);
+router.route("/result").post(isLogin(), matchCtrl.postResult);
 
 // BUY CHIPS
 router.post(
   "/buy",
-  isLogin,
+  isLogin(),
   asyncHandler(verifyTransaction),
   billingCtrl.buyChips
 );
@@ -75,9 +76,16 @@ router.post(
 // SELL ROUTES
 router
   .route("/sell")
-  .get(isLogin, billingCtrl.getAllSellRequests)
-  .post(isLogin, billingCtrl.addSellRequest);
+  .get(isLogin(), billingCtrl.getAllSellRequests)
+  .post(isLogin(), billingCtrl.addSellRequest);
 
-router.delete("/sell/:sellId", isLogin, billingCtrl.deleteSellRequest);
+router.delete("/sell/:sellId", isLogin(), billingCtrl.deleteSellRequest);
+
+// ADMIN SETTINGS ROUTES
+router
+  .route("/settings")
+  .get(isLogin(), settingsCtrl.getSettings)
+  .post(isLogin(true), settingsCtrl.addSettings)
+  .put(isLogin(true), settingsCtrl.updateSettings);
 
 module.exports = router;

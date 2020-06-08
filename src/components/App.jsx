@@ -8,6 +8,7 @@ import AppLayout from "components/AppLayout";
 import PrivateRoute from "components/PrivateRoute";
 import { publicRoutes, privateRoutes } from "Routes";
 import { checkLogin } from "redux/modules/userDetails";
+import { fetchSettings } from "redux/modules/settings";
 import SocketContext from "context/socket-context";
 import { SOCKET_CONFIG } from "config";
 import "./App.scss";
@@ -17,7 +18,7 @@ const ENDPOINT = SOCKET_CONFIG.endpoint;
 console.log(ENDPOINT);
 const socket = socketIOClient(ENDPOINT);
 function App(props) {
-  const { checkLogin } = props;
+  const { checkLogin, fetchSettings } = props;
   const history = useHistory();
 
   useEffect(() => {
@@ -26,6 +27,7 @@ function App(props) {
         history.replace(routePaths.LOGIN);
       }
     });
+    fetchSettings();
   }, []);
   return (
     <SocketContext.Provider value={socket}>
@@ -45,11 +47,13 @@ function App(props) {
   );
 }
 
-export default connect(({ userDetails }) => ({ userDetails }), { checkLogin })(
-  App
-);
+export default connect(({ userDetails }) => ({ userDetails }), {
+  checkLogin,
+  fetchSettings
+})(App);
 
 App.propTypes = {
   userDetails: PropTypes.object,
-  checkLogin: PropTypes.func
+  checkLogin: PropTypes.func,
+  fetchSettings: PropTypes.func
 };

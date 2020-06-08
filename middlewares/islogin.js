@@ -1,6 +1,10 @@
-module.exports = (req, res, next) => {
+const { ErrorResponse } = require("../utils");
+module.exports = (isAdmin = false) => (req, res, next) => {
   if (!req.user) {
-    return res.status(401).send({ error: "Unauhorised" });
+    return next(new ErrorResponse("Unauhorised", 401));
+  }
+  if (isAdmin && !req.user.isAdmin) {
+    return next(new ErrorResponse("Unauhorised", 401));
   }
   next();
 };

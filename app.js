@@ -5,6 +5,7 @@ require("./api/data/db");
 require("./api/data/model/match.model");
 require("./api/data/model/user.model");
 require("./api/data/model/sellRequest.model");
+require("./api/data/model/setting.model");
 // for inject env variables from config
 
 const express = require("express");

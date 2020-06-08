@@ -5,5 +5,6 @@ export default {
   matches: "/matches",
   sell: "/sell",
   buy: "/buy",
-  result: "/result"
+  result: "/result",
+  settings: "/settings"
 };

@@ -27,12 +27,13 @@ module.exports.register = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.getCurrentUser = (req, res) => {
-  res.send({ success: true, data: req.user });
+  if (req.user) res.send({ success: true, data: req.user });
+  else res.send({ success: false });
 };
 
 module.exports.logout = (req, res) => {
   req.logOut();
-  res.json({ success: true });
+  res.redirect("/login");
 };
 
 module.exports.verfiyOtp = async (req, res) => {

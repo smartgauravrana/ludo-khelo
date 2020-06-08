@@ -23,7 +23,8 @@ const BuyFields = [
   }
 ];
 
-function Buy({ userDetails, buyChips }) {
+function Buy({ userDetails, buyChips, settings }) {
+  const { paytmNumber, supportNumber } = settings;
   function copy() {
     var copyText = document.querySelector("#paymentNumber");
     copyText.select();
@@ -41,7 +42,7 @@ function Buy({ userDetails, buyChips }) {
       <p>
         Please pay at this number only{" "}
         <span>
-          <b style={{ fontSize: "120%", color: "red" }}>9729343885</b>
+          <b style={{ fontSize: "120%", color: "red" }}>{paytmNumber}</b>
         </span>
         , and enter wallet Transcation Id.
         <br />
@@ -71,7 +72,7 @@ function Buy({ userDetails, buyChips }) {
           name="paymentNumber"
           placeholder="Recipient Paytm Number..."
           readOnly
-          value="9729343885"
+          value={paytmNumber}
         />
         <div className="input-group-append">
           <button id="copyButton" onClick={copy}>
@@ -114,12 +115,12 @@ function Buy({ userDetails, buyChips }) {
       <div className="Buy__QA">
         <h3 style={{ textAlign: "center" }}>For Any Query</h3>
         <p style={{ textAlign: "center" }}>
-          Please contact support at whatsapp (+919729343885)
+          {`Please contact support at whatsapp (+91${supportNumber})`}
           <br />
           Your query will be solved in <b>within 12 hours</b>.
         </p>
         <a
-          href={`https://wa.me/919729343885?text=Please+Load+Chips+In+My+Account,+My+account+number+is+${userDetails.phone}`}
+          href={`https://wa.me/91${supportNumber}?text=Please+Load+Chips+In+My+Account,+My+account+number+is+${userDetails.phone}`}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -131,8 +132,9 @@ function Buy({ userDetails, buyChips }) {
 }
 
 export default connect(
-  ({ userDetails }) => ({
-    userDetails
+  ({ userDetails, settings: { settings } }) => ({
+    userDetails,
+    settings
   }),
   {
     buyChips
@@ -144,5 +146,6 @@ Buy.propTypes = {
   isValid: PropTypes.bool,
   submitForm: PropTypes.func,
   buyChips: PropTypes.func,
-  resetForm: PropTypes.func
+  resetForm: PropTypes.func,
+  settings: PropTypes.object
 };

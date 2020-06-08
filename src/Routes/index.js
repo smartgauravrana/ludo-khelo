@@ -12,6 +12,7 @@ import TermCondition from "pages/TermCondition";
 import MatchDetail from "pages/MatchDetail";
 import Timeline from "pages/Timeline";
 import Manage from "pages/Manage";
+import Settings from "pages/Settings";
 
 export const publicRoutes = [
   {
@@ -70,5 +71,6 @@ export const privateRoutes = [
     path: routePaths.ADMIN.manage,
     component: Manage,
     exact: true
-  }
+  },
+  { path: routePaths.ADMIN.settings, component: Settings, exact: true }
 ];
