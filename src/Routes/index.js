@@ -1,5 +1,6 @@
 import React from "react";
 import loadable from "@loadable/component";
+import { Skeleton } from "antd";
 import routePaths from "./routePaths";
 import SocketContext from "context/socket-context";
 
@@ -16,34 +17,57 @@ import MatchDetail from "pages/MatchDetail";
 import TermCondition from "pages/TermCondition";
 import Settings from "pages/Settings";
 
-const Login = loadable(() =>
-  import(/* webpackChunkName: "Login" */ "pages/Login")
+const Login = loadable(
+  () => import(/* webpackChunkName: "Login" */ "pages/Login"),
+  {
+    fallback: <Skeleton />
+  }
 );
 
-const Register = loadable(() =>
-  import(/* webpackChunkName: "Register" */ "pages/Register")
+const Register = loadable(
+  () => import(/* webpackChunkName: "Register" */ "pages/Register"),
+  {
+    fallback: <Skeleton />
+  }
 );
 
-const Home = loadable(() =>
-  import(/* webpackChunkName: "Home" */ "pages/Home")
+const Home = loadable(
+  () => import(/* webpackChunkName: "Home" */ "pages/Home"),
+  {
+    fallback: <Skeleton />
+  }
 );
 
-const Buy = loadable(() => import(/* webpackChunkName: "Buy" */ "pages/Buy"));
+const Buy = loadable(() => import(/* webpackChunkName: "Buy" */ "pages/Buy"), {
+  fallback: <Skeleton />
+});
 
-const Sell = loadable(() =>
-  import(/* webpackChunkName: "Sell" */ "pages/Sell")
+const Sell = loadable(
+  () => import(/* webpackChunkName: "Sell" */ "pages/Sell"),
+  {
+    fallback: <Skeleton />
+  }
 );
 
-const Timeline = loadable(() =>
-  import(/* webpackChunkName: "Timeline" */ "pages/Timeline")
+const Timeline = loadable(
+  () => import(/* webpackChunkName: "Timeline" */ "pages/Timeline"),
+  {
+    fallback: <Skeleton />
+  }
 );
 
-const Admin = loadable(() =>
-  import(/* webpackChunkName: "Admin" */ "pages/Admin")
+const Admin = loadable(
+  () => import(/* webpackChunkName: "Admin" */ "pages/Admin"),
+  {
+    fallback: <Skeleton />
+  }
 );
 
-const Manage = loadable(() =>
-  import(/* webpackChunkName: "Managae" */ "pages/Manage")
+const Manage = loadable(
+  () => import(/* webpackChunkName: "Manage" */ "pages/Manage"),
+  {
+    fallback: <Skeleton />
+  }
 );
 
 export const publicRoutes = [
