@@ -1,5 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
+import routePaths from "Routes/routePaths";
 import LoginForm from "components/LoginForm";
 import "./Login.scss";
 
@@ -8,6 +10,9 @@ export default function Login() {
     <div className="Login">
       <h1>Login</h1>
       <LoginForm />
+      <div className="Login__NewUser">
+        New User? <Link to={routePaths.REGISTER}>Register Here</Link>
+      </div>
     </div>
   );
 }

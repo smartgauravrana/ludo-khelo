@@ -10,6 +10,7 @@ import { getMatches, updateMatches } from "redux/modules/manage";
 import { postResult } from "redux/modules/matchDetails";
 import DisplayTable from "components/DisplayTable";
 import CopyData from "components/CopyData";
+import Filter from "components/Filter";
 import "./ManageTable.scss";
 
 class ManageTable extends Component {
@@ -28,18 +29,21 @@ class ManageTable extends Component {
     const { getMatches, location } = this.props;
     const { matchFilter } = this.state;
     const options = {
-      matchStatus: matchFilter,
+      "status[eq]": matchFilter,
       page: location.search.split("?page=").pop() || 1
     };
     getMatches({ options });
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { location, getMatches } = this.props;
     const { matchFilter } = this.state;
-    if (prevProps.location.search !== location.search) {
+    if (
+      prevProps.location.search !== location.search ||
+      prevState.matchFilter !== matchFilter
+    ) {
       const options = {
-        matchStatus: matchFilter,
+        "status[eq]": matchFilter,
         page: location.search.split("?page=").pop() || 1
       };
       getMatches({ options });
@@ -185,6 +189,12 @@ class ManageTable extends Component {
     } = this.state;
     return (
       <div className="ManageTable">
+        <Filter
+          initialValue={this.state.matchFilter}
+          onChange={value => {
+            this.setState({ matchFilter: value });
+          }}
+        />
         <DisplayTable
           rowKey="_id"
           dataSource={matches}
