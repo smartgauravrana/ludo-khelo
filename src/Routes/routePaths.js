@@ -7,6 +7,7 @@ export default {
   TERMS: "/terms",
   MATCH_DETAIL: "/match/:matchId",
   HISTORY: "/history",
+  VERIFICATION: "/verification",
   ADMIN: {
     default: "/admin",
     manage: "/manage",

@@ -16,6 +16,7 @@ import SocketContext from "context/socket-context";
 import MatchDetail from "pages/MatchDetail";
 import TermCondition from "pages/TermCondition";
 import Settings from "pages/Settings";
+import Verification from "pages/Verification";
 
 const Login = loadable(
   () => import(/* webpackChunkName: "Login" */ "pages/Login"),
@@ -114,6 +115,10 @@ export const publicRoutes = [
   {
     path: routePaths.HISTORY,
     component: Timeline
+  },
+  {
+    path: routePaths.VERIFICATION,
+    component: Verification
   }
 ];
 

@@ -1,7 +1,17 @@
 .Register {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+
   &__NewUser {
     text-align: center;
     padding: 20px 0;
     font-size: 20px;
+  }
+  h1 {
+    text-align: center;
+  }
+  .form-group {
+    margin-top: 10px;
   }
 }
