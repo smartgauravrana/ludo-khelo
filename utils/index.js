@@ -64,6 +64,14 @@ const isResultPosted = (resultsPosted, userId) => {
   return isResultPosted;
 };
 
+const isParticipant = (match, userId) => {
+  return (
+    match.createdBy._id.toString() === userId.toString() ||
+    (match.joinee.toString() &&
+      match.joinee._id.toString() === userId.toString())
+  );
+};
+
 module.exports = {
   validPassword,
   genPassword,
@@ -71,5 +79,6 @@ module.exports = {
   isEmpty,
   genRewardAmount,
   ErrorResponse,
-  isResultPosted
+  isResultPosted,
+  isParticipant
 };

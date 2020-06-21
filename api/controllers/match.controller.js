@@ -7,6 +7,7 @@ const {
   isEmpty,
   genRewardAmount,
   isResultPosted,
+  isParticipant,
   ErrorResponse
 } = require("../../utils");
 
@@ -165,6 +166,9 @@ module.exports.postResult = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Match not found!", 404));
   }
 
+  if (!(req.user.isAdmin && isParticipant(match, req.user._id))) {
+    return next(new ErrorResponse("You're not allowed to do this!", 400));
+  }
   if (match.status === MATCH_STATUS.completed) {
     return next(
       new ErrorResponse("Match already completed! Refresh Page!!", 400)
