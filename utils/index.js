@@ -35,7 +35,7 @@ function genRewardAmount(matchAmount) {
     reward = matchAmount - matchAmount * 0.05;
   }
 
-  return Math.floor(reward);
+  return 2 * Math.floor(reward);
 }
 
 function getPaytmDetails(text) {
@@ -55,11 +55,21 @@ const isEmpty = value =>
   (typeof value === "object" && !Object.keys(value).length) ||
   (typeof value === "string" && !value.trim().length);
 
+const isResultPosted = (resultsPosted, userId) => {
+  const isResultPosted = !!Object.keys(resultsPosted).find(key =>
+    resultsPosted[key].find(
+      result => result.postedBy.toString() === userId.toString()
+    )
+  );
+  return isResultPosted;
+};
+
 module.exports = {
   validPassword,
   genPassword,
   getPaytmDetails,
   isEmpty,
   genRewardAmount,
-  ErrorResponse
+  ErrorResponse,
+  isResultPosted
 };

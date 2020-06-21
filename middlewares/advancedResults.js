@@ -1,6 +1,5 @@
 const advancedResults = (model, populate) => async (req, res, next) => {
   let query;
-
   // Copy req.query
   const reqQuery = { ...req.query };
 
@@ -15,12 +14,21 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 
   // Create operators ($gt, $gte, etc)
   queryStr = queryStr.replace(
-    /\b(gt|gte|lt|lte|in|ne|eq)\b/g,
+    /\b(gt|gte|lt|lte|in|ne|eq|nin)\b/g,
     match => `$${match}`
   );
 
   if (req.query.history) {
     queryStr = { $or: [{ createdBy: req.user.id }, { joinee: req.user.id }] };
+    queryStr = JSON.stringify(queryStr);
+  }
+
+  // for status fields on resource
+  if (req.query.status && req.query.status.nin) {
+    const fields = req.query.status.nin.split(",").map(field => field.trim());
+    queryStr = {
+      status: { $nin: fields }
+    };
     queryStr = JSON.stringify(queryStr);
   }
 
@@ -39,7 +47,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     const sortBy = req.query.sort.split(",").join(" ");
     query = query.sort(sortBy);
   } else {
-    query = query.sort("-createdAt");
+    query = query.sort({ _id: -1 });
   }
 
   // Pagination

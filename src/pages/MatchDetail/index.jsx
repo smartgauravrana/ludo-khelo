@@ -3,22 +3,27 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import SocketContext from "context/socket-context";
-import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
-import { acceptInvite } from "redux/modules/matchDetails";
+import { SOCKET_EVENTS } from "../../../constants";
+import { acceptInvite, getMatch } from "redux/modules/matchDetails";
 import RecordingMessage from "./RecordingMessage";
 import PenaltyMessage from "./PenaltyMessage";
 import NoticeBoard from "./NoticeBoard";
 import PostResult from "./PostResult";
 import "./MatchDetail.scss";
+import { getOpponent, isResultPosted } from "client-utils";
 
-function MatchDetail({ matchList, match, acceptInvite, socket }) {
+function MatchDetail({
+  matchList,
+  match,
+  acceptInvite,
+  socket,
+  userDetails,
+  getMatch
+}) {
   const [matchDetail, setMatchDetail] = useState(null);
   const [roomInput, setRoomInput] = useState("");
   useEffect(() => {
-    const matchFound = matchList.find(
-      item => item._id === match.params.matchId
-    );
-    setMatchDetail(matchFound);
+    getMatch(match.params.matchId, data => setMatchDetail(data));
   }, []);
 
   function copy() {
@@ -78,10 +83,13 @@ function MatchDetail({ matchList, match, acceptInvite, socket }) {
       </div>
     </div>
   );
-  console.log("matchdetails: ", matchDetail);
+
   return matchDetail ? (
     <div className="MatchDetail">
-      <NoticeBoard matchDetail={matchDetail} />
+      <NoticeBoard
+        matchDetail={matchDetail}
+        opponent={getOpponent(matchDetail, userDetails._id)}
+      />
       <hr />
       {matchDetail.roomId ? roomIdDetails : form}
       <hr />
@@ -89,7 +97,9 @@ function MatchDetail({ matchList, match, acceptInvite, socket }) {
       <hr />
       <PenaltyMessage />
       <hr />
-      <PostResult matchId={matchDetail._id} />
+      {!isResultPosted(matchDetail.resultsPosted, userDetails._id) && (
+        <PostResult matchDetail={matchDetail} user={userDetails} />
+      )}
     </div>
   ) : (
     <div>loading....</div>
@@ -102,13 +112,22 @@ const MatchDetailWithSocket = props => (
   </SocketContext.Consumer>
 );
 
-export default connect(({ matchDetails: { matchList } }) => ({ matchList }), {
-  acceptInvite
-})(MatchDetailWithSocket);
+export default connect(
+  ({ matchDetails: { matchList }, userDetails }) => ({
+    matchList,
+    userDetails
+  }),
+  {
+    acceptInvite,
+    getMatch
+  }
+)(MatchDetailWithSocket);
 
 MatchDetail.propTypes = {
   matchList: PropTypes.array,
   match: PropTypes.object,
   acceptInvite: PropTypes.func,
-  socket: PropTypes.object
+  socket: PropTypes.object,
+  userDetails: PropTypes.object,
+  getMatch: PropTypes.func
 };

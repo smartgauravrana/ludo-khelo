@@ -4,7 +4,7 @@ import { Button } from "antd";
 import { useHistory } from "react-router-dom";
 
 import { MATCH_STATUS } from "../../../constants";
-import { isResultPosted } from "client-utils";
+import { isResultPosted, isParticipant } from "client-utils";
 
 export default function MatchActions({
   content,
@@ -64,21 +64,8 @@ export default function MatchActions({
       </Button>
     );
   }
-
-  if (content.status === MATCH_STATUS.playAccepted) {
-    return (
-      <Button
-        type="primary"
-        className="Load_btn"
-        onClick={() => history.push(`/match/${content._id}`)}
-      >
-        View
-      </Button>
-    );
-  }
-  if (content.status === MATCH_STATUS.onHold) {
-    // checking if result posted by user or not
-    if (!isResultPosted(content.resultsPosted, user._id)) {
+  if (isParticipant(content, user._id)) {
+    if (content.status === MATCH_STATUS.playAccepted) {
       return (
         <Button
           type="primary"
@@ -88,14 +75,29 @@ export default function MatchActions({
           View
         </Button>
       );
-    } else {
-      return (
-        <Button type="ghost" disabled>
-          Processing
-        </Button>
-      );
+    }
+    if (content.status === MATCH_STATUS.onHold) {
+      // checking if result posted by user or not
+      if (!isResultPosted(content.resultsPosted, user._id)) {
+        return (
+          <Button
+            type="primary"
+            className="Load_btn"
+            onClick={() => history.push(`/match/${content._id}`)}
+          >
+            View
+          </Button>
+        );
+      } else {
+        return (
+          <Button type="ghost" disabled>
+            Processing
+          </Button>
+        );
+      }
     }
   }
+
   return null;
 }
 

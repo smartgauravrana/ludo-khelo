@@ -1,6 +1,7 @@
 import call from "api/apiRequest";
 import endpoints from "api/endpoints";
 import { setUserDetails } from "./userDetails";
+import { MATCH_STATUS } from "../../../constants";
 
 const SET_MATCH_DETAILS = "matchDetails/SET_MATCH_DETAILS";
 const SET_MATCH_LIST = "matchDetails/SET_MATCH_LIST";
@@ -91,7 +92,10 @@ export const getAllMatches = (cbSuccess, cbError) => async (
   if (isAdmin) {
     params.isOfficial = true;
   }
-  params["status[ne]"] = "completed";
+  // fetching only playable matches by status
+  params[
+    "status[nin]"
+  ] = `${MATCH_STATUS.completed}, ${MATCH_STATUS.cancelled}, ${MATCH_STATUS.onHold}`;
   try {
     const res = await call({
       url: `${endpoints.matches}`,
@@ -224,6 +228,13 @@ export const updateMatchStatus = (matchId, status) => (dispatch, getState) => {
   dispatch({ type: SET_MATCH_LIST, payload: newList });
 };
 
+export const removeMatch = matchId => (dispatch, getState) => {
+  const {
+    matchDetails: { matchList }
+  } = getState();
+  const newList = matchList.filter(el => el._id !== matchId);
+  dispatch({ type: SET_MATCH_LIST, payload: newList });
+};
 const getReducer = {
   [SET_MATCH_DETAILS]: ({ state, action: { payload } }) => {
     return {

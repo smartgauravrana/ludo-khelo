@@ -1,7 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Drawer } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -41,7 +41,9 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
   return (
     <>
       <div className="header">
-        <div className="header__title">Welcome</div>
+        <div className="header__title">
+          <Link to="/">Ludo Money</Link>
+        </div>
         <MenuOutlined className="header__menu--icon" onClick={onMenuClick} />
       </div>
       <Drawer

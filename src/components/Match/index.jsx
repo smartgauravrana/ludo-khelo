@@ -158,7 +158,12 @@ function Match({
             <MatchActions
               playRequest={playRequest}
               cancelRequest={cancelRequest}
-              deleteMatch={deleteMatch}
+              deleteMatch={match => {
+                socket.emit(SOCKET_EVENTS.clientMatchDeleted, {
+                  matchId: match._id
+                });
+                deleteMatch(match);
+              }}
               content={content}
               user={user}
             />

@@ -35,6 +35,11 @@ module.exports = class IoService {
           socket.broadcast.emit(SOCKET_EVENTS.serverPlayAccepted, data);
         });
 
+        socket.on(SOCKET_EVENTS.clientMatchDeleted, data => {
+          console.log("Match Deleted by owner: ", data);
+          socket.broadcast.emit(SOCKET_EVENTS.serverMatchDeleted, data);
+        });
+
         socket.on("disconnect", () => {
           console.log("Client disconnected");
         });

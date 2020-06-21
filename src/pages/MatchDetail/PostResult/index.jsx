@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { message } from "antd";
+import { useHistory } from "react-router-dom";
 
 import { postResult } from "redux/modules/matchDetails";
 import { checkLogin } from "redux/modules/userDetails";
 import Loader from "components/Loader";
+import routePaths from "Routes/routePaths";
 import { storage } from "../../../firebase";
 import { RESULT_OPTIONS } from "../../../../constants";
+import { isParticipant } from "client-utils";
 import "./PostResult.scss";
 
 const resultOptions = [
@@ -25,14 +28,20 @@ const resultOptions = [
   }
 ];
 
-function PostResult({ postResult, checkLogin, matchId }) {
+function PostResult({ postResult, checkLogin, matchDetail, user }) {
+  const matchId = matchDetail && matchDetail._id;
   const [choice, setChoice] = useState("");
   const [cancelText, setCancelText] = useState("");
   const [imageAsFile, setImageAsFile] = useState("");
   const [imageAsUrl, setImageAsUrl] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const history = useHistory();
+
   const onPostResult = () => {
+    if (!isParticipant(matchDetail, user._id)) {
+      return message.error("You're not allowed for this!");
+    }
     setIsLoading(true);
     let postData = { resultType: choice, matchId };
     switch (choice) {
@@ -48,6 +57,7 @@ function PostResult({ postResult, checkLogin, matchId }) {
       () => {
         setIsLoading(false);
         checkLogin();
+        history.push(routePaths.HOME);
       },
       err => {
         setIsLoading(false);
@@ -154,11 +164,13 @@ function PostResult({ postResult, checkLogin, matchId }) {
       <br />
       <br />
       <div className="screenShot-upload">
-        <img
-          className="img-fluid"
-          alt="Responsive image"
-          src={imageAsUrl && imageAsUrl.imgUrl}
-        />
+        {imageAsUrl.imgUrl && (
+          <img
+            className="img-fluid"
+            alt="Responsive image"
+            src={imageAsUrl && imageAsUrl.imgUrl}
+          />
+        )}
         <br />
       </div>
     </div>
@@ -191,11 +203,14 @@ function PostResult({ postResult, checkLogin, matchId }) {
       <button
         className="PostResult__Button"
         disabled={
-          !choice ||
-          (choice === RESULT_OPTIONS.cancel && !cancelText) ||
-          (choice === RESULT_OPTIONS.won && !imageAsUrl.imgUrl)
+          !choice || (choice === RESULT_OPTIONS.won && !imageAsUrl.imgUrl)
         }
-        onClick={onPostResult}
+        onClick={() => {
+          if (choice === RESULT_OPTIONS.cancel && !cancelText) {
+            return message.error("Enter Cancel Reason!");
+          }
+          onPostResult();
+        }}
       >
         Post Result
       </button>
@@ -211,5 +226,6 @@ export default connect(null, {
 PostResult.propTypes = {
   postResult: PropTypes.func,
   checkLogin: PropTypes.func,
-  matchId: PropTypes.string
+  matchDetail: PropTypes.string,
+  user: PropTypes.object
 };

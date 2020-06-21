@@ -3,7 +3,12 @@ const Match = mongoose.model("matches");
 const User = mongoose.model("users");
 const { MATCH_STATUS, RESULT_OPTIONS } = require("../../constants");
 const asyncHandler = require("../../middlewares/async");
-const { isEmpty, genRewardAmount, ErrorResponse } = require("../../utils");
+const {
+  isEmpty,
+  genRewardAmount,
+  isResultPosted,
+  ErrorResponse
+} = require("../../utils");
 
 // @desc      Add Match
 // @route     POST /api/matches
@@ -164,6 +169,9 @@ module.exports.postResult = asyncHandler(async (req, res, next) => {
     return next(
       new ErrorResponse("Match already completed! Refresh Page!!", 400)
     );
+  }
+  if (isResultPosted(match.resultsPosted, req.user._id)) {
+    return next(new ErrorResponse("Already result posted by you!"));
   }
 
   let result;

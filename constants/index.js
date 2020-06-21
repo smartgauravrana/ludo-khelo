@@ -13,7 +13,9 @@ module.exports.SOCKET_EVENTS = {
   clientPlayRequested: "clientPlayRequested",
   serverPlayRequested: "serverPlayRequested",
   clientPlayAccepted: "clientPlayAccepted",
-  serverPlayAccepted: "serverPlayAccepted"
+  serverPlayAccepted: "serverPlayAccepted",
+  clientMatchDeleted: "clientMatchDeleted",
+  serverMatchDeleted: "serverMatchDeleted"
 };
 
 module.exports.SELLING_STATUS = {
