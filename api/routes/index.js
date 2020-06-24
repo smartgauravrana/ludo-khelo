@@ -8,6 +8,7 @@ const authCtrl = require("../controllers/auth.controller");
 const matchCtrl = require("../controllers/match.controller");
 const billingCtrl = require("../controllers/billing.controller");
 const settingsCtrl = require("../controllers/settings.controller");
+const dashboardCtrl = require("../controllers/dashboard.controller");
 const {
   isLogin,
   advancedResults,
@@ -87,5 +88,8 @@ router
   .get(settingsCtrl.getSettings)
   .post(isLogin(true), settingsCtrl.addSettings)
   .put(isLogin(true), settingsCtrl.updateSettings);
+
+// ADMIN DASHBOARD DATA
+router.route("/dashboard").get(isLogin(true), dashboardCtrl.getDashboardData);
 
 module.exports = router;

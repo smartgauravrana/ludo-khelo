@@ -18,16 +18,15 @@ passport.deserializeUser(function (id, cb) {
 });
 
 passport.use(
-  new LocalStrategy({ usernameField: "phone" }, function (
+  new LocalStrategy({ usernameField: "phone" }, async function (
     phone,
     password,
     done
   ) {
-    User.findOne({ phone: phone }, function (err, user) {
-      if (err) {
-        console.log("inside err");
-        return done(err);
-      }
+    try {
+      const user = await User.findOne({ phone: phone }).select(
+        "+password +salt"
+      );
       if (!user) {
         return done(null, false);
       }
@@ -36,6 +35,9 @@ passport.use(
         return done(null, false);
       }
       return done(null, user);
-    });
+    } catch (err) {
+      console.log("inside err");
+      return done(err);
+    }
   })
 );

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import SocketContext from "context/socket-context";
-import { SOCKET_EVENTS } from "../../../constants";
+import { SOCKET_EVENTS, MATCH_STATUS } from "../../../constants";
 import { acceptInvite, getMatch } from "redux/modules/matchDetails";
 import RecordingMessage from "./RecordingMessage";
 import PenaltyMessage from "./PenaltyMessage";
@@ -97,9 +97,10 @@ function MatchDetail({
       <hr />
       <PenaltyMessage />
       <hr />
-      {!isResultPosted(matchDetail.resultsPosted, userDetails._id) && (
-        <PostResult matchDetail={matchDetail} user={userDetails} />
-      )}
+      {matchDetail.status !== MATCH_STATUS.completed &&
+        !isResultPosted(matchDetail.resultsPosted, userDetails._id) && (
+          <PostResult matchDetail={matchDetail} user={userDetails} />
+        )}
     </div>
   ) : (
     <div>loading....</div>

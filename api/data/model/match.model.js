@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const { MATCH_STATUS } = require("../../../constants");
+const { genRewardAmount } = require("../../../utils");
 
 // const resultSchema = new Schema({
 //   postedBy: { type: Schema.Types.ObjectId },
@@ -31,7 +32,16 @@ const matchSchema = new Schema({
       cancel: []
     }
   },
+  winningAmount: { type: Number },
   createdOn: Date
+});
+
+// saving winning Amount from current logic
+matchSchema.pre("save", function (next) {
+  if (!this.winningAmount) {
+    this.winningAmount = genRewardAmount(this.amount);
+  }
+  next();
 });
 
 mongoose.model("matches", matchSchema);

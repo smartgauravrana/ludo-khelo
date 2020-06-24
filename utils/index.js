@@ -19,23 +19,23 @@ function genPassword(password) {
   };
 }
 
-function genRewardAmount(matchAmount) {
+function genRewardAmount(challengeAmount) {
   let reward;
-  if (matchAmount < 250) {
+  if (challengeAmount < 250) {
     // charge 10%
-    reward = matchAmount - matchAmount * 0.1;
+    reward = challengeAmount - challengeAmount * 0.1;
   }
-  if (matchAmount >= 250 && matchAmount <= 500) {
+  if (challengeAmount >= 250 && challengeAmount <= 500) {
     // charge Rs.25
-    reward = matchAmount - 25;
+    reward = challengeAmount - 25;
   }
 
-  if (matchAmount > 500) {
+  if (challengeAmount > 500) {
     // charge 5%
-    reward = matchAmount - matchAmount * 0.05;
+    reward = challengeAmount - challengeAmount * 0.05;
   }
 
-  return 2 * Math.floor(reward);
+  return challengeAmount + Math.floor(reward);
 }
 
 function getPaytmDetails(text) {
