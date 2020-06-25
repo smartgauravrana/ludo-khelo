@@ -2,15 +2,22 @@ import call from "api/apiRequest";
 import endpoints from "api/endpoints";
 import { setUserDetails } from "./userDetails";
 import { MATCH_STATUS } from "../../../constants";
+import { isEmpty } from "../../../utils";
 
 const SET_MATCH_DETAILS = "matchDetails/SET_MATCH_DETAILS";
 const SET_MATCH_LIST = "matchDetails/SET_MATCH_LIST";
 const ADD_MATCH = "matchDetails/ADD_MATCH";
 const DELETE_MATCH = "matchDetails/DELETE_MATCH";
+const SET_IS_LOADING = "matchDetails/SET_IS_LOADING";
+const SET_HAS_MORE = "matchDetails/SET_HAS_MORE";
+const SET_NEXT = "matchDetails/SET_NEXT";
 const RESET_MATCHES = "matchDetails/RESET_MATCHES";
 
 const initialState = {
-  matchList: []
+  matchList: [],
+  hasMore: true,
+  isLoading: false,
+  next: ""
 };
 
 export const postResult = (postData, cbSuccess, cbError) => async dispatch => {
@@ -85,8 +92,10 @@ export const getAllMatches = (cbSuccess, cbError) => async (
   dispatch,
   getState
 ) => {
+  dispatch({ type: SET_IS_LOADING, value: true });
   const {
-    userDetails: { isAdmin }
+    userDetails: { isAdmin },
+    matchDetails: { next }
   } = getState();
   const params = {};
   if (isAdmin) {
@@ -96,17 +105,27 @@ export const getAllMatches = (cbSuccess, cbError) => async (
   params[
     "status[nin]"
   ] = `${MATCH_STATUS.completed}, ${MATCH_STATUS.cancelled}, ${MATCH_STATUS.onHold}`;
+  if (next) {
+    params["_id[gt]"] = next;
+  }
   try {
     const res = await call({
       url: `${endpoints.matches}`,
       params
     });
     const { data } = res.data;
-    cbSuccess && cbSuccess(data);
+    if (isEmpty(data)) {
+      return dispatch({ type: SET_HAS_MORE, value: false });
+    }
+    dispatch({ type: SET_NEXT, value: data[0]._id || "" });
     dispatch({ type: SET_MATCH_LIST, payload: data });
+
+    cbSuccess && cbSuccess(data);
   } catch (e) {
-    console.log("post match err");
+    console.log("GET ALL matches err: ", e);
     cbError && cbError(e);
+  } finally {
+    dispatch({ type: SET_IS_LOADING, value: false });
   }
 };
 
@@ -248,6 +267,15 @@ const getReducer = {
       matchList: [...payload]
     };
   },
+  [SET_IS_LOADING]: ({ state, action: { value } }) => ({
+    ...state,
+    isLoading: value
+  }),
+  [SET_HAS_MORE]: ({ state, action: { value } }) => ({
+    ...state,
+    hasMore: value
+  }),
+  [SET_NEXT]: ({ state, action: { value } }) => ({ ...state, next: value }),
   [ADD_MATCH]: ({ state, action: { payload } }) => {
     return { ...state, matchList: [payload, ...state.matchList] };
   },

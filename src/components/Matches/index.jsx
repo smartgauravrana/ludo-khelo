@@ -11,6 +11,7 @@ import {
   removeMatch
 } from "redux/modules/matchDetails";
 import SocketContext from "context/socket-context";
+import ListingWithInfiniteScroll from "components/ListingWithInfiniteScroll";
 import { SOCKET_EVENTS } from "../../../constants";
 import "./Matches.scss";
 
@@ -22,7 +23,9 @@ function Matches({
   updateMatchStatus,
   getMatch,
   socket,
-  removeMatch
+  removeMatch,
+  hasMore,
+  isLoading
 }) {
   useEffect(() => {
     getAllMatches();
@@ -40,7 +43,7 @@ function Matches({
       removeMatch(data.matchId);
     });
     return () => {
-      // resetMatches();
+      resetMatches();
       socket.removeAllListeners(SOCKET_EVENTS.serverPlayRequested);
       socket.removeAllListeners(SOCKET_EVENTS.serverPlayAccepted);
     };
@@ -51,14 +54,20 @@ function Matches({
         Recently Created Matches {userDetails.isAdmin && "by Admin"}
       </div>
       <div className="Matches__list">
-        {matchList.map(match => (
-          <Match
-            key={match._id}
-            content={match}
-            user={userDetails}
-            socket={socket}
-          />
-        ))}
+        <ListingWithInfiniteScroll
+          hasMore={hasMore}
+          isLoading={isLoading}
+          loadMore={() => getAllMatches()}
+        >
+          {matchList.map(match => (
+            <Match
+              key={match._id}
+              content={match}
+              user={userDetails}
+              socket={socket}
+            />
+          ))}
+        </ListingWithInfiniteScroll>
       </div>
     </div>
   );
@@ -71,9 +80,11 @@ const MatchesWithSocket = props => (
 );
 
 export default connect(
-  ({ matchDetails: { matchList }, userDetails }) => ({
+  ({ matchDetails: { matchList, hasMore, isLoading }, userDetails }) => ({
     matchList,
-    userDetails
+    userDetails,
+    hasMore,
+    isLoading
   }),
   {
     getAllMatches,
@@ -92,5 +103,7 @@ Matches.propTypes = {
   socket: PropTypes.object,
   updateMatchStatus: PropTypes.func,
   getMatch: PropTypes.func,
-  removeMatch: PropTypes.func
+  removeMatch: PropTypes.func,
+  hasMore: PropTypes.bool,
+  isLoading: PropTypes.bool
 };

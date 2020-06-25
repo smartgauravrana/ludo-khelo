@@ -26,8 +26,11 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   // for status fields on resource
   if (req.query.status && req.query.status.nin) {
     const fields = req.query.status.nin.split(",").map(field => field.trim());
+    const oldQueryStr = JSON.parse(queryStr);
+    delete oldQueryStr.status;
     queryStr = {
-      status: { $nin: fields }
+      status: { $nin: fields },
+      ...oldQueryStr
     };
     queryStr = JSON.stringify(queryStr);
   }
