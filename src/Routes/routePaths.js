@@ -11,6 +11,7 @@ export default {
   ADMIN: {
     default: "/admin",
     manage: "/manage",
-    settings: "/settings"
+    settings: "/settings",
+    dashboard: "/dashboard"
   }
 };

@@ -72,6 +72,14 @@ const isParticipant = (match, userId) => {
   );
 };
 
+const getTime = () => {
+  const indianTime = new Date();
+  // setting indian time
+  indianTime.setHours(indianTime.getHours() + 5);
+  indianTime.setMinutes(indianTime.getMinutes() + 30);
+  return new Date(indianTime);
+};
+
 module.exports = {
   validPassword,
   genPassword,
@@ -80,5 +88,6 @@ module.exports = {
   genRewardAmount,
   ErrorResponse,
   isResultPosted,
-  isParticipant
+  isParticipant,
+  getTime
 };

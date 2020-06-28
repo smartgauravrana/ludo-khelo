@@ -114,10 +114,10 @@ export const getAllMatches = (cbSuccess, cbError) => async (
       params
     });
     const { data } = res.data;
-    if (isEmpty(data)) {
-      return dispatch({ type: SET_HAS_MORE, value: false });
+    if (isEmpty(data) || data.length < 10) {
+      dispatch({ type: SET_HAS_MORE, value: false });
     }
-    dispatch({ type: SET_NEXT, value: data[0]._id || "" });
+    dispatch({ type: SET_NEXT, value: !isEmpty(data) ? data[0]._id : "" });
     dispatch({ type: SET_MATCH_LIST, payload: data });
 
     cbSuccess && cbSuccess(data);

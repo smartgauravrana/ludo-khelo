@@ -144,7 +144,7 @@ function Match({
     <div className="Match">
       <Card className="Match__card">
         <div className="Match__createdDate">
-          Created: {Moment(content.createdOn).fromNow()}
+          Created: {Moment(content.createdAt).fromNow()}
         </div>
         <div className="Match__info">
           <p>

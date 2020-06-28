@@ -19,8 +19,7 @@ module.exports.addMatch = asyncHandler(async (req, res) => {
   const match = await new Match({
     amount,
     isOfficial: req.user.isAdmin || false,
-    createdBy: req.user,
-    createdOn: new Date()
+    createdBy: req.user
   }).save();
   req.user.chips -= amount;
   req.user.matchInProgress = 1;

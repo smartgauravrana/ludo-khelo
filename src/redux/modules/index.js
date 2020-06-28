@@ -4,11 +4,13 @@ import matchDetails from "./matchDetails";
 import timeline from "./timeline";
 import manage from "./manage";
 import settings from "./settings";
+import dashboard from "./dashboard";
 
 export default combineReducers({
   userDetails,
   matchDetails,
   timeline,
   manage,
-  settings
+  settings,
+  dashboard
 });

@@ -13,7 +13,8 @@ const {
   isLogin,
   advancedResults,
   verifyTransaction,
-  asyncHandler
+  asyncHandler,
+  dateFilterAggregation
 } = require("../../middlewares");
 
 router.post(
@@ -90,6 +91,12 @@ router
   .put(isLogin(true), settingsCtrl.updateSettings);
 
 // ADMIN DASHBOARD DATA
-router.route("/dashboard").get(isLogin(true), dashboardCtrl.getDashboardData);
+router
+  .route("/dashboard/matches")
+  .get(isLogin(true), dateFilterAggregation, dashboardCtrl.getMatchesDashboard);
+
+router
+  .route("/dashboard/users")
+  .get(isLogin(true), dateFilterAggregation, dashboardCtrl.getUsersDashboard);
 
 module.exports = router;

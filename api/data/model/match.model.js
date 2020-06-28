@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const { MATCH_STATUS } = require("../../../constants");
-const { genRewardAmount } = require("../../../utils");
+const { genRewardAmount, getTime } = require("../../../utils");
 
 // const resultSchema = new Schema({
 //   postedBy: { type: Schema.Types.ObjectId },
@@ -33,11 +33,14 @@ const matchSchema = new Schema({
     }
   },
   winningAmount: { type: Number },
-  createdOn: Date
+  createdAt: Date
 });
 
 // saving winning Amount from current logic
 matchSchema.pre("save", function (next) {
+  if (!this.createdAt) {
+    this.createdAt = getTime();
+  }
   if (!this.winningAmount) {
     this.winningAmount = genRewardAmount(this.amount);
   }

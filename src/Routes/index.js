@@ -17,6 +17,7 @@ import MatchDetail from "pages/MatchDetail";
 import TermCondition from "pages/TermCondition";
 import Settings from "pages/Settings";
 import Verification from "pages/Verification";
+import Dashboard from "pages/Dashboard";
 
 const Login = loadable(
   () => import(/* webpackChunkName: "Login" */ "pages/Login"),
@@ -133,5 +134,6 @@ export const privateRoutes = [
     component: Manage,
     exact: true
   },
+  { path: routePaths.ADMIN.dashboard, component: Dashboard, exact: true },
   { path: routePaths.ADMIN.settings, component: Settings, exact: true }
 ];
