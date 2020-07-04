@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Button, message } from "antd";
@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import CustomTitle from "components/CustomTitle";
 import TextInput from "components/TextInput";
 import { buyChips } from "redux/modules/userDetails";
+import Loader from "components/Loader";
 import "./Buy.scss";
 
 const BuyFields = [
@@ -24,6 +25,7 @@ const BuyFields = [
 ];
 
 function Buy({ userDetails, buyChips, settings }) {
+  const [isBuying, setIsBuying] = useState(false);
   const { paytmNumber, supportNumber } = settings;
   function copy() {
     var copyText = document.querySelector("#paymentNumber");
@@ -51,11 +53,16 @@ function Buy({ userDetails, buyChips, settings }) {
     </>
   );
 
-  const onBuyChips = values => {
+  const onBuyChips = (values, cb) => {
+    setIsBuying(true);
     buyChips(
       values,
-      () => message.success("Chips Added!"),
+      () => {
+        cb();
+        message.success("Chips Added!");
+      },
       err => {
+        cb();
         const { data } = err.response;
         message.error(data.error);
       }
@@ -88,9 +95,17 @@ function Buy({ userDetails, buyChips, settings }) {
           }}
           validationSchema={Yup.object({
             transactionId: Yup.string().required("Required!"),
-            amount: Yup.number().required("Required!")
+            amount: Yup.number()
+              .required("Required!")
+              .positive("Amount can't be minus")
+              .integer("Amount can't include decimal point.")
           })}
-          onSubmit={onBuyChips}
+          onSubmit={(values, { resetForm }) =>
+            onBuyChips(values, () => {
+              resetForm();
+              setIsBuying(false);
+            })
+          }
         >
           {props => (
             <Form>
@@ -127,6 +142,7 @@ function Buy({ userDetails, buyChips, settings }) {
           Click here to contact Admin
         </a>
       </div>
+      {isBuying && <Loader />}
     </div>
   );
 }

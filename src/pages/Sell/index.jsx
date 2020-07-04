@@ -52,6 +52,9 @@ function Sell({ userDetails, sellChips }) {
   );
   return (
     <div className="Sell">
+      <div className="Sell__chipsInfo">
+        Chips Available : <strong>{userDetails.chips}</strong>
+      </div>
       <div className="Sell__Header">{noticeInfo}</div>
       <div className="Sell__form">
         <Formik
@@ -74,11 +77,15 @@ function Sell({ userDetails, sellChips }) {
               "Accept Terms & Conditions is required"
             )
           })}
-          onSubmit={values => {
+          onSubmit={(values, { resetForm }) => {
             sellChips(
               values,
-              () => message.success("Success"),
+              () => {
+                resetForm();
+                message.success("Success");
+              },
               e => {
+                resetForm();
                 console.log(e);
               }
             );

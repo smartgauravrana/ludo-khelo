@@ -201,7 +201,11 @@ function PostResult({ postResult, checkLogin, matchDetail, user }) {
         {choice === RESULT_OPTIONS.won && screenshotBlock}
       </div>
       <button
-        className="PostResult__Button"
+        className={`PostResult__Button ${
+          !choice || (choice === RESULT_OPTIONS.won && !imageAsUrl.imgUrl)
+            ? "PostResult__Button--disabled"
+            : ""
+        }`}
         disabled={
           !choice || (choice === RESULT_OPTIONS.won && !imageAsUrl.imgUrl)
         }

@@ -14,8 +14,11 @@ const {
 // @desc      Add Match
 // @route     POST /api/matches
 // @access    Private
-module.exports.addMatch = asyncHandler(async (req, res) => {
+module.exports.addMatch = asyncHandler(async (req, res, next) => {
   const { amount } = req.body;
+  if (req.user.chips < amount) {
+    return next(new ErrorResponse("You don't have enough chips", 400));
+  }
   const match = await new Match({
     amount,
     isOfficial: req.user.isAdmin || false,

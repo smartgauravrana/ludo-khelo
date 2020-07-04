@@ -33,13 +33,13 @@ const registerFields = [
   },
   {
     name: "password",
-    type: "text",
+    type: "password",
     placeholder: "Password"
     // label: "Password"
   },
   {
     name: "confirmPassword",
-    type: "text",
+    type: "password",
     placeholder: "Confirm Password"
     // label: "Confrim Password"
   }

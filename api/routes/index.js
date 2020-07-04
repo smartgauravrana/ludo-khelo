@@ -20,14 +20,16 @@ const {
 router.post(
   "/login",
   function (req, res, next) {
-    console.log("inside login handler");
     passport.authenticate("local", function (err, user, info) {
-      console.log("inside passport authenticate");
       if (err) {
-        return res.status(500).send({ msg: "Something went wrong!" });
+        return res
+          .status(500)
+          .send({ success: false, error: "Something went wrong!" });
       }
       if (!user) {
-        return res.status(404).send({ msg: "User not exist!" });
+        return res
+          .status(404)
+          .send({ success: false, error: "User not exist!" });
       }
       req.logIn(user, function (err) {
         if (err) {

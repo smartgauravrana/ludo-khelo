@@ -12,7 +12,7 @@ const userSchema = new Schema({
     select: false
   },
   verified: { type: Boolean, default: false },
-  chips: { type: Number, default: 0 },
+  chips: { type: Number, default: 0, min: 0 },
   isAdmin: { type: Boolean, default: false },
   matchInProgress: { type: Number, default: 0 },
   salt: { type: String, select: false },

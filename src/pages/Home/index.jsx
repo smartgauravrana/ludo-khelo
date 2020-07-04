@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import PropTypes from "prop-types";
 
 import {
@@ -14,6 +14,7 @@ import {
 import { checkLogin } from "redux/modules/userDetails";
 import TextInput from "components/TextInput";
 import Matches from "components/Matches";
+import routePaths from "Routes/routePaths";
 import { SOCKET_EVENTS } from "../../../constants";
 import "./Home.scss";
 
@@ -35,16 +36,23 @@ class Home extends Component {
 
   onChallengeSet = values => {
     const { socket } = this.props;
-    this.props.postMatch(values, () => {
-      this.props.checkLogin();
-      socket.emit(SOCKET_EVENTS.clientMatchPosted, {
-        id: this.props.userDetails._id
-      });
-    });
+    this.props.postMatch(
+      values,
+      () => {
+        this.props.checkLogin();
+        socket.emit(SOCKET_EVENTS.clientMatchPosted, {
+          id: this.props.userDetails._id
+        });
+      },
+      err => {
+        const { data } = err.response;
+        message.error(data.error);
+      }
+    );
   };
 
   render() {
-    const { userDetails } = this.props;
+    const { userDetails, history } = this.props;
     return (
       <div className="Home">
         <div className="Home__message">
@@ -61,10 +69,14 @@ class Home extends Component {
               .min(50, "Amount must be minimum 50")
           })}
           onSubmit={values => {
-            if (!userDetails.matchInProgress) {
-              this.onChallengeSet(values);
-            } else {
+            if (userDetails.matchInProgress) {
               alert("First, Post the result of pending match");
+              history.push(routePaths.HISTORY);
+            } else if (userDetails.chips < values.amount) {
+              alert("You don't have enough chips!. Please Buy chips");
+              history.push(routePaths.BUY);
+            } else {
+              this.onChallengeSet(values);
             }
           }}
         >
@@ -104,5 +116,6 @@ Home.propTypes = {
   addMatch: PropTypes.func,
   resetMatches: PropTypes.func,
   socket: PropTypes.object,
-  checkLogin: PropTypes.func
+  checkLogin: PropTypes.func,
+  history: PropTypes.object
 };
