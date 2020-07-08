@@ -84,9 +84,10 @@ function Sell({ userDetails, sellChips }) {
                 resetForm();
                 message.success("Success");
               },
-              e => {
+              err => {
                 resetForm();
-                console.log(e);
+                const { data } = err.response;
+                message.error(data.error);
               }
             );
           }}

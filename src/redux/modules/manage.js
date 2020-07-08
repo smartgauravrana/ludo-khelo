@@ -17,15 +17,13 @@ export const getMatches = ({
   cbSuccess,
   cbError
 }) => async dispatch => {
-  console.log("options: ", options);
   dispatch({ type: SET_IS_MATCHES_LOADING, payload: true });
   try {
     const res = await call({
       url: `${endpoints.matches}`,
       params: options
     });
-    const { data } = res.data;
-    const { total } = res.data;
+    const { data, total } = res.data;
     cbSuccess && cbSuccess(data);
     dispatch({ type: SET_MATCHES, payload: data });
     dispatch({ type: SET_TOTAL, payload: total });

@@ -12,11 +12,11 @@ export default function DisplayTable({
   loading
 }) {
   return (
-    <div className="Table">
+    <div className="DisplayTable">
       <Table
         dataSource={dataSource}
         columns={columns}
-        pagination={paginationProps}
+        pagination={{ defaultPageSize: 10, ...paginationProps }}
         loading={loading}
         rowKey={rowKey}
       />

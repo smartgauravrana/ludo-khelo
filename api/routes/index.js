@@ -4,6 +4,7 @@ const passport = require("passport");
 const mongoose = require("mongoose");
 
 const Match = mongoose.model("matches");
+const SellRequest = mongoose.model("sellRequests");
 const authCtrl = require("../controllers/auth.controller");
 const matchCtrl = require("../controllers/match.controller");
 const billingCtrl = require("../controllers/billing.controller");
@@ -80,10 +81,13 @@ router.post(
 // SELL ROUTES
 router
   .route("/sell")
-  .get(isLogin(), billingCtrl.getAllSellRequests)
+  .get(isLogin(), advancedResults(SellRequest), billingCtrl.getAllSellRequests)
   .post(isLogin(), billingCtrl.addSellRequest);
 
-router.delete("/sell/:sellId", isLogin(), billingCtrl.deleteSellRequest);
+router
+  .route("/sell/:sellId")
+  .delete(isLogin(), billingCtrl.deleteSellRequest)
+  .put(isLogin(true), billingCtrl.updateSellRequest);
 
 // ADMIN SETTINGS ROUTES
 router

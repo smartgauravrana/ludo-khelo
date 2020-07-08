@@ -12,6 +12,7 @@ export default {
     default: "/admin",
     manage: "/manage",
     settings: "/settings",
-    dashboard: "/dashboard"
+    dashboard: "/dashboard",
+    manageWithdrawls: "/manage-withdrawls"
   }
 };

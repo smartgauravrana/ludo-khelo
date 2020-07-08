@@ -5,6 +5,7 @@ import timeline from "./timeline";
 import manage from "./manage";
 import settings from "./settings";
 import dashboard from "./dashboard";
+import manageWithdrawls from "./manageWithdrawls";
 
 export default combineReducers({
   userDetails,
@@ -12,5 +13,6 @@ export default combineReducers({
   timeline,
   manage,
   settings,
-  dashboard
+  dashboard,
+  manageWithdrawls
 });
