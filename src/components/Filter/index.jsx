@@ -5,6 +5,7 @@ import { MATCH_STATUS } from "../../../constants";
 import "./Filter.scss";
 
 export default function Filter({ initialValue, onChange, options }) {
+  console.log(initialValue, options, MATCH_STATUS);
   const [value, setValue] = useState(initialValue);
   const handleChange = event => {
     const selectedValue = event.target.value;
@@ -33,7 +34,7 @@ Filter.propTypes = {
   options: PropTypes.object
 };
 
-Filter.default = {
+Filter.defaultProps = {
   initialValue: "",
-  options: { MATCH_STATUS }
+  options: MATCH_STATUS
 };

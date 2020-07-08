@@ -126,7 +126,7 @@ class ManageTable extends Component {
       title: "Action",
       dataIndex: "resultsPosted",
       render: (results, record) => {
-        return (
+        return record.status === MATCH_STATUS.onHold ? (
           <Button
             type="primary"
             onClick={() => {
@@ -136,6 +136,8 @@ class ManageTable extends Component {
           >
             Resolve
           </Button>
+        ) : (
+          <div style={{ color: "#1890ff" }}>NA</div>
         );
       }
     }
