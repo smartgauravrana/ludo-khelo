@@ -11,18 +11,18 @@ module.exports.getMatchesDashboard = asyncHandler(async (req, res, next) => {
   if (req.dateFilter) {
     query.push(req.dateFilter);
   }
-  const data = await Match.aggregate([
-    {
-      $group: {
-        _id: "$status",
-        matchesNumber: { $sum: 1 },
-        maxChallengeAmount: { $max: "$amount" },
-        profit: {
-          $sum: { $subtract: [{ $multiply: [2, "$amount"] }, "$winningAmount"] }
-        }
+
+  query.push({
+    $group: {
+      _id: "$status",
+      matchesNumber: { $sum: 1 },
+      maxChallengeAmount: { $max: "$amount" },
+      profit: {
+        $sum: { $subtract: [{ $multiply: [2, "$amount"] }, "$winningAmount"] }
       }
     }
-  ]);
+  });
+  const data = await Match.aggregate(query);
   res.send({ success: true, data });
 });
 

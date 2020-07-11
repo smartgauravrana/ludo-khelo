@@ -19,7 +19,7 @@ export default function Filter({ initialValue, onChange, options }) {
         <select value={value} onChange={handleChange}>
           {Object.keys(options).map(key => (
             <option key={key} value={key}>
-              {key}
+              {options[key]}
             </option>
           ))}
         </select>
