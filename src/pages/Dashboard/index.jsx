@@ -46,15 +46,15 @@ class Dashboard extends Component {
     return (
       <div className="Dashboard">
         <h1>Dashboard</h1>
+        <Filter
+          initialValue={filter}
+          onChange={val => setFilter(DASHBOARD_FILTERS[val])}
+          options={DASHBOARD_FILTERS}
+        />
         {isUsersLoading || isMatchesLoading ? (
           <Loader />
         ) : (
           <>
-            <Filter
-              initialValue={filter}
-              onChange={val => setFilter(DASHBOARD_FILTERS[val])}
-              options={DASHBOARD_FILTERS}
-            />
             <h2>Matches Data</h2>
             <div className="Dashboard__Matches">
               <div className="Dashboard__Item">
