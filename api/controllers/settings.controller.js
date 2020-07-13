@@ -19,7 +19,7 @@ module.exports.addSettings = asyncHandler(async (req, res, next) => {
     );
   } else {
     const newSettings = await new Setting(req.body).save();
-    res.send({ success: true, data: newSettings });
+    res.send({ success: true, data: newSettings || {} });
   }
 });
 module.exports.updateSettings = asyncHandler(async (req, res, next) => {

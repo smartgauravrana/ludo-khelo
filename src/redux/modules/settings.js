@@ -4,7 +4,11 @@ import endpoints from "api/endpoints";
 const SET_SETTINGS = "settings/SET_SETTINGS";
 
 const initialState = {
-  settings: {}
+  settings: {
+    paytmMail: "",
+    paytmNumber: "",
+    supportNumber: ""
+  }
 };
 
 export const fetchSettings = () => async dispatch => {
