@@ -6,7 +6,7 @@ const { asyncHandler } = require("../../middlewares");
 
 module.exports.getSettings = asyncHandler(async (req, res, next) => {
   const settings = await Setting.findOne({});
-  res.send({ success: true, data: settings });
+  res.send({ success: true, data: settings || {} });
 });
 module.exports.addSettings = asyncHandler(async (req, res, next) => {
   const settings = await Setting.findOne({});
@@ -19,7 +19,7 @@ module.exports.addSettings = asyncHandler(async (req, res, next) => {
     );
   } else {
     const newSettings = await new Setting(req.body).save();
-    res.send({ success: true, data: newSettings || {} });
+    res.send({ success: true, data: newSettings });
   }
 });
 module.exports.updateSettings = asyncHandler(async (req, res, next) => {

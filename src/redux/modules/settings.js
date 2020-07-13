@@ -1,5 +1,6 @@
 import call from "api/apiRequest";
 import endpoints from "api/endpoints";
+import isEmpty from "../../../utils";
 
 const SET_SETTINGS = "settings/SET_SETTINGS";
 
@@ -15,7 +16,10 @@ export const fetchSettings = () => async dispatch => {
   try {
     const res = await call({ url: endpoints.settings });
     const { data } = res.data;
-    dispatch({ type: SET_SETTINGS, payload: data });
+    dispatch({
+      type: SET_SETTINGS,
+      payload: !isEmpty(data) ? data : initialState.settings
+    });
   } catch (e) {
     console.log(e);
   }
