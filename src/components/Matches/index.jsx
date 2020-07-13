@@ -28,7 +28,6 @@ function Matches({
   isLoading
 }) {
   useEffect(() => {
-    getAllMatches();
     socket.on(SOCKET_EVENTS.serverPlayRequested, data => {
       console.log("play requested for my match");
       getMatch(data.matchId);
@@ -55,9 +54,10 @@ function Matches({
       </div>
       <div className="Matches__list">
         <ListingWithInfiniteScroll
-          hasMore={hasMore}
+          hasMore={hasMore && !isLoading}
           isLoading={isLoading}
           loadMore={() => getAllMatches()}
+          settings={{ initialLoad: true }}
         >
           {matchList.map(match => (
             <Match

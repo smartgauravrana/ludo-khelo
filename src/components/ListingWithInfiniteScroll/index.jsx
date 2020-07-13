@@ -4,7 +4,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import { Spin } from "antd";
 
 export default function ListingWithInfiniteScroll(props) {
-  const { className, loadMore, hasMore, isLoading } = props;
+  const { className, loadMore, hasMore, isLoading, settings } = props;
   return (
     <InfiniteScroll
       pageStart={0}
@@ -12,6 +12,7 @@ export default function ListingWithInfiniteScroll(props) {
       loadMore={loadMore}
       hasMore={hasMore}
       initialLoad={false}
+      {...settings}
     >
       {props.children}
       {isLoading && (
@@ -28,9 +29,11 @@ ListingWithInfiniteScroll.propTypes = {
   loadMore: PropTypes.func,
   hasMore: PropTypes.bool,
   isLoading: PropTypes.bool,
-  children: PropTypes.array
+  children: PropTypes.array,
+  settings: PropTypes.object
 };
 
 ListingWithInfiniteScroll.defaultProps = {
-  initialLoad: false
+  initialLoad: false,
+  settings: {}
 };
