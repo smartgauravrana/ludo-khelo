@@ -48,7 +48,7 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
     <>
       <div className="header">
         <div className="header__title">
-          <Link to="/">Ludo Money</Link>
+          <Link to="/">Ludo Paytm</Link>
         </div>
         <MenuOutlined className="header__menu--icon" onClick={onMenuClick} />
       </div>
