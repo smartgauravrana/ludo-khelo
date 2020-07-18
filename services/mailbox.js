@@ -26,7 +26,7 @@ const getUnseenMail = ({ server, data }, getMailCb) => {
             simpleParser(stream, (err, parsed) => {
               if (!err) {
                 // console.log(parsed.text);
-                getMailCb(null, { mailText: parsed.text, uid });
+                getMailCb(null, { mailText: parsed.html, uid });
               }
             });
           });

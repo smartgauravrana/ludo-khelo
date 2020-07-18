@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const createTextVersion = require("textversionjs");
 const ErrorResponse = require("./errorResponse");
 
 function validPassword(password, hash, salt) {
@@ -38,11 +39,15 @@ function genRewardAmount(challengeAmount) {
   return challengeAmount + Math.floor(reward);
 }
 
-function getPaytmDetails(text) {
-  const amountRegex = /₹\s\d+/;
-  const idRegex = /Transaction Id:\s\d+/;
-  const [amountString] = text.match(amountRegex);
-  const [idString] = text.match(idRegex);
+function getPaytmDetails(html) {
+  const mailtext = createTextVersion(html);
+
+  // &#8377; is code for INR Symbol
+  const amountRegex = /&#8377;\s\d+/;
+  const idRegex = /Order ID:\s\d+/;
+
+  const [amountString] = mailtext.match(amountRegex);
+  const [idString] = mailtext.match(idRegex);
   const amount = +amountString.split(" ").pop().trim();
   const transactionId = idString.split(" ").pop().trim();
   return { amount, transactionId };
