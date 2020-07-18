@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import CustomTitle from "components/CustomTitle";
 import TextInput from "components/TextInput";
 import { buyChips } from "redux/modules/userDetails";
+import QueryNotice from "components/QueryNotice";
 import Loader from "components/Loader";
 import "./Buy.scss";
 
@@ -26,7 +27,7 @@ const BuyFields = [
 
 function Buy({ userDetails, buyChips, settings }) {
   const [isBuying, setIsBuying] = useState(false);
-  const { supportNumber } = settings;
+  // const { supportNumber } = settings;
   // const { paytmNumber, supportNumber } = settings;
 
   // function copy() {
@@ -132,21 +133,7 @@ function Buy({ userDetails, buyChips, settings }) {
           )}
         </Formik>
       </div>
-      <div className="Buy__QA">
-        <h3 style={{ textAlign: "center" }}>For Any Query</h3>
-        <p style={{ textAlign: "center" }}>
-          {`Please contact support at whatsapp (+91${supportNumber})`}
-          <br />
-          Your query will be solved in <b>within 12 hours</b>.
-        </p>
-        <a
-          href={`https://wa.me/91${supportNumber}?text=Please+Load+Chips+In+My+Account,+My+account+number+is+${userDetails.phone}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Click here to contact Admin
-        </a>
-      </div>
+      <QueryNotice />
       {isBuying && <Loader />}
     </div>
   );

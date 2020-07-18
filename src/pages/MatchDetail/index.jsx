@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { message } from "antd";
 
 import SocketContext from "context/socket-context";
+import Loader from "components/Loader";
 import { SOCKET_EVENTS, MATCH_STATUS } from "../../../constants";
 import { acceptInvite, getMatch } from "redux/modules/matchDetails";
 import RecordingMessage from "./RecordingMessage";
@@ -22,6 +24,7 @@ function MatchDetail({
 }) {
   const [matchDetail, setMatchDetail] = useState(null);
   const [roomInput, setRoomInput] = useState("");
+  const [updatingRoomId, setUpdatingRoomId] = useState(false);
   useEffect(() => {
     getMatch(match.params.matchId, data => setMatchDetail(data));
   }, []);
@@ -32,11 +35,21 @@ function MatchDetail({
     document.execCommand("copy");
   }
   const onRoomSubmit = () => {
-    acceptInvite({ match: matchDetail, roomId: roomInput }, () => {
-      socket.emit(SOCKET_EVENTS.clientPlayAccepted, {
-        matchId: match.params.matchId
-      });
-    });
+    setUpdatingRoomId(true);
+    acceptInvite(
+      { match: matchDetail, roomId: roomInput },
+      () => {
+        socket.emit(SOCKET_EVENTS.clientPlayAccepted, {
+          matchId: match.params.matchId
+        });
+        setUpdatingRoomId(false);
+        message.success("Room Code Updated!");
+      },
+      () => {
+        setUpdatingRoomId(false);
+        message.error("Please try again!");
+      }
+    );
   };
 
   const form = (
@@ -101,6 +114,7 @@ function MatchDetail({
         !isResultPosted(matchDetail.resultsPosted, userDetails._id) && (
           <PostResult matchDetail={matchDetail} user={userDetails} />
         )}
+      {updatingRoomId && <Loader />}
     </div>
   ) : (
     <div>loading....</div>
