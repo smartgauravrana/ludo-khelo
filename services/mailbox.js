@@ -62,7 +62,7 @@ function startMailServer() {
   mailServer = new Imap({
     user: process.env.MAIL_ID,
     password: process.env.MAIL_PWD,
-    host: "outlook.office365.com",
+    host: "imap.gmail.com",
     port: 993,
     tls: true,
     tlsOptions: {
