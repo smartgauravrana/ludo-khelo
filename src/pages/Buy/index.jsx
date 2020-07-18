@@ -26,12 +26,14 @@ const BuyFields = [
 
 function Buy({ userDetails, buyChips, settings }) {
   const [isBuying, setIsBuying] = useState(false);
-  const { paytmNumber, supportNumber } = settings;
-  function copy() {
-    var copyText = document.querySelector("#paymentNumber");
-    copyText.select();
-    document.execCommand("copy");
-  }
+  const { supportNumber } = settings;
+  // const { paytmNumber, supportNumber } = settings;
+
+  // function copy() {
+  //   var copyText = document.querySelector("#paymentNumber");
+  //   copyText.select();
+  //   document.execCommand("copy");
+  // }
   const noticeInfo = (
     <>
       <CustomTitle title="Buy Chips" />
@@ -42,9 +44,9 @@ function Buy({ userDetails, buyChips, settings }) {
         Dont pay through Bank (You will lose your money).
       </p>
       <p>
-        Please pay at this number only{" "}
+        Please pay at this Link through{" "}
         <span>
-          <b style={{ fontSize: "120%", color: "red" }}>{paytmNumber}</b>
+          <a href="https://paytm.me/YCm-eWS">PAYTM LINK</a>
         </span>
         , and enter wallet Transcation Id.
         <br />
@@ -72,12 +74,12 @@ function Buy({ userDetails, buyChips, settings }) {
   return (
     <div className="Buy">
       <div className="Buy__Header">{noticeInfo}</div>
-      <div className="Buy__paymentNumber form-group">
+      {/* <div className="Buy__paymentNumber form-group">
         <input
           id="paymentNumber"
           type="number"
           name="paymentNumber"
-          placeholder="Recipient Paytm Number..."
+          placeholder="Payment Link"
           readOnly
           value={paytmNumber}
         />
@@ -86,6 +88,9 @@ function Buy({ userDetails, buyChips, settings }) {
             Copy
           </button>
         </div>
+      </div> */}
+      <div className="Buy__paytmLink">
+        <a href="https://paytm.me/YCm-eWS">Click Here to Open Paytm App</a>
       </div>
       <div className="Buy__form">
         <Formik

@@ -37,3 +37,18 @@
     padding: 10px 32px;
   }
 }
+
+.Buy__paytmLink {
+  text-align: center;
+  background: #1890ff;
+  margin: 10px 20px 20px 20px;
+  border-radius: 5px;
+  box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.1);
+
+  a {
+    color: white;
+    width: 100%;
+    display: inline-block;
+    padding: 10px 20px;
+  }
+}
