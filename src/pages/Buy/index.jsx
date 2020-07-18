@@ -16,7 +16,7 @@ const BuyFields = [
   {
     name: "transactionId",
     type: "text",
-    placeholder: "Transaction Id"
+    placeholder: "Order Id"
   },
   {
     name: "amount",
@@ -47,9 +47,11 @@ function Buy({ userDetails, buyChips, settings }) {
       <p>
         Please pay at this Link through{" "}
         <span>
-          <a href="https://paytm.me/YCm-eWS">PAYTM LINK</a>
+          <a href="https://paytm.me/YCm-eWS" target="_blank">
+            PAYTM LINK
+          </a>
         </span>
-        , and enter wallet Transcation Id.
+        , and enter wallet Order Id.
         <br />
         <a href="/help/loadbalance">Help</a>
       </p>
@@ -91,7 +93,9 @@ function Buy({ userDetails, buyChips, settings }) {
         </div>
       </div> */}
       <div className="Buy__paytmLink">
-        <a href="https://paytm.me/YCm-eWS">Click Here to Open Paytm App</a>
+        <a href="https://paytm.me/YCm-eWS" target="_blank">
+          Click Here to Open Paytm App
+        </a>
       </div>
       <div className="Buy__form">
         <Formik

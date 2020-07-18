@@ -79,6 +79,8 @@ function startMailServer() {
       console.log("message", "server1 ready");
     });
   });
+  // reconnecting
+  mailServer.on("end", startMailServer);
   // new mail listener
   // mailServer.on("mail", function (num) {
   //   console.log("new mail ", num);
