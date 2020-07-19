@@ -80,7 +80,14 @@ function startMailServer() {
     });
   });
   // reconnecting
-  mailServer.on("end", startMailServer);
+  mailServer.once("end", () => {
+    console.log("mailbox ended!");
+  });
+  mailServer.once("close", () => {
+    console.log("mailbox closed!");
+    mailServer = null;
+    startMailServer();
+  });
   // new mail listener
   // mailServer.on("mail", function (num) {
   //   console.log("new mail ", num);
