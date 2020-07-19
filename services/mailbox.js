@@ -49,17 +49,17 @@ const getUnseenMail = ({ server, data }, getMailCb) => {
   });
 };
 
-let mailServer;
+// let mailServer;
 
-function getMailServer() {
-  return mailServer;
-}
+// function getMailServer() {
+//   return mailServer;
+// }
 
-function startMailServer() {
-  if (mailServer) {
-    return mailServer;
-  }
-  mailServer = new Imap({
+function getMailServer(cb) {
+  // if (mailServer) {
+  //   return mailServer;
+  // }
+  const mailServer = new Imap({
     user: process.env.MAIL_ID,
     password: process.env.MAIL_PWD,
     // host: "imap.gmail.com",
@@ -77,22 +77,24 @@ function startMailServer() {
     mailServer.openBox("INBOX", true, function (err, box) {
       if (err) throw err;
       console.log("message", "server1 ready");
+      cb(mailServer);
     });
   });
   // reconnecting
-  mailServer.once("end", () => {
-    console.log("mailbox ended!");
-  });
-  mailServer.once("close", () => {
-    console.log("mailbox closed!");
-    mailServer = null;
-    startMailServer();
-  });
+  // mailServer.once("end", () => {
+  //   console.log("mailbox ended!");
+  // });
+  // mailServer.once("close", () => {
+  //   console.log("mailbox closed!");
+  //   mailServer = null;
+  //   startMailServer();
+  // });
   // new mail listener
   // mailServer.on("mail", function (num) {
   //   console.log("new mail ", num);
   // });
   mailServer.connect();
+  // return mailServer;
 }
 
-module.exports = { getMailServer, getUnseenMail, startMailServer };
+module.exports = { getMailServer, getUnseenMail };

@@ -25,8 +25,8 @@ const io = new IoService(server);
 const routes = require("./api/routes");
 
 // Mail searching
-const { startMailServer } = require("./services/mailbox");
-startMailServer();
+// const { startMailServer } = require("./services/mailbox");
+// startMailServer();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

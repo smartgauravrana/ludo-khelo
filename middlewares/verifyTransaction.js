@@ -10,8 +10,8 @@ const verifyTransaction = async (req, res, next) => {
     };
     return next();
   }
-  const mailServer = getMailServer();
-  getUnseenMail(
+  // getMailServer();
+  const cb = (mailServer) => getUnseenMail(
     { server: mailServer, data: transactionId },
     async (err, data) => {
       if (err) return next(new ErrorResponse("Something went wrong!", 500));
@@ -40,6 +40,7 @@ const verifyTransaction = async (req, res, next) => {
       }
     }
   );
+  getMailServer(cb);
 };
 
 module.exports = verifyTransaction;
