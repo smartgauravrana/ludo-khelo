@@ -28,7 +28,7 @@ export default function Onboarding() {
           src="https://www.youtube.com/embed/O7dAJRo-Swg"
           frameborder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
+          allowfullscreen="allowfullscreen"
         ></iframe>
       </div>
 
