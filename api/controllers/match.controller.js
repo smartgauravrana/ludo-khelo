@@ -48,51 +48,6 @@ module.exports.getMatch = asyncHandler(async (req, res) => {
 // @access    Private
 module.exports.getMatches = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
-  // const {
-  //   isOfficial,
-  //   history,
-  //   page,
-  //   searchText,
-  //   matchStatus,
-  //   contests
-  // } = req.query;
-  // let query;
-  // let count;
-  // if (history) {
-  //   query = Match.find()
-  //     .or([{ createdBy: req.user._id }, { joinee: req.user._id }])
-  //     .populate("createdBy")
-  //     .populate("joinee");
-  //   count = await Match.countDocuments({
-  //     $or: [{ createdBy: req.user._id }, { joinee: req.user._id }]
-  //   });
-  // } else {
-  //   let findQuery = {};
-  //   if (isOfficial) {
-  //     findQuery.isOfficial = isOfficial || false;
-  //   }
-  //   if (searchText) {
-  //     findQuery._id = searchText;
-  //   }
-  //   if (matchStatus) {
-  //     findQuery.status = matchStatus;
-  //   }
-  //   if (contests) {
-  //     findQuery = { status: { $ne: MATCH_STATUS.completed } };
-  //   }
-  //   console.log("query: ", findQuery);
-  //   query = Match.find(findQuery).populate("createdBy").populate("joinee");
-  //   count = await Match.countDocuments(findQuery);
-  // }
-  // console.log("count: ", count);
-  // query = query
-  //   .sort({
-  //     _id: -1
-  //   })
-  //   .skip(10 * (page - 1 || 0))
-  //   .limit(10);
-  // const matches = await query.exec();
-  // res.send({ total: count, data: matches });
 });
 
 module.exports.update = asyncHandler(async (req, res) => {

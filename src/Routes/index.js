@@ -19,6 +19,7 @@ import Settings from "pages/Settings";
 import Verification from "pages/Verification";
 import Dashboard from "pages/Dashboard";
 import ManageWithdrawls from "pages/ManageWithdrawls";
+import Users from "pages/Users";
 
 const Login = loadable(
   () => import(/* webpackChunkName: "Login" */ "pages/Login"),
@@ -137,5 +138,10 @@ export const privateRoutes = [
   },
   { path: routePaths.ADMIN.dashboard, component: Dashboard, exact: true },
   { path: routePaths.ADMIN.settings, component: Settings, exact: true },
-  { path: routePaths.ADMIN.manageWithdrawls, component: ManageWithdrawls }
+  {
+    path: routePaths.ADMIN.manageWithdrawls,
+    component: ManageWithdrawls,
+    exact: true
+  },
+  { path: routePaths.ADMIN.users, component: Users, exact: true }
 ];

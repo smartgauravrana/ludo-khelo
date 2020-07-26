@@ -6,6 +6,7 @@ import manage from "./manage";
 import settings from "./settings";
 import dashboard from "./dashboard";
 import manageWithdrawls from "./manageWithdrawls";
+import users from "./users";
 
 export default combineReducers({
   userDetails,
@@ -14,5 +15,6 @@ export default combineReducers({
   manage,
   settings,
   dashboard,
-  manageWithdrawls
+  manageWithdrawls,
+  users
 });

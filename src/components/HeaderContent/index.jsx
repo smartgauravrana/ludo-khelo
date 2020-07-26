@@ -21,6 +21,9 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
       <Link to={routePaths.ADMIN.dashboard} onClick={onMenuClick}>
         Dashboard
       </Link>
+      <Link to={routePaths.ADMIN.users} onClick={onMenuClick}>
+        Users
+      </Link>
       <Link to={routePaths.ADMIN.settings} onClick={onMenuClick}>
         Settings
       </Link>

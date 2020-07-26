@@ -5,11 +5,13 @@ const mongoose = require("mongoose");
 
 const Match = mongoose.model("matches");
 const SellRequest = mongoose.model("sellRequests");
+const User = mongoose.model("users");
 const authCtrl = require("../controllers/auth.controller");
 const matchCtrl = require("../controllers/match.controller");
 const billingCtrl = require("../controllers/billing.controller");
 const settingsCtrl = require("../controllers/settings.controller");
 const dashboardCtrl = require("../controllers/dashboard.controller");
+const userCtrl = require("../controllers/user.controller");
 const {
   isLogin,
   advancedResults,
@@ -104,5 +106,15 @@ router
 router
   .route("/dashboard/users")
   .get(isLogin(true), dateFilterAggregation, dashboardCtrl.getUsersDashboard);
+
+// users management
+router
+  .route("/users")
+  .get(isLogin(true), advancedResults(User), userCtrl.getAllUsers);
+
+router
+  .route("/users/:userId")
+  .get(isLogin(true), userCtrl.getSingleUser)
+  .put(isLogin(true), userCtrl.updateSingleUser);
 
 module.exports = router;

@@ -13,6 +13,7 @@ export default {
     manage: "/manage",
     settings: "/settings",
     dashboard: "/dashboard",
-    manageWithdrawls: "/manage-withdrawls"
+    manageWithdrawls: "/manage-withdrawls",
+    users: "/users"
   }
 };

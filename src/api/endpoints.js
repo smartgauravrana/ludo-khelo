@@ -8,5 +8,6 @@ export default {
   result: "/result",
   settings: "/settings",
   matchesStats: "/dashboard/matches",
-  usersStats: "/dashboard/users"
+  usersStats: "/dashboard/users",
+  users: "/users"
 };
