@@ -63,7 +63,8 @@ class Users extends Component {
     },
     {
       title: "Username",
-      dataIndex: "username"
+      dataIndex: "username",
+      ellipsis: true
     },
     {
       title: "Chips",
