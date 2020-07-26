@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -11,6 +11,7 @@ import { publicRoutes, privateRoutes } from "Routes";
 import { checkLogin } from "redux/modules/userDetails";
 import { fetchSettings } from "redux/modules/settings";
 import SocketContext from "context/socket-context";
+import Loader from "components/Loader";
 import { SOCKET_CONFIG, GTM_ID } from "config";
 import "./App.scss";
 import routePaths from "../Routes/routePaths";
@@ -26,29 +27,38 @@ const tagManagerArgs = {
 TagManager.initialize(tagManagerArgs);
 function App(props) {
   const { checkLogin, fetchSettings } = props;
+  const [isUserFetching, setIsUserFetching] = useState(true);
   const history = useHistory();
 
   useEffect(() => {
-    checkLogin(user => {
-      if (!user._id) {
-        history.replace(routePaths.LOGIN);
-      }
-    });
+    checkLogin(
+      user => {
+        setIsUserFetching(false);
+        if (!user._id) {
+          history.replace(routePaths.HOME);
+        }
+      },
+      () => setIsUserFetching(false)
+    );
     fetchSettings();
   }, []);
   return (
     <SocketContext.Provider value={socket}>
       <div className="App">
-        <AppLayout>
-          <Switch>
-            {publicRoutes.map(route => (
-              <Route key={route.path} {...route} abc={true} />
-            ))}
-            {privateRoutes.map(route => (
-              <PrivateRoute key={route.path} {...route} />
-            ))}
-          </Switch>
-        </AppLayout>
+        {!isUserFetching ? (
+          <AppLayout>
+            <Switch>
+              {publicRoutes.map(route => (
+                <Route key={route.path} {...route} />
+              ))}
+              {privateRoutes.map(route => (
+                <PrivateRoute key={route.path} {...route} />
+              ))}
+            </Switch>
+          </AppLayout>
+        ) : (
+          <Loader />
+        )}
       </div>
     </SocketContext.Provider>
   );

@@ -17,6 +17,7 @@ import Matches from "components/Matches";
 import routePaths from "Routes/routePaths";
 import { SOCKET_EVENTS } from "../../../constants";
 import "./Home.scss";
+import Onboarding from "components/Onboarding";
 
 class Home extends Component {
   componentDidMount() {
@@ -55,47 +56,57 @@ class Home extends Component {
     const { userDetails, history } = this.props;
     return (
       <div className="Home">
-        <div className="Home__message">
-          If your oppoent says you to play in any other group, inform us we will
-          award you win. (Proof required)
-        </div>
-        <Formik
-          initialValues={{
-            amount: ""
-          }}
-          validationSchema={Yup.object({
-            amount: Yup.number()
-              .required("Required!")
-              .min(50, "Amount must be minimum 50")
-          })}
-          onSubmit={values => {
-            if (userDetails.matchInProgress) {
-              alert("First, Post the result of pending match");
-              history.push(routePaths.HISTORY);
-            } else if (userDetails.chips < values.amount) {
-              alert("You don't have enough chips!. Please Buy chips");
-              history.push(routePaths.BUY);
-            } else {
-              this.onChallengeSet(values);
-            }
-          }}
-        >
-          {props => (
-            <div className="Home__setChallenge">
-              <TextInput name="amount" type="text" placeholder="Enter Amount" />
-              <Button
-                type="primary"
-                onClick={() => {
-                  props.submitForm();
-                  // props.resetForm();
-                }}
-              >
-                Set
-              </Button>
+        {userDetails._id ? (
+          <>
+            <div className="Home__message">
+              If your oppoent says you to play in any other group, inform us we
+              will award you win. (Proof required)
             </div>
-          )}
-        </Formik>
-        <Matches />
+            <Formik
+              initialValues={{
+                amount: ""
+              }}
+              validationSchema={Yup.object({
+                amount: Yup.number()
+                  .required("Required!")
+                  .min(50, "Amount must be minimum 50")
+              })}
+              onSubmit={values => {
+                if (userDetails.matchInProgress) {
+                  alert("First, Post the result of pending match");
+                  history.push(routePaths.HISTORY);
+                } else if (userDetails.chips < values.amount) {
+                  alert("You don't have enough chips!. Please Buy chips");
+                  history.push(routePaths.BUY);
+                } else {
+                  this.onChallengeSet(values);
+                }
+              }}
+            >
+              {props => (
+                <div className="Home__setChallenge">
+                  <TextInput
+                    name="amount"
+                    type="text"
+                    placeholder="Enter Amount"
+                  />
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      props.submitForm();
+                      // props.resetForm();
+                    }}
+                  >
+                    Set
+                  </Button>
+                </div>
+              )}
+            </Formik>
+            <Matches />
+          </>
+        ) : (
+          <Onboarding />
+        )}
       </div>
     );
   }

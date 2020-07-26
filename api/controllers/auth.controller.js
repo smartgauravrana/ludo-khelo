@@ -33,7 +33,7 @@ module.exports.getCurrentUser = (req, res) => {
 
 module.exports.logout = (req, res) => {
   req.logOut();
-  res.redirect("/login");
+  res.redirect("/");
 };
 
 module.exports.verfiyOtp = async (req, res) => {

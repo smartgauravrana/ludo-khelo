@@ -41,7 +41,7 @@ export const register = (
   }
 };
 
-export const checkLogin = cbSuccess => async dispatch => {
+export const checkLogin = (cbSuccess, cbError) => async dispatch => {
   const res = await call({ url: endpoints.currentUser });
   const { data } = res.data;
   cbSuccess && cbSuccess(data || {});

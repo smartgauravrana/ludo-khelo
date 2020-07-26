@@ -1,0 +1,29 @@
+.Onboarding {
+  background: white;
+  text-align: center;
+  border: 1px solid black;
+  padding: 20px;
+  margin: 20px 0;
+
+  iframe {
+    width: 100%;
+  }
+
+  .QueryNotice {
+    border: none;
+  }
+}
+
+.Onboarding__Earn {
+  color: red;
+  font-size: 28px;
+}
+
+.Onboarding__Login {
+  font-weight: bold;
+}
+
+.Onboarding__Register {
+  font-weight: 24px;
+  font-weight: bold;
+}
