@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, message } from "antd";
 import PropTypes from "prop-types";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Moment from "moment";
 import { connect } from "react-redux";
 
@@ -15,7 +15,7 @@ import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
 import { checkLogin } from "redux/modules/userDetails";
 // import { isResultPosted } from "client-utils";
 import MatchActions from "components/MatchActions";
-// import routePaths from "Routes/routePaths";
+import routePaths from "Routes/routePaths";
 import "./Match.scss";
 import CopyData from "../CopyData";
 
@@ -29,15 +29,26 @@ function Match({
   updateMatchStatus,
   checkLogin
 }) {
-  // const history = useHistory();
+  const history = useHistory();
 
   const playRequest = () => {
     if (!user.matchInProgress) {
-      sendInvite(content, () => {
-        socket.emit(SOCKET_EVENTS.clientPlayRequested, {
-          matchId: content._id
-        });
-      });
+      if (user.chips < content.amount) {
+        alert("You don't have enough chips!. Please Buy chips");
+        return history.push(routePaths.BUY);
+      }
+      sendInvite(
+        content,
+        () => {
+          socket.emit(SOCKET_EVENTS.clientPlayRequested, {
+            matchId: content._id
+          });
+        },
+        err => {
+          const { data } = err.response;
+          message.error(data.error);
+        }
+      );
     } else {
       alert("First Post result for pending Match!");
     }

@@ -193,20 +193,25 @@ export const sendInvite = (match, cbSuccess, cbError) => async (
   getState
 ) => {
   const updateObj = { isJoinee: true };
-  const res = await updateMatch(updateObj, match._id);
-  const { data } = res.data;
-  const {
-    matchDetails: { matchList }
-  } = getState();
-  const newList = matchList.map(el => {
-    if (el._id === match._id) {
-      return data;
-    }
-    return el;
-  });
-  dispatch({ type: SET_MATCH_LIST, payload: newList });
-  dispatch(setUserDetails(data.joinee));
-  cbSuccess && cbSuccess(data);
+  try {
+    const res = await updateMatch(updateObj, match._id);
+    const { data } = res.data;
+    const {
+      matchDetails: { matchList }
+    } = getState();
+    const newList = matchList.map(el => {
+      if (el._id === match._id) {
+        return data;
+      }
+      return el;
+    });
+    dispatch({ type: SET_MATCH_LIST, payload: newList });
+    dispatch(setUserDetails(data.joinee));
+    cbSuccess && cbSuccess(data);
+  } catch (err) {
+    console.log("play requested err: ", err);
+    cbError && cbError(err);
+  }
 };
 
 export const leaveMatch = (match, cbSuccess, cbError) => async (

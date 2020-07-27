@@ -26,7 +26,7 @@ module.exports.addMatch = asyncHandler(async (req, res, next) => {
   }).save();
   req.user.chips -= amount;
   req.user.matchInProgress = 1;
-  req.user.save();
+  await req.user.save();
   match.createdBy = req.user;
   res.send({ success: true, data: match });
 });
@@ -50,7 +50,7 @@ module.exports.getMatches = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
-module.exports.update = asyncHandler(async (req, res) => {
+module.exports.update = asyncHandler(async (req, res, next) => {
   const { matchId } = req.params;
   const { isJoinee, roomId, leaveMatch } = req.body;
   let updateObj = {};
@@ -60,6 +60,10 @@ module.exports.update = asyncHandler(async (req, res) => {
       joinee: req.user._id,
       status: MATCH_STATUS.playRequested
     };
+    const match = await Match.findById(matchId);
+    if (match && match.amount > req.user.chips) {
+      return next(new ErrorResponse("You don't have enought chips!", 400));
+    }
   }
 
   if (roomId) {
@@ -94,7 +98,7 @@ module.exports.update = asyncHandler(async (req, res) => {
     match = match.toObject();
     match.joinee = req.user;
   }
-  req.user.save();
+  await req.user.save();
   res.send({ sucess: true, data: match });
 });
 
@@ -109,7 +113,7 @@ module.exports.delete = asyncHandler(async (req, res, next) => {
   }
   req.user.chips += match.amount;
   req.user.matchInProgress = 0;
-  match.delete();
+  await match.delete();
   const user = await req.user.save();
   res.send({ success: true, data: user });
 });
