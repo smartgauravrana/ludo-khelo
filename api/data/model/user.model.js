@@ -16,6 +16,7 @@ const userSchema = new Schema({
   isAdmin: { type: Boolean, default: false },
   matchInProgress: { type: Number, default: 0 },
   salt: { type: String, select: false },
+  notificationDevices: { type: Array, default: [] },
   createdAt: Date
 });
 

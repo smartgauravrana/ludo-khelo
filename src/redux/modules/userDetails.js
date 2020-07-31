@@ -83,6 +83,18 @@ export const sellChips = (sellData, cbSuccess, cbError) => async dispatch => {
   }
 };
 
+export const addDevice = playerId => async dispatch => {
+  try {
+    await call({
+      method: "POST",
+      url: endpoints.notificationDevices,
+      data: { playerId }
+    });
+  } catch (e) {
+    console.log("Adding device err: ", e);
+  }
+};
+
 export const setUserDetails = userDetails => ({
   type: SET_USER_DETAILS,
   payload: userDetails

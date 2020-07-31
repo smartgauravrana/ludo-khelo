@@ -117,4 +117,9 @@ router
   .get(isLogin(true), userCtrl.getSingleUser)
   .put(isLogin(true), userCtrl.updateSingleUser);
 
+// for push notification
+router
+  .route("/users/notification")
+  .post(isLogin(), userCtrl.addNotificationDevice);
+
 module.exports = router;

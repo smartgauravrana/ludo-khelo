@@ -2,7 +2,7 @@ import React from "react";
 import { Card, message } from "antd";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-import Moment from "moment";
+// import Moment from "moment";
 import { connect } from "react-redux";
 
 import {
@@ -154,9 +154,9 @@ function Match({
   return (
     <div className="Match">
       <Card className="Match__card">
-        <div className="Match__createdDate">
+        {/* <div className="Match__createdDate">
           Created: {Moment(content.createdAt).fromNow()}
-        </div>
+        </div> */}
         <div className="Match__info">
           <p>
             {content.createdBy.username} have set a challenge for{" "}

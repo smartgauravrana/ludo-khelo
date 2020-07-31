@@ -9,5 +9,6 @@ export default {
   settings: "/settings",
   matchesStats: "/dashboard/matches",
   usersStats: "/dashboard/users",
-  users: "/users"
+  users: "/users",
+  notificationDevices: "/users/notification"
 };

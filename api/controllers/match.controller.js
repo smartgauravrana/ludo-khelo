@@ -10,6 +10,7 @@ const {
   isParticipant,
   ErrorResponse
 } = require("../../utils");
+const { sendNotification } = require("../../services/notificationService");
 
 // @desc      Add Match
 // @route     POST /api/matches
@@ -54,16 +55,28 @@ module.exports.update = asyncHandler(async (req, res, next) => {
   const { matchId } = req.params;
   const { isJoinee, roomId, leaveMatch } = req.body;
   let updateObj = {};
+
+  const notification = {
+    content: "",
+    playerIds: []
+  };
+
   if (isJoinee) {
     updateObj = {
       ...updateObj,
       joinee: req.user._id,
       status: MATCH_STATUS.playRequested
     };
+
     const match = await Match.findById(matchId);
     if (match && match.amount > req.user.chips) {
       return next(new ErrorResponse("You don't have enought chips!", 400));
     }
+
+    // setting notification for match creator
+    const matchCreator = await User.findById(match.createdBy);
+    notification.content = "Your Challenge Accepted!";
+    notification.playerIds = matchCreator.notificationDevices;
   }
 
   if (roomId) {
@@ -79,6 +92,12 @@ module.exports.update = asyncHandler(async (req, res, next) => {
   if (isJoinee) {
     req.user.chips -= match.amount;
     req.user.matchInProgress = 1;
+  }
+  if (roomId) {
+    // setting notification for joinee person after room code set
+    const matchJoinee = await User.findById(match.joinee);
+    notification.content = "Request Accepted! Click to Play";
+    notification.playerIds = matchJoinee.notificationDevices;
   }
   if (leaveMatch) {
     if (
@@ -99,6 +118,8 @@ module.exports.update = asyncHandler(async (req, res, next) => {
     match.joinee = req.user;
   }
   await req.user.save();
+  // firing notification
+  if (isJoinee || roomId) await sendNotification(notification);
   res.send({ sucess: true, data: match });
 });
 

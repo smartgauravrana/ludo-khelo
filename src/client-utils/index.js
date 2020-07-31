@@ -14,8 +14,8 @@ export function isParticipant(match, userId) {
 
 export function getOpponent(match, userId) {
   if (match.createdBy._id === userId) {
-    return match.createdBy;
+    return match.joinee;
   }
-  if (match.joinee && match.joinee._id === userId) return match.joinee;
+  if (match.joinee && match.joinee._id === userId) return match.createdBy;
   return {};
 }
