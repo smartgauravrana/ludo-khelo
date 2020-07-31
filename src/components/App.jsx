@@ -8,13 +8,14 @@ import TagManager from "react-gtm-module";
 import AppLayout from "components/AppLayout";
 import PrivateRoute from "components/PrivateRoute";
 import { publicRoutes, privateRoutes } from "Routes";
-import { checkLogin } from "redux/modules/userDetails";
+import { checkLogin, addDevice } from "redux/modules/userDetails";
 import { fetchSettings } from "redux/modules/settings";
 import SocketContext from "context/socket-context";
 import Loader from "components/Loader";
 import { SOCKET_CONFIG, GTM_ID } from "config";
 import "./App.scss";
 import routePaths from "../Routes/routePaths";
+import useWebPush from "../hooks/useWebPush";
 
 const ENDPOINT = SOCKET_CONFIG.endpoint;
 const socket = socketIOClient(ENDPOINT);
@@ -26,9 +27,12 @@ const tagManagerArgs = {
 
 TagManager.initialize(tagManagerArgs);
 function App(props) {
-  const { checkLogin, fetchSettings } = props;
+  const { checkLogin, fetchSettings, userDetails, addDevice } = props;
   const [isUserFetching, setIsUserFetching] = useState(true);
   const history = useHistory();
+
+  // hook for using webpush
+  useWebPush({ userDetails, addDevice });
 
   useEffect(() => {
     checkLogin(
@@ -66,11 +70,13 @@ function App(props) {
 
 export default connect(({ userDetails }) => ({ userDetails }), {
   checkLogin,
-  fetchSettings
+  fetchSettings,
+  addDevice
 })(App);
 
 App.propTypes = {
   userDetails: PropTypes.object,
   checkLogin: PropTypes.func,
-  fetchSettings: PropTypes.func
+  fetchSettings: PropTypes.func,
+  addDevice: PropTypes.func
 };

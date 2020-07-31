@@ -19,6 +19,17 @@ module.exports.getSingleUser = asyncHandler(async (req, res, next) => {
   res.json({ success: true, data: user });
 });
 
+// @desc  POST User Player Id for notification
+// @route     GET /api/users/notification
+// @access    Public
+module.exports.addNotificationDevice = asyncHandler(async (req, res, next) => {
+  const { playerId } = req.body;
+  if (!playerId) return next(new ErrorResponse("Device Id is required!", 400));
+  req.user.notificationDevices.push(playerId);
+  const user = await req.user.save();
+  res.json({ success: true, data: user });
+});
+
 // @desc      UPDATE Single User
 // @route     GET /api/users/:userId
 // @access    Private
