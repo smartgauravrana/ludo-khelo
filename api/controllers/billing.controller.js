@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const SellRequest = mongoose.model("sellRequests");
-const { SELLING_STATUS } = require("../../constants");
+const Match = mongoose.model("matches");
+const { SELLING_STATUS, MATCH_STATUS } = require("../../constants");
 // const { getMailServer, getUnseenMail } = require("../../services/mailbox");
 const { ErrorResponse, getTime } = require("../../utils");
 const { asyncHandler } = require("../../middlewares");
@@ -34,6 +35,14 @@ module.exports.getAllSellRequests = asyncHandler(async (req, res, next) => {
 module.exports.addSellRequest = asyncHandler(async (req, res, next) => {
   const { amount, phone } = req.body;
   if (req.user.chips >= amount && amount >= 50) {
+
+    // checking for if user played any match
+    const matchPlayed = await Match.findOne({$or: [{createdBy: req.user._id}, {joinee: req.user._id}], status: {$nin: [MATCH_STATUS.created, MATCH_STATUS.playRequested]}});
+    console.log("matchPlayed", matchPlayed);
+    if(!matchPlayed)
+      return next(new ErrorResponse("Play atleast one Match for Withdrawl!", 400));
+
+    // checking for sell request within last 24hrs
     const previousRequests = await SellRequest.find({
       userId: req.user._id,
       createdAt: { $gt: new Date(getTime() - 24 * 60 * 60 * 1000) }
