@@ -159,7 +159,7 @@ function Match({
         </div> */}
         <div className="Match__info">
           <p>
-            {content.createdBy.username} have set a challenge for{" "}
+            {content.createdBy.username} {content.status !== MATCH_STATUS.created ? `vs ${content.joinee && content.joinee.username}` : `have set a challenge`} for{" "}
             <strong>&#8377;{content.amount}</strong>
           </p>
           {/* <p>Match Amount: Rs.{content.amount}</p> */}
