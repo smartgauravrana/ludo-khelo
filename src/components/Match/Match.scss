@@ -1,9 +1,14 @@
 .ant-card-body {
   padding: 8px;
+  padding-top: 0;
   border: 1px solid lightgreen;
 }
 
 .Match {
+  .copy-btn{
+    padding: 6px 8px;
+    font-size: 10px;
+  }
   .Match__card {
     width: "100%";
   }
@@ -18,7 +23,7 @@
   }
 
   .Match__info {
-    margin-top: 14px;
+    margin-top: 8px;
     display: flex;
     justify-content: space-between;
 

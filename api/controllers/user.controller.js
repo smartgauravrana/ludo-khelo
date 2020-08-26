@@ -38,6 +38,7 @@ module.exports.updateSingleUser = asyncHandler(async (req, res, next) => {
   let user = await User.findById(req.params.userId);
   if (!user) return next(new ErrorResponse("User not found", 404));
 
+  // for manually chips add by admin
   if (addChips && addChips > 0) {
     user = await User.findByIdAndUpdate(
       user._id,

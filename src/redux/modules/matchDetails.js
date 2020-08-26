@@ -102,9 +102,9 @@ export const getAllMatches = (cbSuccess, cbError) => async (
     params.isOfficial = true;
   }
   // fetching only playable matches by status
-  params[
-    "status[nin]"
-  ] = `${MATCH_STATUS.completed}, ${MATCH_STATUS.cancelled}, ${MATCH_STATUS.onHold}`;
+  // params[
+  //   "status[nin]"
+  // ] = `${MATCH_STATUS.completed}, ${MATCH_STATUS.cancelled}, ${MATCH_STATUS.onHold}`;
   if (next) {
     params["_id[gt]"] = next;
   }
