@@ -12,6 +12,7 @@ const billingCtrl = require("../controllers/billing.controller");
 const settingsCtrl = require("../controllers/settings.controller");
 const dashboardCtrl = require("../controllers/dashboard.controller");
 const userCtrl = require("../controllers/user.controller");
+const adminCtrl = require("../controllers/admin.controller");
 const {
   isLogin,
   advancedResults,
@@ -106,6 +107,9 @@ router
 router
   .route("/dashboard/users")
   .get(isLogin(true), dateFilterAggregation, dashboardCtrl.getUsersDashboard);
+
+router.route("/tools/export-users")
+.post(isLogin(true), adminCtrl.exportUsersCsv);
 
 // users management
 router
