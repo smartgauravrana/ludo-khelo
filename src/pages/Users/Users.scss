@@ -1,5 +1,11 @@
 .Users {
   margin: 10px;
+
+  &__Header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
 }
 
 .Users__info {

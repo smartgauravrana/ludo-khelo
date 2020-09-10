@@ -8,27 +8,36 @@ import routePaths from "Routes/routePaths";
 import DisplayTable from "components/DisplayTable";
 import SearchInput from "components/SearchInput";
 import Loader from "components/Loader";
+import Filter from "components/Filter";
 import "./Users.scss";
+
+const userSearchFields = {
+  phone: "phone",
+  username: "username"
+}
 
 class Users extends Component {
   constructor() {
     super();
     this.state = {
       selectedUser: null,
-      phone: null,
+      searchField: userSearchFields.username,
       showModal: false,
       chips: 0,
-      updatingUser: false
+      updatingUser: false,
+      searchValue: ""
     };
   }
 
   componentDidMount() {
+    const {location} = this.props;
     this.fetchAllUsers();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { location } = this.props;
-    if (prevProps.location.search !== location.search) {
+    const {searchValue} = this.state;
+    if (prevProps.location.search !== location.search || prevState.searchValue !== searchValue ) {
       this.fetchAllUsers();
     }
   }
@@ -40,10 +49,13 @@ class Users extends Component {
 
   fetchAllUsers = () => {
     const { location, getAllUsers } = this.props;
-    const { phone } = this.state;
+    const { searchField, searchValue } = this.state;
     const options = {};
     options.page = location.search.split("?page=").pop() || 1;
-    if (phone) options.phone = phone;
+    if (searchValue){ 
+      options.search = {field: searchField};
+      options.search.value = searchValue;
+    };
     getAllUsers(options);
   };
 
@@ -78,22 +90,32 @@ class Users extends Component {
     this.setState({
       showModal: false,
       selectedUser: null,
-      updatingUser: false
+      updatingUser: false,
+      chips: 0
     });
 
   render() {
-    const { users, history, getAllUsers, addChips } = this.props;
-    const { selectedUser, showModal, chips, updatingUser } = this.state;
+    const { users, history, getAllUsers, addChips, location } = this.props;
+    const { selectedUser, showModal, chips, updatingUser, searchField } = this.state;
     const { usersList, total, isUsersLoading } = users;
     return (
       <div className="Users">
-        <h1>Manage Users</h1>
+        <div className="Users__Header">
+          <h1>Manage Users</h1>
+          <Filter
+            initialValue={searchField}
+            onChange={value => {
+              this.setState({ searchField: value });            
+            }}
+            options= {userSearchFields}
+          />
+          </div>
+        
         <SearchInput
           placeholder="Search by phone"
           onClick={val => {
-            let options = {};
-            if (val) options.phone = val;
-            getAllUsers(options);
+            this.setState({searchValue: val});
+            history.replace(location.pathname);
           }}
         />
         <DisplayTable
@@ -111,6 +133,7 @@ class Users extends Component {
               );
             }
           }}
+          location={location}
         />
         {selectedUser && (
           <Modal

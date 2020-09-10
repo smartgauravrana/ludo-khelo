@@ -4,7 +4,7 @@ const advancedResults = (model, populate = []) => async (req, res, next) => {
   const reqQuery = { ...req.query };
 
   // Fields to exclude
-  const removeFields = ["select", "sort", "page", "limit"];
+  const removeFields = ["select", "sort", "page", "limit", "search"];
 
   // Loop over removeFields and delete them from reqQuery
   removeFields.forEach(param => delete reqQuery[param]);
@@ -14,7 +14,7 @@ const advancedResults = (model, populate = []) => async (req, res, next) => {
 
   // Create operators ($gt, $gte, etc)
   queryStr = queryStr.replace(
-    /\b(gt|gte|lt|lte|in|ne|eq|nin)\b/g,
+    /\b(gt|gte|lt|lte|in|ne|eq|nin|regex)\b/g,
     match => `$${match}`
   );
 
@@ -35,9 +35,22 @@ const advancedResults = (model, populate = []) => async (req, res, next) => {
     queryStr = JSON.stringify(queryStr);
   }
 
+  console.log("req: ", req.query)
+  if(req.query.search){
+    const searchInfo = JSON.parse(req.query.search);
+    console.log("searchInfo: ", searchInfo)
+    const expression = `.*${searchInfo.value}.*`;
+    const rx = new RegExp(expression, "i");
+    queryStr = {
+      [searchInfo.field]: {$regex: new RegExp(expression, "i")}
+    };
+    // queryStr = JSON.stringify(queryStr);
+  }
+
   // Finding resource
-  console.log(JSON.parse(queryStr));
-  query = model.find(JSON.parse(queryStr));
+  queryStr = req.query.search ? queryStr : JSON.parse(queryStr)
+  console.log(queryStr);
+  query = model.find(queryStr);
 
   // Select Fields
   if (req.query.select) {
@@ -58,7 +71,7 @@ const advancedResults = (model, populate = []) => async (req, res, next) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const startIndex = (page - 1) * limit;
   // const endIndex = page * limit;
-  const total = await model.countDocuments(JSON.parse(queryStr));
+  const total = await model.countDocuments(queryStr);
 
   query = query.skip(startIndex).limit(limit);
 

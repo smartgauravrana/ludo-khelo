@@ -1,26 +1,27 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Table } from "antd";
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import "./DisplayTable.scss";
+import { useState } from "react";
 
 export default function DisplayTable({
   dataSource,
   rowKey,
   columns,
   paginationProps,
-  loading
+  loading,
+  location
 }) {
-  const location = useLocation();
-  console.log("location: ", location);
+
   return (
     <div className="DisplayTable">
       <Table
         dataSource={dataSource}
         columns={columns}
         pagination={{
-          defaultCurrent: location.search.split("?page=").pop() || 1,
+          defaultCurrent: parseInt(location.search.split("?page=").pop()) || 1,
           defaultPageSize: 10,
           ...paginationProps
         }}
@@ -36,5 +37,6 @@ DisplayTable.propTypes = {
   columns: PropTypes.array,
   paginationProps: PropTypes.object,
   loading: PropTypes.bool,
-  rowKey: PropTypes.string
+  rowKey: PropTypes.string,
+  location: PropTypes.object
 };
