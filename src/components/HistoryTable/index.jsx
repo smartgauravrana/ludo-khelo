@@ -80,7 +80,7 @@ class HistoryTable extends Component {
   ];
 
   cancelRequest = content => {
-    const { leaveMatch, checkLogin } = this.props;
+    const { leaveMatch, checkLogin, location } = this.props;
     leaveMatch(
       content,
       () => checkLogin(),
@@ -100,6 +100,7 @@ class HistoryTable extends Component {
           dataSource={timeline}
           columns={this.columns}
           loading={isLoading}
+          location={location}
           paginationProps={{
             total: total,
             onChange: currentPage => {

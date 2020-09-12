@@ -182,7 +182,7 @@ class ManageTable extends Component {
   };
 
   render() {
-    const { matches, isMatchesLoading, total, history } = this.props;
+    const { matches, isMatchesLoading, total, history, location } = this.props;
     const {
       selectedRecord,
       showModal,
@@ -202,6 +202,7 @@ class ManageTable extends Component {
           dataSource={matches}
           columns={this.columns}
           loading={isMatchesLoading}
+          location={location}
           paginationProps={{
             total: total,
             onChange: currentPage => {

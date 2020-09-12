@@ -109,7 +109,7 @@ class ManageWithdrawls extends Component {
   ];
 
   render() {
-    const { manageWithdrawls, history } = this.props;
+    const { manageWithdrawls, history, location } = this.props;
     const { isLoading, sellRequests, total } = manageWithdrawls;
     return (
       <div className="ManageWithdrawl">
@@ -126,6 +126,7 @@ class ManageWithdrawls extends Component {
           dataSource={sellRequests}
           columns={this.columns}
           loading={isLoading || this.state.isUpdating}
+          location={location}
           paginationProps={{
             total: total,
             onChange: currentPage => {

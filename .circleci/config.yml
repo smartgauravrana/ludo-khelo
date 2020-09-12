@@ -9,7 +9,7 @@ jobs:
       - run:
           name: Deploy Over SSH
           command: |
-            ssh ubuntu@ec2-3-20-171-15.us-east-2.compute.amazonaws.com "./deploy.sh"
+            ssh root@95.111.194.38 "./deploy.sh"
     # machine:
     #   image: ubuntu-1604:201903-01
     # steps:
