@@ -17,5 +17,5 @@ echo "running npm prod"
 npm run prod
 
 echo "copying Worker files"
-cp ./OneSignalSDKUpdaterWorker.js build
-cp ./OneSignalSDKWorker.js build
+cp ../OneSignalSDKUpdaterWorker.js build
+cp ../OneSignalSDKWorker.js build
