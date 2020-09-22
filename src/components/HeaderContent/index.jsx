@@ -9,7 +9,7 @@ import routePaths from "Routes/routePaths";
 
 import "./HeaderContent.scss";
 
-function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
+function HeaderContent({ onMenuClick, drawerVisible, userDetails, settings }) {
   const adminLinks = (
     <>
       <Link to={routePaths.ADMIN.manage} onClick={onMenuClick}>
@@ -51,7 +51,7 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
     <>
       <div className="header">
         <div className="header__title">
-          <Link to="/">Ludo Paytm</Link>
+          <Link to="/">{settings.websiteTitle || "Ludo Paytm"}</Link>
         </div>
         <MenuOutlined className="header__menu--icon" onClick={onMenuClick} />
       </div>
@@ -91,12 +91,13 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails }) {
 }
 
 export default connect(
-  ({ userDetails }) => ({ userDetails }),
+  ({ userDetails, settings: {settings} }) => ({ userDetails, settings }),
   null
 )(HeaderContent);
 
 HeaderContent.propTypes = {
   onMenuClick: PropTypes.func,
   drawerVisible: PropTypes.bool,
-  userDetails: PropTypes.object
+  userDetails: PropTypes.object,
+  settings: PropTypes.object
 };

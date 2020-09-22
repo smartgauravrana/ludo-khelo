@@ -110,7 +110,7 @@ module.exports.update = asyncHandler(async (req, res, next) => {
       req.user.matchInProgress = 0;
       await match.save();
     } else {
-      return res.status(400).send({ msg: "Can't cancel now!" });
+      return next(new ErrorResponse("Can't cancel now!", 400));
     }
   }
   if (!leaveMatch) {
@@ -186,8 +186,7 @@ module.exports.postResult = asyncHandler(async (req, res, next) => {
             new: true
           }
         );
-        req.user.matchInProgress = 0;
-        await req.user.save();
+                
       } else {
         console.log("cancel is not empty");
         result = await Match.findByIdAndUpdate(
@@ -203,12 +202,14 @@ module.exports.postResult = asyncHandler(async (req, res, next) => {
           }
         );
         req.user.chips += match.amount;
-        await req.user.save();
         await User.findByIdAndUpdate(otherUserId, {
           $inc: { chips: match.amount },
           $set: { matchInProgress: 0 }
         }).exec();
       }
+      // saving current user 
+      req.user.matchInProgress = 0;
+      await req.user.save();
       break;
     case RESULT_OPTIONS.lost:
       // change status and reward money to winner

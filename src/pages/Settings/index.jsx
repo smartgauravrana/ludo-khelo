@@ -25,6 +25,11 @@ const fields = [
     name: "supportNumber",
     type: "text",
     label: "Support Number"
+  },
+  {
+    name: "websiteTitle",
+    type: "text",
+    label: "Website Title"
   }
 ];
 function Settings({ settings, updateSettings }) {
@@ -39,7 +44,8 @@ function Settings({ settings, updateSettings }) {
         initialValues={{
           paytmNumber: settings.paytmNumber,
           paytmMail: settings.paytmMail,
-          supportNumber: settings.supportNumber
+          supportNumber: settings.supportNumber,
+          websiteTitle: settings.websiteTitle
         }}
         validationSchema={Yup.object({
           paytmNumber: Yup.string()

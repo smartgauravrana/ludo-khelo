@@ -9,7 +9,12 @@ const settingSchema = new Schema({
   paytmMail: { type: String, default: "ludokhelo99@gmail.com", trim: true },
   supportNumber: {
     type: String,
-    required: [true, "Suppoort number is required!"]
+    required: [true, "Support number is required!"]
+  },
+  websiteTitle: {
+    type:String,
+    time: true,
+    required: [true, "Website title is required!"]
   }
 });
 

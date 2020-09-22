@@ -17,6 +17,7 @@ module.exports = class IoService {
         socket.on(SOCKET_EVENTS.clientMatchPosted, async data => {
           console.log("match created from client: ", data);
           const match = await Match.find({ createdBy: data.id })
+            .populate("createdBy")
             .sort({ _id: -1 })
             .limit(1)
             .exec();
