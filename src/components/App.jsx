@@ -45,7 +45,10 @@ function App(props) {
       () => setIsUserFetching(false)
     );
     fetchSettings();
+
+    // setInterval(checkLogin, 11500);
   }, []);
+  
   return (
     <SocketContext.Provider value={socket}>
       <div className="App">

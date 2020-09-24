@@ -118,9 +118,9 @@ module.exports.update = asyncHandler(async (req, res, next) => {
     match.joinee = req.user;
   }
   await req.user.save();
+  res.send({ sucess: true, data: match });
   // firing notification
   if (isJoinee || roomId) await sendNotification(notification);
-  res.send({ sucess: true, data: match });
 });
 
 // @desc      Delete Single match
@@ -171,6 +171,35 @@ module.exports.postResult = asyncHandler(async (req, res, next) => {
   // check for resultType
   switch (resultType) {
     case RESULT_OPTIONS.cancel:
+      // cancelled by admin
+      console.log("cancelled by admin called")
+      if(req.user.isAdmin){
+        result = await Match.findByIdAndUpdate(
+          matchId,
+          {
+            $set: { status: MATCH_STATUS.cancelled },
+            $push: {
+              "resultsPosted.cancel": { postedBy: req.user._id, cancelReason: "Cancelled by admin" }
+            }
+          },
+          {
+            new: true
+          }
+        );
+
+        // find Users
+        const users = await User.find({$or: [{_id: match.createdBy }, {_id: match.joinee}]});
+
+        // updating joinee and creator chips
+        for(let user of users){
+          let userUpdate = user;
+          userUpdate.chips += match.amount;
+          if(!isResultPosted(match.resultsPosted, user._id)){
+            userUpdate.matchInProgress = 0;
+          }
+          await user.save();
+        }
+      } else{
       if (isEmpty(match.resultsPosted.cancel)) {
         console.log("inside if", match.resultsPosted);
         // on hold and push data
@@ -210,6 +239,7 @@ module.exports.postResult = asyncHandler(async (req, res, next) => {
       // saving current user 
       req.user.matchInProgress = 0;
       await req.user.save();
+    }
       break;
     case RESULT_OPTIONS.lost:
       // change status and reward money to winner
@@ -273,7 +303,7 @@ module.exports.postResult = asyncHandler(async (req, res, next) => {
       break;
 
     default:
-      return;
+      return next(new ErrorResponse("Bad Request!", 400));
   }
   res.send({ success: true, data: result });
 });

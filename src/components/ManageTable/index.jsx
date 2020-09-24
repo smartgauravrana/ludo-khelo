@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Button, Modal, message } from "antd";
 import { withRouter } from "react-router-dom";
 
-import { MATCH_STATUS } from "../../../constants";
+import { MATCH_STATUS, RESULT_OPTIONS } from "../../../constants";
 import routePaths from "Routes/routePaths";
 import { getMatches, updateMatches } from "redux/modules/manage";
 import { postResult } from "redux/modules/matchDetails";
@@ -23,6 +23,7 @@ class ManageTable extends Component {
       modalError: "",
       matchFilter: MATCH_STATUS.onHold
     };
+    this.toBeCancelled = "toBeCancelled";
   }
 
   componentDidMount() {
@@ -157,6 +158,8 @@ class ManageTable extends Component {
 
   selectWinner = id => this.setState({ selectedWinnerId: id });
 
+  cancelMatch = () => this.setState({toBeCancelled: true});
+
   onOkHandler = () => {
     const { selectedRecord, selectedWinnerId } = this.state;
     if (!selectedWinnerId) {
@@ -166,8 +169,8 @@ class ManageTable extends Component {
     this.props.postResult(
       {
         matchId: selectedRecord._id,
-        winner: selectedWinnerId,
-        resultType: "completed"
+        winner: selectedWinnerId !== this.toBeCancelled ? selectedWinnerId : null,
+        resultType: selectedWinnerId === this.toBeCancelled ? RESULT_OPTIONS.cancel : "completed"
       },
       data => {
         this.setState({ showModal: false });
@@ -187,7 +190,8 @@ class ManageTable extends Component {
       selectedRecord,
       showModal,
       modalError,
-      selectedWinnerId
+      selectedWinnerId,
+      toBeCancelled
     } = this.state;
     return (
       <div className="ManageTable">
@@ -259,6 +263,19 @@ class ManageTable extends Component {
                   selectedRecord.joinee &&
                   selectedRecord.joinee.username}
               </label>
+            </div><br />
+            <hr />
+            <br/>
+            <strong><p>Or do you want to cancel?</p></strong>
+            <div className="winner-choice">
+              <input
+                type="radio"
+                name="winnerId"
+                value="cancel"
+                onChange={() => this.selectWinner(this.toBeCancelled)}
+                checked={selectedWinnerId == this.toBeCancelled }
+              />
+              <label>Cancel Match</label>
             </div>
           </div>
           {modalError && <div className="text-danger">{modalError}</div>}
