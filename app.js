@@ -18,6 +18,12 @@ const expressStaticGzip = require("express-static-gzip");
 const IoService = require("./services/IoService");
 const { errorHandler } = require("./middlewares");
 
+// security related packages
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+
 const app = express();
 const server = http.createServer(app);
 
@@ -28,8 +34,24 @@ const routes = require("./api/routes");
 // const { startMailServer } = require("./services/mailbox");
 // startMailServer();
 
-app.use(bodyParser.json());
+// Helmet
+app.use(helmet());
+
+const limit = rateLimit({
+  max: 90,// max requests
+  windowMs: 60 * 60 * 1000, // 1 Hour
+  message: 'Too many requests' // message to send
+});
+
+app.use('/api/register', limit); // Setting limiter on specific route
+
+app.use(bodyParser.json({limit: '20kb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Data Sanitization against NoSQL Injection Attacks
+app.use(mongoSanitize());
+// Data Sanitization against XSS attacks
+app.use(xss())
 
 app.use(
   cookieSession({

@@ -9,7 +9,7 @@ jobs:
       - run:
           name: Deploy Over SSH
           command: |
-            ssh root@95.111.194.38 "./deploy.sh"
+            ssh root@95.111.196.153 "./deploy.sh"
     # machine:
     #   image: ubuntu-1604:201903-01
     # steps:
