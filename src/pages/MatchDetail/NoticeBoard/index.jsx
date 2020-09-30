@@ -13,11 +13,11 @@ export default function NoticeBoard({ matchDetail, opponent }) {
       </div>
       {opponent.phone && (
         <div className="card-text text-primary notice-msg">
-          Opponent Whatsapp Number -&gt; 91{opponent.phone}.
+          Opponent Whatsapp Number -&gt; +91{opponent.phone}.
         </div>
       )}
       <a
-        href={"https://wa.me/91${opponent.phone}"}
+        href={`https://wa.me/91${opponent.phone}`}
         target="_blank"
         rel="noopener noreferrer"
         className="notice-msg"
