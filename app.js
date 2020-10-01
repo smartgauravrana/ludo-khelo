@@ -38,7 +38,6 @@ const routes = require("./api/routes");
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      directives: {
         defaultSrc: ["'self'"],
         frameSrc: ["'self'", "*.youtube.com"],
         styleSrc: ["'self'", "'unsafe-inline'"],
