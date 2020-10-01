@@ -37,7 +37,7 @@ const routes = require("./api/routes");
 // Helmet
 app.use(helmet({
   contentSecurityPolicy: {
-    directives: {defaultSrc: ["'https://www.youtube.com'"]}
+    directives: {defaultSrc: ["'self'", "'https://www.youtube.com'"]}
     }
 }));
 
