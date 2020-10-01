@@ -41,7 +41,7 @@ app.use(helmet({
         defaultSrc: ["'self'"],
         frameSrc: ["'self'", "*.youtube.com"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "*.google-analytics.com"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "*.google-analytics.com", "*.googletagmanager.com"],
         connectSrc: ["'self'", "*.google-analytics.com"]
     }
   }
