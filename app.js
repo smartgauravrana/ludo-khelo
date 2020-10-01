@@ -35,7 +35,9 @@ const routes = require("./api/routes");
 // startMailServer();
 
 // Helmet
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {frameSrc: "https://www.youtube.com"}
+}));
 
 const limit = rateLimit({
   max: 90,// max requests
