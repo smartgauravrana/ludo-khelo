@@ -37,8 +37,15 @@ const routes = require("./api/routes");
 // Helmet
 app.use(helmet({
   contentSecurityPolicy: {
-    directives: {defaultSrc: ["'self'", "'https://www.youtube.com'"]}
+    directives: {
+      directives: {
+        defaultSrc: ["'self'"],
+        frameSrc: ["'self'", "*.youtube.com"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "*.google-analytics.com"],
+        connectSrc: ["'self'", "*.google-analytics.com"]
     }
+  }
 }));
 
 const limit = rateLimit({
