@@ -35,17 +35,18 @@ const routes = require("./api/routes");
 // startMailServer();
 
 // Helmet
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-        defaultSrc: ["'self'"],
-        frameSrc: ["'self'", "*.youtube.com"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "*.google-analytics.com", "*.googletagmanager.com"],
-        connectSrc: ["'self'", "*.google-analytics.com"]
-    }
-  }
-}));
+// app.use(helmet({
+//   contentSecurityPolicy: {
+//     directives: {
+//         defaultSrc: ["'self'"],
+//         frameSrc: ["'self'", "*.youtube.com"],
+//         styleSrc: ["'self'", "'unsafe-inline'"],
+//         scriptSrc: ["'self'", "'unsafe-inline'", "*.google-analytics.com", "*.googletagmanager.com", "*.onesignal.com", "onesignal.com"],
+//         connectSrc: ["'self'", "*.google-analytics.com", "*.googleapis.com"],
+//         imgSrc: ["*.google-analytics.com"]
+//     }
+//   }
+// }));
 
 const limit = rateLimit({
   max: 90,// max requests
