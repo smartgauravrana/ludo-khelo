@@ -20,6 +20,7 @@ import Verification from "pages/Verification";
 import Dashboard from "pages/Dashboard";
 import ManageWithdrawls from "pages/ManageWithdrawls";
 import Users from "pages/Users";
+import Billing from "pages/Billing";
 
 const Login = loadable(
   () => import(/* webpackChunkName: "Login" */ "pages/Login"),
@@ -122,7 +123,12 @@ export const publicRoutes = [
   {
     path: routePaths.VERIFICATION,
     component: Verification
-  }
+  },
+  {
+    path: routePaths.BILLING,
+    component: Billing,
+    exact: true
+  },
 ];
 
 export const privateRoutes = [

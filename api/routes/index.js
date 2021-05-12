@@ -59,7 +59,7 @@ router
   .get(
     "/matches",
     isLogin(),
-    advancedResults(Match, ["createdBy", "joinee"]),
+    advancedResults(Match, ["createdBy", "joinee"], '-phone -notificationDevices'),
     matchCtrl.getMatches
   )
   .post("/matches", isLogin(), matchCtrl.addMatch);
@@ -125,5 +125,14 @@ router
 router
   .route("/users/notification")
   .post(isLogin(), userCtrl.addNotificationDevice);
+
+// paytm gateway
+router
+  .route("/create-transaction")
+  .post(isLogin(), billingCtrl.createTransaction)
+
+router
+  .route('/post-transaction')
+  .post(billingCtrl.handlePostTransaction)
 
 module.exports = router;

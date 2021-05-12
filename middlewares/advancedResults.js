@@ -1,4 +1,4 @@
-const advancedResults = (model, populate = []) => async (req, res, next) => {
+const advancedResults = (model, populate = [], fieldsToExclude='') => async (req, res, next) => {
   let query;
   // Copy req.query
   const reqQuery = { ...req.query };
@@ -77,7 +77,7 @@ const advancedResults = (model, populate = []) => async (req, res, next) => {
 
   if (populate.length) {
     populate.forEach(field => {
-      query = query.populate(field);
+      query = query.populate(field, fieldsToExclude);
     });
   }
 
