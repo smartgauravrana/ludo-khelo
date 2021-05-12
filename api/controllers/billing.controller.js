@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 const SellRequest = mongoose.model("sellRequests");
 const Match = mongoose.model("matches");
+const Transaction = mongoose.model('transactions');
+const User = mongoose.model('users');
 const { SELLING_STATUS, MATCH_STATUS } = require("../../constants");
 // const { getMailServer, getUnseenMail } = require("../../services/mailbox");
 const { ErrorResponse, getTime } = require("../../utils");
 const { asyncHandler } = require("../../middlewares");
+const PaytmService = require("../../services/paytmService");
 
 // @desc      Buy Chips
 // @route     POST /api/buy
@@ -89,4 +92,46 @@ module.exports.deleteSellRequest = asyncHandler(async (req, res, next) => {
   const { sellId } = req.params;
   const sellRequest = await SellRequest.findByIdAndDelete(sellId);
   res.send({ success: true, data: sellRequest });
+});
+
+module.exports.createTransaction = asyncHandler(async (req, res, next) => {
+  const {amount} = req.body;
+  if(!amount) {
+    return next(new ErrorResponse('Amount is required', 400));
+  }
+  const response = await PaytmService.createTransactionToken({ amount });
+  await Transaction.create({
+    userId: req.user._id,
+    amount,
+    orderId: response.orderId
+  });
+  res.send({ success: true, data: response });
+});
+
+
+module.exports.handlePostTransaction = asyncHandler(async (req, res, next) => {
+  const {ORDERID, STATUS } = req.body;
+  await Transaction.findOneAndUpdate({
+    orderId: ORDERID
+  }, {
+    orderId: ORDERID,
+    status: STATUS
+  });
+
+  if(STATUS === 'TXN_SUCCESS'){
+    const txn = await Transaction.findOne({orderId: ORDERID});
+    if(txn){
+      const user = await User.findById(txn.userId);
+      user.chips += txn.amount;
+      await user.save();
+    }
+  } else{
+    console.log("Pending or failed TXN: ", req.body);
+  }
+
+  if (process.env.NODE_ENV === "production"){
+    res.redirect('/')
+  }else {
+    res.rediret('htpp://localhost:8080')
+  }
 });

@@ -295,6 +295,8 @@ module.exports.postResult = asyncHandler(async (req, res, next) => {
         User.findByIdAndUpdate(winner, {
           $inc: { chips: genRewardAmount(match.amount) }
         }).exec();
+        const loserId = winner.toString() !== match.createdBy.toString() ? match.createdBy : match.joinee;
+        await User.findByIdAndUpdate(loserId, { matchInProgress: 0 }) // resetting loser matchinprogress
       } else {
         return res
           .status(400)
