@@ -6,15 +6,18 @@ export default function Billing({ }) {
 
     const [txn, setTxn] = useState(null);
 
-    useEffect(async () => {
-      const res = await call({
+    useEffect(() => {
+      async function getTxnToken(){
+        const res = await call({
           method: 'POST',
           url: '/create-transaction',
           data: { amount: 10.0}
-      });
-      const {data} = res.data;
-      setTxn(data);
-      console.log("res: ", res)
+        });
+        const {data} = res.data;
+        setTxn(data);
+        console.log("res: ", res)
+      }
+      getTxnToken();
     }, []);
 
     const config = {
