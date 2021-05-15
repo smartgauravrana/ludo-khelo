@@ -30,6 +30,11 @@ const fields = [
     name: "websiteTitle",
     type: "text",
     label: "Website Title"
+  },
+  {
+    name: "referralCommission",
+    type: "number",
+    label: "Referral Percentage"
   }
 ];
 function Settings({ settings, updateSettings }) {
@@ -45,7 +50,8 @@ function Settings({ settings, updateSettings }) {
           paytmNumber: settings.paytmNumber,
           paytmMail: settings.paytmMail,
           supportNumber: settings.supportNumber,
-          websiteTitle: settings.websiteTitle
+          websiteTitle: settings.websiteTitle,
+          referralCommission: settings.referralCommission
         }}
         validationSchema={Yup.object({
           paytmNumber: Yup.string()

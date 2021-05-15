@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const { MATCH_STATUS } = require("../../../constants");
-const { genRewardAmount, getTime } = require("../../../utils");
+const { genRewardAmount, getTime, getRefAmount } = require("../../../utils");
+
+const User = mongoose.model("users");
+const Setting = mongoose.model("settings");
 
 // const resultSchema = new Schema({
 //   postedBy: { type: Schema.Types.ObjectId },
@@ -45,6 +48,26 @@ matchSchema.pre("save", function (next) {
     this.winningAmount = genRewardAmount(this.amount);
   }
   next();
+});
+
+// for referral amount system
+matchSchema.post('findOneAndUpdate', async function() {
+  const docToUpdate = await this.model.findOne(this.getQuery());
+  console.log("match Updated: ", docToUpdate); 
+  const winnerId = docToUpdate.winner;
+  if(winnerId){
+    const settings = await Setting.findOne();
+    const referralPercentage = settings.referralCommission || 0;
+
+    const winner = await User.findById(winnerId);
+    const referrerId = winner.referrer; // referrerId is phone no
+    console.log("parentId: ", referrerId);
+    if(referrerId){
+      await User.findOneAndUpdate({phone: referrerId}, {
+        $inc: { chips: getRefAmount(docToUpdate.amount, referralPercentage)}
+      });
+    }
+  }
 });
 
 mongoose.model("matches", matchSchema);

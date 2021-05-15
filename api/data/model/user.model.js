@@ -17,6 +17,7 @@ const userSchema = new Schema({
   matchInProgress: { type: Number, default: 0 },
   salt: { type: String, select: false },
   notificationDevices: { type: Array, default: [] },
+  referrer: { type : String},
   createdAt: Date
 });
 

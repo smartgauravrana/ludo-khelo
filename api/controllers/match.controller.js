@@ -234,7 +234,7 @@ module.exports.postResult = asyncHandler(async (req, res, next) => {
         await User.findByIdAndUpdate(otherUserId, {
           $inc: { chips: match.amount },
           $set: { matchInProgress: 0 }
-        }).exec();
+        });
       }
       // saving current user 
       req.user.matchInProgress = 0;

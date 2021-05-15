@@ -42,6 +42,12 @@ const registerFields = [
     type: "password",
     placeholder: "Confirm Password"
     // label: "Confrim Password"
+  },
+  {
+    name: "referrer",
+    type: "text",
+    placeholder: "Referral Code"
+    // label: "Confrim Password"
   }
 ];
 
@@ -57,6 +63,7 @@ function RegisterForm({ register }) {
           phone: "",
           password: "",
           confirmPassword: "",
+          referrer: "",
           agreeToTerms: false
         }}
         validationSchema={Yup.object({
@@ -71,6 +78,7 @@ function RegisterForm({ register }) {
             .test("passwords-match", "Passwords must match!", function (value) {
               return this.parent.password === value;
             }),
+          referrer: Yup.string(),
           agreeToTerms: Yup.bool().oneOf(
             [true],
             "Accept Terms & Conditions is required"

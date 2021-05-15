@@ -9,7 +9,7 @@ module.exports.login = (req, res) => {
 };
 
 module.exports.register = asyncHandler(async (req, res, next) => {
-  const { name, username, phone, password } = req.body;
+  const { name, username, phone, password, referrer } = req.body;
   const { hash, salt } = genPassword(password);
   const isUserExist = await User.findOne({ phone });
   if (!isUserExist) {
@@ -17,6 +17,7 @@ module.exports.register = asyncHandler(async (req, res, next) => {
       name,
       username,
       phone,
+      referrer,
       password: hash,
       salt
     }).save();
