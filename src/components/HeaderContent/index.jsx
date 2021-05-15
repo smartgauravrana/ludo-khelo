@@ -51,7 +51,7 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails, settings }) {
     <>
       <div className="header">
         <div className="header__title">
-          <Link to="/">{settings.websiteTitle || "Ludo Paytm"}</Link>
+          <Link to="/">{settings.websiteTitle || "Mama Shakuni"}</Link>
         </div>
         <MenuOutlined className="header__menu--icon" onClick={onMenuClick} />
       </div>
