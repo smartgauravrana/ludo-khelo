@@ -2,10 +2,10 @@ require("dotenv").config();
 
 // db related stuff
 require("./api/data/db");
-require("./api/data/model/match.model");
-require("./api/data/model/user.model");
-require("./api/data/model/sellRequest.model");
 require("./api/data/model/setting.model");
+require("./api/data/model/user.model");
+require("./api/data/model/match.model");
+require("./api/data/model/sellRequest.model");
 require("./api/data//model/transaction.model");
 // for inject env variables from config
 

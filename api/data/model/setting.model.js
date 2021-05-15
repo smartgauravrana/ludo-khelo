@@ -15,6 +15,12 @@ const settingSchema = new Schema({
     type:String,
     time: true,
     required: [true, "Website title is required!"]
+  },
+  referralCommission: {
+    type: Number,
+    min: 0,
+    max: 100,
+    default: 0
   }
 });
 

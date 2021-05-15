@@ -85,6 +85,15 @@ const getTime = () => {
   return new Date(indianTime);
 };
 
+const getRefAmount = (matchAmount , referralPercentage) => {
+  if(!referralPercentage){
+    return 0
+  }
+  const winningAmount = genRewardAmount(matchAmount);
+  const profit = 2*matchAmount  - winningAmount;
+  return Math.floor(profit * (referralPercentage /100))
+}
+
 module.exports = {
   validPassword,
   genPassword,
@@ -94,5 +103,6 @@ module.exports = {
   ErrorResponse,
   isResultPosted,
   isParticipant,
-  getTime
+  getTime,
+  getRefAmount
 };
