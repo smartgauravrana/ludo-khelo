@@ -91,7 +91,8 @@ const getRefAmount = (matchAmount , referralPercentage) => {
   }
   const winningAmount = genRewardAmount(matchAmount);
   const profit = 2*matchAmount  - winningAmount;
-  return Math.floor(profit * (referralPercentage /100))
+  const totalReferrerAmount = profit * (referralPercentage /100);
+  return Math.floor(totalReferrerAmount / 2);
 }
 
 module.exports = {

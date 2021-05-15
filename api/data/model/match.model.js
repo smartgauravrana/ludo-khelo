@@ -59,14 +59,32 @@ matchSchema.post('findOneAndUpdate', async function() {
     const settings = await Setting.findOne();
     const referralPercentage = settings.referralCommission || 0;
 
-    const winner = await User.findById(winnerId);
-    const referrerId = winner.referrer; // referrerId is phone no
-    console.log("parentId: ", referrerId);
-    if(referrerId){
-      await User.findOneAndUpdate({phone: referrerId}, {
+    // user1 
+    const user1 = await User.findById(docToUpdate.joinee);
+    const user2 = await User.findById(docToUpdate.createdBy);
+    const referrer1 = user1.referrer;
+    const referrer2 = user2.referrer;
+
+    if(referrer1)  {
+      await User.findOneAndUpdate({phone: referrer1}, {
         $inc: { chips: getRefAmount(docToUpdate.amount, referralPercentage)}
       });
     }
+
+    if(referrer2) {
+      await User.findOneAndUpdate({phone: referrer2}, {
+        $inc: { chips: getRefAmount(docToUpdate.amount, referralPercentage)}
+      });
+    }
+
+    // const winner = await User.findById(winnerId);
+    // const referrerId = winner.referrer; // referrerId is phone no
+    // console.log("parentId: ", referrerId);
+    // if(referrerId){
+    //   await User.findOneAndUpdate({phone: referrerId}, {
+    //     $inc: { chips: getRefAmount(docToUpdate.amount, referralPercentage)}
+    //   });
+    // }
   }
 });
 
