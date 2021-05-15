@@ -28,5 +28,5 @@ npm run prod
 
 echo "copying Worker files"
 cd ../
-cp OneSignalSDKUpdaterWorker.js ./ludo-khelo/build
+cp OneSignalSDKUpdateWorker.js ./ludo-khelo/build
 cp OneSignalSDKWorker.js ./ludo-khelo/build
