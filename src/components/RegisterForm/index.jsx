@@ -5,6 +5,7 @@ import { Button, message } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
+import queryString from "query-string";
 
 import { register } from "redux/modules/userDetails";
 import TextInput from "components/TextInput";
@@ -46,14 +47,15 @@ const registerFields = [
   {
     name: "referrer",
     type: "text",
-    placeholder: "Referral Code"
-    // label: "Confrim Password"
+    placeholder: "Referral Code",
+    label: "Referral Code"
   }
 ];
 
 function RegisterForm({ register }) {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
+  const params = queryString.parse(history.location.search);
   return (
     <div className="RegisterForm">
       <Formik
@@ -63,7 +65,7 @@ function RegisterForm({ register }) {
           phone: "",
           password: "",
           confirmPassword: "",
-          referrer: "",
+          referrer: params.refer_code || "",
           agreeToTerms: false
         }}
         validationSchema={Yup.object({
@@ -103,7 +105,7 @@ function RegisterForm({ register }) {
         {props => (
           <Form>
             {registerFields.map(field => (
-              <TextInput key={field.name} {...field} />
+              <TextInput key={field.name} {...field} disabled={field.name === "referrer" && params.refer_code} />
             ))}
             <div className="termsCheckbox">
               <Field type="checkbox" name="agreeToTerms" />

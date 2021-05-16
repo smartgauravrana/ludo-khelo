@@ -66,13 +66,13 @@ matchSchema.post('findOneAndUpdate', async function() {
     const referrer2 = user2.referrer;
 
     if(referrer1)  {
-      await User.findOneAndUpdate({phone: referrer1}, {
+      await User.findOneAndUpdate({referCode: referrer1}, {
         $inc: { chips: getRefAmount(docToUpdate.amount, referralPercentage)}
       });
     }
 
     if(referrer2) {
-      await User.findOneAndUpdate({phone: referrer2}, {
+      await User.findOneAndUpdate({referCode: referrer2}, {
         $inc: { chips: getRefAmount(docToUpdate.amount, referralPercentage)}
       });
     }

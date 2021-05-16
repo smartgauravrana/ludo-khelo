@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { genPassword, ErrorResponse } = require("../../utils");
 const { asyncHandler } = require("../../middlewares");
+const ReferralService = require("../../services/referralService");
 
 const User = mongoose.model("users");
 
@@ -13,13 +14,16 @@ module.exports.register = asyncHandler(async (req, res, next) => {
   const { hash, salt } = genPassword(password);
   const isUserExist = await User.findOne({ phone });
   if (!isUserExist) {
+    // generating refer code
+    const referCode = await ReferralService.generateReferCode();
     const user = await new User({
       name,
       username,
       phone,
-      referrer,
+      referrer, // person who referred the user
       password: hash,
-      salt
+      salt,
+      referCode // user refer code for referring others
     }).save();
     res.send({ success: true, data: user });
   } else {

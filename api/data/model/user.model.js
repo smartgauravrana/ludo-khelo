@@ -18,6 +18,7 @@ const userSchema = new Schema({
   salt: { type: String, select: false },
   notificationDevices: { type: Array, default: [] },
   referrer: { type : String},
+  referCode: {type: String, default: ''},
   createdAt: Date
 });
 

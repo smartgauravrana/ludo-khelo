@@ -16,12 +16,12 @@ function Referral({ settings, userDetails }) {
 		const {shareMessage} = settings;
 		console.log(settings)
 
-		const message = shareMessage ? shareMessage.replace("REFER_CODE", userDetails.phone) : ''
+		const message = shareMessage ? shareMessage.replace("REFER_CODE", userDetails.referCode) : ''
 
     function updateClipboard() {
         setTooltipVisible(true);
         setTimeout(() => setTooltipVisible(false), 900)
-        navigator.clipboard.writeText(userDetails.phone).then(function() {
+        navigator.clipboard.writeText(userDetails.referCode).then(function() {
             /* clipboard successfully set */
         }, function() {
             /* clipboard write failed */
@@ -38,7 +38,7 @@ function Referral({ settings, userDetails }) {
 
              <Tooltip title="Code Copied" placement="bottom" color="green" visible={tooltipVisible}>
              <div className="Referral__Button" onClick={updateClipboard}>
-                 <div className="Referral__Code">{userDetails.phone}</div>
+                 <div className="Referral__Code">{userDetails.referCode}</div>
                  <CopyOutlined className="Referral__Copy"/>
              </div>
             </Tooltip>
@@ -47,7 +47,7 @@ function Referral({ settings, userDetails }) {
 							<div className="Referral__ShareTitle" style={{ "borderBottom": "1px solid black"}}>
 								SHARE KARO RE BABA ! 
 							</div>
-							<MessageShare message={message}/>
+							<MessageShare message={message} referCode={userDetails.referCode}/>
 						</div>
 
 						<div className="Referral__Support">

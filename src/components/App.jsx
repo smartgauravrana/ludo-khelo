@@ -38,7 +38,7 @@ function App(props) {
     checkLogin(
       user => {
         setIsUserFetching(false);
-        if (!user._id) {
+        if (!user._id && history.location.pathname !== routePaths.REGISTER) {
           history.replace(routePaths.HOME);
         }
       },

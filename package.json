@@ -43,6 +43,8 @@
     "passport-local": "^1.0.0",
     "paytm-blink-checkout-react": "0.0.2",
     "paytm-pg-node-sdk": "^1.0.4",
+    "query-string": "^7.0.0",
+    "random-string": "^0.2.0",
     "react": "^16.13.1",
     "react-clipboard.js": "^2.0.16",
     "react-dom": "^16.13.1",

@@ -11,9 +11,8 @@ import fbIcon from "assets/fb_icon.png";
 
 import "./MessageShare.scss";
 
-const url = "https://mamashakuni.com";
-
-export default function MessageShare({ message }){
+export default function MessageShare({ message, referCode }){
+    const url = `https://mamashakuni.com/register?refer_code=${referCode}`;
     return <div className="MessageShare">
         <WhatsappShareButton url={url} title={message}>
         <img className="MessageShare__Icon" src ={whatsappIcon}/>
