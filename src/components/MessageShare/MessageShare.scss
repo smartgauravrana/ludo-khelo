@@ -1,0 +1,12 @@
+.MessageShare {
+    display: flex;
+    justify-content: center;
+
+    &>button {
+        margin: 10px;
+    }
+}
+
+.MessageShare__Icon{
+    height: 60px
+}

@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import routePaths from "Routes/routePaths";
+import newGif from "assets/new.gif";
 
 import "./HeaderContent.scss";
 
@@ -43,6 +44,12 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails, settings }) {
       </Link>
       <Link to={routePaths.SELL} onClick={onMenuClick}>
         Sell Chips
+      </Link>
+      <Link to={routePaths.REFERRAL} onClick={onMenuClick}>
+        Refer and Earn <img src={newGif} style={{height: '30px'}}/>
+      </Link>
+      <Link to={routePaths.SUPPORT} onClick={onMenuClick}>
+        Customer Support
       </Link>
     </>
   );

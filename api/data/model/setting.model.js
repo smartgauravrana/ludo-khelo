@@ -21,7 +21,11 @@ const settingSchema = new Schema({
     min: 0,
     max: 100,
     default: 0
-  }
+  },
+  whatsappEnabled: { type: Boolean, default: true},
+  telegramEnabled: { type: Boolean, default: true},
+  telegramUsername: { type: String, default: ''},
+  shareMessage: {type: String, default: ''}
 });
 
 module.exports = mongoose.model("settings", settingSchema);

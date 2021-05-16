@@ -76,15 +76,6 @@ matchSchema.post('findOneAndUpdate', async function() {
         $inc: { chips: getRefAmount(docToUpdate.amount, referralPercentage)}
       });
     }
-
-    // const winner = await User.findById(winnerId);
-    // const referrerId = winner.referrer; // referrerId is phone no
-    // console.log("parentId: ", referrerId);
-    // if(referrerId){
-    //   await User.findOneAndUpdate({phone: referrerId}, {
-    //     $inc: { chips: getRefAmount(docToUpdate.amount, referralPercentage)}
-    //   });
-    // }
   }
 });
 

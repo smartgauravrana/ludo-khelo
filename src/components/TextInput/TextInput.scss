@@ -25,3 +25,16 @@
 .input-error {
   color: red;
 }
+
+.form-control-flex {
+  display: flex;
+  align-items: center;
+
+  label {
+    flex: 3
+  }
+
+  input {
+    flex: 1
+  }
+}

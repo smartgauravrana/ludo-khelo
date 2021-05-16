@@ -35,6 +35,25 @@ const fields = [
     name: "referralCommission",
     type: "number",
     label: "Referral Percentage"
+  },{
+    name: "shareMessage",
+    type: "textarea",
+    label: "Share Message"
+  },
+  {
+    name: "whatsappEnabled",
+    type: "checkbox",
+    label: "Enable Whatsapp"
+  },
+  {
+    name: "telegramEnabled",
+    type: "checkbox",
+    label: "Enable Telegram"
+  },
+  {
+    name: "telegramUsername",
+    type: "text",
+    label: "Telegram Username"
   }
 ];
 function Settings({ settings, updateSettings }) {
@@ -51,7 +70,11 @@ function Settings({ settings, updateSettings }) {
           paytmMail: settings.paytmMail,
           supportNumber: settings.supportNumber,
           websiteTitle: settings.websiteTitle,
-          referralCommission: settings.referralCommission
+          referralCommission: settings.referralCommission,
+          whatsappEnabled: settings.whatsappEnabled,
+          telegramEnabled: settings.telegramEnabled,
+          telegramUsername: settings.telegramUsername,
+          shareMessage: settings.shareMessage
         }}
         validationSchema={Yup.object({
           paytmNumber: Yup.string()

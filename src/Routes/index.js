@@ -75,6 +75,20 @@ const Manage = loadable(
   }
 );
 
+const Support = loadable(
+  () => import(/* webpackChunkName: "Support" */ "pages/Support"),
+  {
+    fallback: <Skeleton />
+  }
+);
+
+const Referral = loadable(
+  () => import(/* webpackChunkName: "Referral" */ "pages/Referral"),
+  {
+    fallback: <Skeleton />
+  }
+);
+
 export const publicRoutes = [
   {
     path: routePaths.LOGIN,
@@ -129,6 +143,16 @@ export const publicRoutes = [
     component: Billing,
     exact: true
   },
+  {
+    path: routePaths.SUPPORT,
+    component: Support,
+    exact: true
+  },
+  {
+    path: routePaths.REFERRAL,
+    component: Referral,
+    exact: true
+  }
 ];
 
 export const privateRoutes = [

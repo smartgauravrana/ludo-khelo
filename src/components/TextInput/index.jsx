@@ -6,8 +6,14 @@ import "./TextInput.scss";
 
 export default function TextInput({ label, ...props }) {
   const [field, meta] = useField(props);
+
+  const formClasses = ["form-control form-group"];
+  if(props.type === "checkbox"){
+    formClasses.push("form-control-flex");
+  }
+
   return (
-    <div className="form-control form-group">
+    <div className={formClasses.join(" ")}>
       {label && <label htmlFor={props.name}>{label}</label>}
       <input {...field} {...props} />
       {meta.touched && meta.error ? (

@@ -7,7 +7,7 @@ import "./Onboarding.scss";
 
 export default function Onboarding() {
   return (
-    <div class="Onboarding">
+    <div className="Onboarding">
       <h3 className="Onboarding__Earn">Win ₹20000 daily.</h3>
       <p className="Onboarding__EarnInfo">
         You can win more than ₹20000 daily by just playing Ludo.
@@ -26,9 +26,9 @@ export default function Onboarding() {
       <div>
         <iframe
           src="https://www.youtube.com/embed/O7dAJRo-Swg"
-          frameborder="0"
+          frameBorder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen="allowfullscreen"
+          allowFullScreen="allowfullscreen"
         ></iframe>
       </div>
 

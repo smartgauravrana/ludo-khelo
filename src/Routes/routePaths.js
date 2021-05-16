@@ -9,6 +9,8 @@ export default {
   HISTORY: "/history",
   VERIFICATION: "/verification",
   BILLING: "/billing",
+  SUPPORT: "/support",
+  REFERRAL: "/refer-and-earn",
   ADMIN: {
     default: "/admin",
     manage: "/manage",

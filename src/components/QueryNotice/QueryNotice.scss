@@ -4,4 +4,13 @@
   background: white;
   padding: 10px;
   border: 1px solid black;
+
+  &__Support{
+    color: #1890ff;
+    font-weight: bold;
+    
+    img {
+      height: 35px
+    }
+  }
 }

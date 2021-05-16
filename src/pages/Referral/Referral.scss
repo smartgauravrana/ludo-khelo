@@ -1,0 +1,38 @@
+.Referral {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    &__Support {
+        margin-top: 50px;
+    }
+
+    &__Share {
+        width: 100%;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 28px;
+        color: #1890ff;
+    }
+}
+
+.Referral__Button {
+    display: flex;
+    background-color: #1890ff;
+    color: white;
+    padding: 12px;
+    border-radius: 5px;
+    align-items: center;
+    position: relative;
+}
+
+.Referral__Code {
+    font-size: 25px;
+    margin-right: 10px;
+}
+
+.Referral__Copy {
+    font-size: 30px;
+}
