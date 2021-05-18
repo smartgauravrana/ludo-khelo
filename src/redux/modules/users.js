@@ -9,7 +9,8 @@ const RESET_USERS = "users/RESET_USERS";
 const initialState = {
   usersList: [],
   isUsersLoading: false,
-  total: null
+  total: null,
+  referralsCount: 0
 };
 
 export const getAllUsers = (
@@ -63,6 +64,9 @@ export const addChips = ({ userId, chips }, cbSuccess, cbError) => async (
     cbError && cbError(e);
   }
 };
+
+
+
 
 export const resetUsers = () => ({ type: RESET_USERS });
 

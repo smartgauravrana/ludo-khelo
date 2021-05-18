@@ -52,3 +52,12 @@ module.exports.updateSingleUser = asyncHandler(async (req, res, next) => {
   }
   res.json({ success: true, data: user });
 });
+
+
+// get Number of referrals
+module.exports.getReferrals = asyncHandler(async (req, res, next) => {
+  const count = await User.countDocuments({ referrer: req.user.referCode});
+  res.json({ success: true, data: {
+    totalReferrals: count
+  }})
+})

@@ -7,7 +7,13 @@ const initialState = {
   settings: {
     paytmMail: "",
     paytmNumber: "",
-    supportNumber: ""
+    supportNumber: "",
+    referralCommission: 40,
+    shareMessage: "",
+    telegramEnabled: false,
+    telegramUsername: "",
+    websiteTitle: "",
+    whatsappEnabled: false
   }
 };
 

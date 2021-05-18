@@ -2,6 +2,7 @@ import call from "api/apiRequest";
 import endpoints from "api/endpoints";
 
 const SET_USER_DETAILS = "userDetails/SET_USER_DETAILS";
+const SET_REFERRAL_COUNT = "userDetails/SET_REFERRAL_COUNT";
 
 const initialState = {};
 
@@ -100,13 +101,29 @@ export const setUserDetails = userDetails => ({
   payload: userDetails
 });
 
+export const getReferrals = () => async dispatch => {
+  try {
+    const res = await call({
+      url: `${endpoints.referralsCount}`
+    });
+    const { data, total } = res.data;
+    dispatch({ type: SET_REFERRAL_COUNT, payload: data.totalReferrals });
+  } catch (e) {
+    console.log("get all users err");;
+  } 
+};
+
 const getReducer = {
   [SET_USER_DETAILS]: ({ state, action: { payload } }) => {
     return {
       ...state,
       ...payload
     };
-  }
+  },
+  [SET_REFERRAL_COUNT]: ({ state, action: {payload}}) => ({
+    ...state,
+    referralsCount: payload
+  })
 };
 
 export default function (state = initialState, action) {

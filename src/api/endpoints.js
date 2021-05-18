@@ -10,5 +10,6 @@ export default {
   matchesStats: "/dashboard/matches",
   usersStats: "/dashboard/users",
   users: "/users",
-  notificationDevices: "/users/notification"
+  notificationDevices: "/users/notification",
+  referralsCount: "/users/referral"
 };

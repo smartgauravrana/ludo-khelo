@@ -117,14 +117,18 @@ router
   .get(isLogin(true), advancedResults(User), userCtrl.getAllUsers);
 
 router
-  .route("/users/:userId")
-  .get(isLogin(true), userCtrl.getSingleUser)
-  .put(isLogin(true), userCtrl.updateSingleUser);
+  .route("/users/referral")
+  .get(isLogin(), userCtrl.getReferrals)
 
 // for push notification
 router
   .route("/users/notification")
   .post(isLogin(), userCtrl.addNotificationDevice);
+
+router
+  .route("/users/:userId")
+  .get(isLogin(true), userCtrl.getSingleUser)
+  .put(isLogin(true), userCtrl.updateSingleUser);
 
 // paytm gateway
 router

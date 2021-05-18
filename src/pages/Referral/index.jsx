@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { CopyOutlined } from "@ant-design/icons";
@@ -7,9 +7,15 @@ import { Tooltip } from 'antd';
 import QueryNotice from "components/QueryNotice";
 import MessageShare from "components/MessageShare";
 
+import { getReferrals } from "redux/modules/userDetails";
+
 import './Referral.scss';
 
-function Referral({ settings, userDetails }) {
+function Referral({ settings, userDetails, getReferrals }) {
+
+	useEffect(() => {
+		getReferrals();
+	}, [])
 
     const [tooltipVisible, setTooltipVisible] = useState(false);
 
@@ -50,6 +56,10 @@ function Referral({ settings, userDetails }) {
 							<MessageShare message={message} referCode={userDetails.referCode}/>
 						</div>
 
+						<div className="Referral__Invites">
+                Invites accepted: <span className="Referral__Count">{userDetails.referralsCount}</span>
+            </div>
+
 						<div className="Referral__Support">
 							<QueryNotice />
 						</div>
@@ -64,7 +74,9 @@ export default connect(({
 }) => ({
     settings: settings.settings,
     userDetails
-}))(Referral);
+}), {
+	getReferrals
+})(Referral);
   
 Referral.propTypes = {
   settings: PropTypes.object,
