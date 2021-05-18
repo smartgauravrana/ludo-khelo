@@ -13,7 +13,12 @@ const PaytmService = require("../../services/paytmService");
 // @route     POST /api/buy
 // @access    Private
 module.exports.buyChips = asyncHandler(async (req, res, next) => {
-  req.user.chips += req.transaction.amount;
+  if(req.user.referrer && req.user.firstTimeBuyer){
+    req.user.chips += req.transaction.amount + 0.1*req.transaction.amount; // 10% bonus for first time referred user
+    req.user.firstTimeBuyer = false;
+  } else{
+    req.user.chips += req.transaction.amount;
+  }
   const user = await req.user.save();
   res.send({ success: true, data: user });
 });

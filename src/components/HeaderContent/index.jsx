@@ -68,8 +68,8 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails, settings }) {
         closable={true}
         onClose={onMenuClick}
         visible={drawerVisible}
-        bodyStyle={{ height: "unset" }}
-        height={350}
+        bodyStyle={{ height: "unset", padding: '20px' }}
+        height={390}
       >
         <div className="drawable-items">
           {!userDetails._id ? (

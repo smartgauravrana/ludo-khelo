@@ -19,6 +19,7 @@ const userSchema = new Schema({
   notificationDevices: { type: Array, default: [] },
   referrer: { type : String},
   referCode: {type: String, default: ''},
+  firstTimeBuyer: { type: Boolean, default: true},
   createdAt: Date
 });
 
