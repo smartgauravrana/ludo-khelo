@@ -24,7 +24,7 @@ module.exports.register = asyncHandler(async (req, res, next) => {
       password: hash,
       salt,
       firstTimeBuyer: true,
-      referCode // user refer code for referring others
+      referCode, // user refer code for referring others
     }).save();
     res.send({ success: true, data: user });
   } else {
