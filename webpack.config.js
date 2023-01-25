@@ -6,6 +6,8 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
 const BrotliPlugin = require("brotli-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = (env) => {
   const { NODE_ENV } = env;
@@ -123,6 +125,7 @@ module.exports = (env) => {
 
   if (NODE_ENV === "development") {
     config.devtool = "inline-source-map";
+    config.plugins.push(new BundleAnalyzerPlugin());
   }
 
   if (NODE_ENV === "production") {

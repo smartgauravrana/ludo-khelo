@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Drawer } from "antd";
-import { MenuOutlined } from "@ant-design/icons";
+import MenuOutlined from "@ant-design/icons/MenuOutlined";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -46,7 +46,7 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails, settings }) {
         Sell Chips
       </Link>
       <Link to={routePaths.REFERRAL} onClick={onMenuClick}>
-        Refer and Earn <img src={newGif} style={{height: '30px'}}/>
+        Refer and Earn <img src={newGif} style={{ height: "30px" }} />
       </Link>
       <Link to={routePaths.SUPPORT} onClick={onMenuClick}>
         Customer Support
@@ -68,7 +68,7 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails, settings }) {
         closable={true}
         onClose={onMenuClick}
         visible={drawerVisible}
-        bodyStyle={{ height: "unset", padding: '20px' }}
+        bodyStyle={{ height: "unset", padding: "20px" }}
         height={390}
       >
         <div className="drawable-items">
@@ -98,7 +98,7 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails, settings }) {
 }
 
 export default connect(
-  ({ userDetails, settings: {settings} }) => ({ userDetails, settings }),
+  ({ userDetails, settings: { settings } }) => ({ userDetails, settings }),
   null
 )(HeaderContent);
 
@@ -106,5 +106,5 @@ HeaderContent.propTypes = {
   onMenuClick: PropTypes.func,
   drawerVisible: PropTypes.bool,
   userDetails: PropTypes.object,
-  settings: PropTypes.object
+  settings: PropTypes.object,
 };
