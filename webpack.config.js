@@ -116,7 +116,7 @@ module.exports = (env) => {
       },
       proxy: {
         "/api": {
-          target: "http://localhost:3000",
+          target: "http://localhost:3001",
         },
       },
       port: 8080,
