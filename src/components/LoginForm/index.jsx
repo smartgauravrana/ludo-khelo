@@ -6,9 +6,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import { login } from "redux/modules/userDetails";
-import TextInput from "components/TextInput";
-import routePaths from "Routes/routePaths";
+import { login } from "@/redux/modules/userDetails";
+import TextInput from "@/components/TextInput";
+import routePaths from "@/Routes/routePaths";
 import "./LoginForm.scss";
 
 const loginFields = [
@@ -16,14 +16,14 @@ const loginFields = [
     name: "phone",
     type: "text",
     placeholder: "Enter Mobile Number",
-    label: "Mobile Number"
+    label: "Mobile Number",
   },
   {
     name: "password",
     type: "password",
     placeholder: "Password",
-    label: "Password"
-  }
+    label: "Password",
+  },
 ];
 
 function LoginForm({ login }) {
@@ -33,34 +33,34 @@ function LoginForm({ login }) {
       <Formik
         initialValues={{
           phone: "",
-          password: ""
+          password: "",
         }}
         validationSchema={Yup.object({
           phone: Yup.string()
             .required("Required!")
             .length(10, "Mobile should be of 10 digits"),
-          password: Yup.string().required("Required!")
+          password: Yup.string().required("Required!"),
         })}
-        onSubmit={values =>
+        onSubmit={(values) =>
           login(
             values,
-            userDetails => {
+            (userDetails) => {
               message.success("Success");
               if (userDetails.isAdmin) {
                 return history.push(routePaths.ADMIN.default);
               }
               history.push(routePaths.HOME);
             },
-            err => {
+            (err) => {
               const { data } = err.response;
               message.error(data.error);
             }
           )
         }
       >
-        {props => (
+        {(props) => (
           <Form>
-            {loginFields.map(field => (
+            {loginFields.map((field) => (
               <TextInput key={field.name} {...field} />
             ))}
             <Button
@@ -82,5 +82,5 @@ export default connect(null, { login })(LoginForm);
 LoginForm.propTypes = {
   submitForm: PropTypes.func,
   login: PropTypes.func,
-  isValid: PropTypes.bool
+  isValid: PropTypes.bool,
 };

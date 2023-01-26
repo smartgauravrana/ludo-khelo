@@ -9,21 +9,21 @@ import {
   getAllMatches,
   postMatch,
   addMatch,
-  resetMatches
-} from "redux/modules/matchDetails";
-import { checkLogin } from "redux/modules/userDetails";
-import TextInput from "components/TextInput";
-import Matches from "components/Matches";
-import routePaths from "Routes/routePaths";
-import { SOCKET_EVENTS } from "../../../constants";
+  resetMatches,
+} from "@/redux/modules/matchDetails";
+import { checkLogin } from "@/redux/modules/userDetails";
+import TextInput from "@/components/TextInput";
+import Matches from "@/components/Matches";
+import routePaths from "@/Routes/routePaths";
+import { SOCKET_EVENTS } from "@/constants";
 import "./Home.scss";
-import Onboarding from "components/Onboarding";
+import Onboarding from "@/components/Onboarding";
 
 class Home extends Component {
   componentDidMount() {
     // this.props.getAllMatches();
     const { socket } = this.props;
-    socket.on(SOCKET_EVENTS.serverMatchUpdates, data => {
+    socket.on(SOCKET_EVENTS.serverMatchUpdates, (data) => {
       const match = data[0];
       match.createdBy !== this.props.userDetails._id &&
         this.props.addMatch(data[0]);
@@ -35,17 +35,17 @@ class Home extends Component {
     socket.removeAllListeners(SOCKET_EVENTS.serverMatchUpdates);
   }
 
-  onChallengeSet = values => {
+  onChallengeSet = (values) => {
     const { socket } = this.props;
     this.props.postMatch(
       values,
       () => {
         this.props.checkLogin();
         socket.emit(SOCKET_EVENTS.clientMatchPosted, {
-          id: this.props.userDetails._id
+          id: this.props.userDetails._id,
         });
       },
-      err => {
+      (err) => {
         const { data } = err.response;
         message.error(data.error);
       }
@@ -64,14 +64,14 @@ class Home extends Component {
             </div>
             <Formik
               initialValues={{
-                amount: ""
+                amount: "",
               }}
               validationSchema={Yup.object({
                 amount: Yup.number()
                   .required("Required!")
-                  .min(50, "Amount must be minimum 50")
+                  .min(50, "Amount must be minimum 50"),
               })}
-              onSubmit={values => {
+              onSubmit={(values) => {
                 if (userDetails.matchInProgress) {
                   alert("First, Post the result of pending match");
                   history.push(routePaths.HISTORY);
@@ -83,7 +83,7 @@ class Home extends Component {
                 }
               }}
             >
-              {props => (
+              {(props) => (
                 <div className="Home__setChallenge">
                   <TextInput
                     name="amount"
@@ -117,7 +117,7 @@ export default connect(({ userDetails }) => ({ userDetails }), {
   postMatch,
   addMatch,
   resetMatches,
-  checkLogin
+  checkLogin,
 })(Home);
 
 Home.propTypes = {
@@ -128,5 +128,5 @@ Home.propTypes = {
   resetMatches: PropTypes.func,
   socket: PropTypes.object,
   checkLogin: PropTypes.func,
-  history: PropTypes.object
+  history: PropTypes.object,
 };

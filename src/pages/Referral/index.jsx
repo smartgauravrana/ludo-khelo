@@ -4,10 +4,10 @@ import PropTypes from "prop-types";
 import CopyOutlined from "@ant-design/icons/CopyOutlined";
 import { Tooltip } from "antd";
 
-import QueryNotice from "components/QueryNotice";
-import MessageShare from "components/MessageShare";
+import QueryNotice from "@/components/QueryNotice";
+import MessageShare from "@/components/MessageShare";
 
-import { getReferrals } from "redux/modules/userDetails";
+import { getReferrals } from "@/redux/modules/userDetails";
 
 import "./Referral.scss";
 

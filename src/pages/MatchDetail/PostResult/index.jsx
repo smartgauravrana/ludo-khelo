@@ -4,28 +4,28 @@ import { connect } from "react-redux";
 import { message } from "antd";
 import { useHistory } from "react-router-dom";
 
-import { postResult } from "redux/modules/matchDetails";
-import { checkLogin } from "redux/modules/userDetails";
-import Loader from "components/Loader";
-import routePaths from "Routes/routePaths";
+import { postResult } from "@/redux/modules/matchDetails";
+import { checkLogin } from "@/redux/modules/userDetails";
+import Loader from "@/components/Loader";
+import routePaths from "@/Routes/routePaths";
 import { storage } from "../../../firebase";
-import { RESULT_OPTIONS } from "../../../../constants";
-import { isParticipant } from "client-utils";
+import { RESULT_OPTIONS } from "@/constants";
+import { isParticipant } from "@/client-utils";
 import "./PostResult.scss";
 
 const resultOptions = [
   {
     value: RESULT_OPTIONS.won,
-    label: "I Won"
+    label: "I Won",
   },
   {
     value: RESULT_OPTIONS.lost,
-    label: "I Lost"
+    label: "I Lost",
   },
   {
     value: RESULT_OPTIONS.cancel,
-    label: "Cancel Game"
-  }
+    label: "Cancel Game",
+  },
 ];
 
 function PostResult({ postResult, checkLogin, matchDetail, user }) {
@@ -59,7 +59,7 @@ function PostResult({ postResult, checkLogin, matchDetail, user }) {
         checkLogin();
         history.push(routePaths.HOME);
       },
-      err => {
+      (err) => {
         setIsLoading(false);
         const { data } = err.response;
         message.error(data.error);
@@ -100,12 +100,12 @@ function PostResult({ postResult, checkLogin, matchDetail, user }) {
     </div>
   );
 
-  const handleImageAsFile = e => {
+  const handleImageAsFile = (e) => {
     const image = e.target.files[0];
-    setImageAsFile(imageFile => image);
+    setImageAsFile((imageFile) => image);
     handleFireBaseUpload(image);
   };
-  const handleFireBaseUpload = imageAsFile => {
+  const handleFireBaseUpload = (imageAsFile) => {
     console.log("start of upload");
     // async magic goes here...
     if (imageAsFile === "") {
@@ -118,11 +118,11 @@ function PostResult({ postResult, checkLogin, matchDetail, user }) {
     // initiates the firebase side uploading
     uploadTask.on(
       "state_changed",
-      snapShot => {
+      (snapShot) => {
         // takes a snap shot of the process as it is happening
         console.log(snapShot);
       },
-      err => {
+      (err) => {
         // catches the errors
         console.log(err);
       },
@@ -133,11 +133,11 @@ function PostResult({ postResult, checkLogin, matchDetail, user }) {
           .ref("images")
           .child(imageAsFile.name)
           .getDownloadURL()
-          .then(fireBaseUrl => {
+          .then((fireBaseUrl) => {
             setIsLoading(false);
-            setImageAsUrl(prevObject => ({
+            setImageAsUrl((prevObject) => ({
               ...prevObject,
-              imgUrl: fireBaseUrl
+              imgUrl: fireBaseUrl,
             }));
           });
       }
@@ -181,7 +181,7 @@ function PostResult({ postResult, checkLogin, matchDetail, user }) {
       {isLoading && <Loader />}
       <h2>POST RESULT</h2>
       <div className="PostResult__select">
-        {resultOptions.map(option => (
+        {resultOptions.map((option) => (
           <div
             className={`PostResult__item ${
               option.value === choice ? "PostResult__item--selected" : ""
@@ -224,12 +224,12 @@ function PostResult({ postResult, checkLogin, matchDetail, user }) {
 
 export default connect(null, {
   postResult,
-  checkLogin
+  checkLogin,
 })(PostResult);
 
 PostResult.propTypes = {
   postResult: PropTypes.func,
   checkLogin: PropTypes.func,
   matchDetail: PropTypes.string,
-  user: PropTypes.object
+  user: PropTypes.object,
 };

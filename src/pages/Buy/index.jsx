@@ -5,24 +5,24 @@ import { Button, message } from "antd";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import CustomTitle from "components/CustomTitle";
-import TextInput from "components/TextInput";
-import { buyChips } from "redux/modules/userDetails";
-import QueryNotice from "components/QueryNotice";
-import Loader from "components/Loader";
+import CustomTitle from "@/components/CustomTitle";
+import TextInput from "@/components/TextInput";
+import { buyChips } from "@/redux/modules/userDetails";
+import QueryNotice from "@/components/QueryNotice";
+import Loader from "@/components/Loader";
 import "./Buy.scss";
 
 const BuyFields = [
   {
     name: "transactionId",
     type: "text",
-    placeholder: "Order Id"
+    placeholder: "Order Id",
   },
   {
     name: "amount",
     type: "number",
-    placeholder: "Amount"
-  }
+    placeholder: "Amount",
+  },
 ];
 
 function Buy({ userDetails, buyChips, settings }) {
@@ -66,7 +66,7 @@ function Buy({ userDetails, buyChips, settings }) {
         cb();
         message.success("Chips Added!");
       },
-      err => {
+      (err) => {
         cb();
         const { data } = err.response;
         message.error(data.error);
@@ -101,14 +101,14 @@ function Buy({ userDetails, buyChips, settings }) {
         <Formik
           initialValues={{
             transactionId: "",
-            amount: ""
+            amount: "",
           }}
           validationSchema={Yup.object({
             transactionId: Yup.string().required("Required!"),
             amount: Yup.number()
               .required("Required!")
               .positive("Amount can't be minus")
-              .integer("Amount can't include decimal point.")
+              .integer("Amount can't include decimal point."),
           })}
           onSubmit={(values, { resetForm }) =>
             onBuyChips(values, () => {
@@ -117,9 +117,9 @@ function Buy({ userDetails, buyChips, settings }) {
             })
           }
         >
-          {props => (
+          {(props) => (
             <Form>
-              {BuyFields.map(field => (
+              {BuyFields.map((field) => (
                 <TextInput key={field.name} {...field} />
               ))}
               <Button
@@ -146,10 +146,10 @@ function Buy({ userDetails, buyChips, settings }) {
 export default connect(
   ({ userDetails, settings: { settings } }) => ({
     userDetails,
-    settings
+    settings,
   }),
   {
-    buyChips
+    buyChips,
   }
 )(Buy);
 
@@ -159,5 +159,5 @@ Buy.propTypes = {
   submitForm: PropTypes.func,
   buyChips: PropTypes.func,
   resetForm: PropTypes.func,
-  settings: PropTypes.object
+  settings: PropTypes.object,
 };

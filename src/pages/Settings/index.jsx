@@ -5,56 +5,57 @@ import { Button, message } from "antd";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 
-import TextInput from "components/TextInput";
-import Loader from "components/Loader";
-import { updateSettings } from "redux/modules/settings";
+import TextInput from "@/components/TextInput";
+import Loader from "@/components/Loader";
+import { updateSettings } from "@/redux/modules/settings";
 import "./Settings.scss";
 
 const fields = [
   {
     name: "paytmNumber",
     type: "text",
-    label: "Paytm Number"
+    label: "Paytm Number",
   },
   {
     name: "paytmMail",
     type: "text",
-    label: "Paytm Mail"
+    label: "Paytm Mail",
   },
   {
     name: "supportNumber",
     type: "text",
-    label: "Support Number"
+    label: "Support Number",
   },
   {
     name: "websiteTitle",
     type: "text",
-    label: "Website Title"
+    label: "Website Title",
   },
   {
     name: "referralCommission",
     type: "number",
-    label: "Referral Percentage"
-  },{
+    label: "Referral Percentage",
+  },
+  {
     name: "shareMessage",
     type: "textarea",
-    label: "Share Message"
+    label: "Share Message",
   },
   {
     name: "whatsappEnabled",
     type: "checkbox",
-    label: "Enable Whatsapp"
+    label: "Enable Whatsapp",
   },
   {
     name: "telegramEnabled",
     type: "checkbox",
-    label: "Enable Telegram"
+    label: "Enable Telegram",
   },
   {
     name: "telegramUsername",
     type: "text",
-    label: "Telegram Username"
-  }
+    label: "Telegram Username",
+  },
 ];
 function Settings({ settings, updateSettings }) {
   const [editMode, setEditMode] = useState(false);
@@ -74,7 +75,7 @@ function Settings({ settings, updateSettings }) {
           whatsappEnabled: settings.whatsappEnabled,
           telegramEnabled: settings.telegramEnabled,
           telegramUsername: settings.telegramUsername,
-          shareMessage: settings.shareMessage
+          shareMessage: settings.shareMessage,
         }}
         validationSchema={Yup.object({
           paytmNumber: Yup.string()
@@ -82,9 +83,9 @@ function Settings({ settings, updateSettings }) {
             .length(10, "Phone No should be of 10 digits"),
           supportNumber: Yup.string()
             .required("Required!")
-            .length(10, "Phone No should be of 10 digits")
+            .length(10, "Phone No should be of 10 digits"),
         })}
-        onSubmit={values => {
+        onSubmit={(values) => {
           setIsLoading(true);
           setEditMode(false);
           updateSettings(
@@ -100,12 +101,12 @@ function Settings({ settings, updateSettings }) {
           );
         }}
       >
-        {props => {
+        {(props) => {
           const initialStr = Object.values(props.initialValues).join("");
           const currentStr = Object.values(props.values).join("");
           return (
             <Form>
-              {fields.map(field => (
+              {fields.map((field) => (
                 <TextInput key={field.name} {...field} disabled={!editMode} />
               ))}
               <div className="Settings__Actions">
@@ -142,7 +143,7 @@ function Settings({ settings, updateSettings }) {
 }
 
 export default connect(({ settings: { settings } }) => ({ settings }), {
-  updateSettings
+  updateSettings,
 })(Settings);
 
 Settings.propTypes = {
@@ -152,5 +153,5 @@ Settings.propTypes = {
   submitForm: PropTypes.func,
   initialValues: PropTypes.object,
   values: PropTypes.object,
-  updateSettings: PropTypes.func
+  updateSettings: PropTypes.func,
 };

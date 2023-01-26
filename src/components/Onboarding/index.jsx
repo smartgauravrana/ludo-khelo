@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import routePaths from "Routes/routePaths";
-import QueryNotice from "components/QueryNotice";
+import routePaths from "@/Routes/routePaths";
+import QueryNotice from "@/components/QueryNotice";
 import "./Onboarding.scss";
 
 export default function Onboarding() {

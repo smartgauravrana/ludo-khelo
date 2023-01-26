@@ -4,14 +4,14 @@ import { message } from "antd";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 
-import { getTimeline } from "redux/modules/timeline";
-import MatchActions from "components/MatchActions";
-import DisplayTable from "components/DisplayTable";
-import { leaveMatch } from "redux/modules/matchDetails";
-import { checkLogin } from "redux/modules/userDetails";
+import { getTimeline } from "@/redux/modules/timeline";
+import MatchActions from "@/components/MatchActions";
+import DisplayTable from "@/components/DisplayTable";
+import { leaveMatch } from "@/redux/modules/matchDetails";
+import { checkLogin } from "@/redux/modules/userDetails";
 import "./HistoryTable.scss";
-import routePaths from "Routes/routePaths";
-import CopyData from "components/CopyData";
+import routePaths from "@/Routes/routePaths";
+import CopyData from "@/components/CopyData";
 
 class HistoryTable extends Component {
   componentDidMount() {
@@ -32,12 +32,12 @@ class HistoryTable extends Component {
       title: "Match ID",
       dataIndex: "_id",
       ellipsis: true,
-      render: _id => (
+      render: (_id) => (
         <div>
           <div>{_id}</div>
           <CopyData data={_id} title="Copy Match ID" />
         </div>
-      )
+      ),
     },
     {
       title: "Title VS",
@@ -58,11 +58,11 @@ class HistoryTable extends Component {
             <strong>&#8377;{record.amount}</strong>
           </div>
         );
-      }
+      },
     },
     {
       title: "Status",
-      dataIndex: "status"
+      dataIndex: "status",
     },
     {
       title: "Action",
@@ -75,16 +75,16 @@ class HistoryTable extends Component {
             cancelRequest={() => this.cancelRequest(record)}
           />
         );
-      }
-    }
+      },
+    },
   ];
 
-  cancelRequest = content => {
+  cancelRequest = (content) => {
     const { leaveMatch, checkLogin, location } = this.props;
     leaveMatch(
       content,
       () => checkLogin(),
-      err => {
+      (err) => {
         const { data } = err.response;
         message.error(data.error);
       }
@@ -103,13 +103,13 @@ class HistoryTable extends Component {
           location={location}
           paginationProps={{
             total: total,
-            onChange: currentPage => {
+            onChange: (currentPage) => {
               history.push(
                 `${routePaths.HISTORY}${
                   currentPage !== 1 ? "?page=" + currentPage : ""
                 }`
               );
-            }
+            },
           }}
         />
       </div>
@@ -123,12 +123,12 @@ export default withRouter(
       timeline,
       isLoading,
       total,
-      userDetails
+      userDetails,
     }),
     {
       getTimeline,
       leaveMatch,
-      checkLogin
+      checkLogin,
     }
   )(HistoryTable)
 );
@@ -142,5 +142,5 @@ HistoryTable.propTypes = {
   checkLogin: PropTypes.func,
   userDetails: PropTypes.object,
   location: PropTypes.object,
-  history: PropTypes.object
+  history: PropTypes.object,
 };

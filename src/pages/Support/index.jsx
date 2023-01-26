@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import QueryNotice from "components/QueryNotice";
+import QueryNotice from "@/components/QueryNotice";
 
 export default function Support() {
-    return <QueryNotice />
-} 
+  return <QueryNotice />;
+}

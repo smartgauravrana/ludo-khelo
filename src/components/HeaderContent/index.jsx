@@ -5,8 +5,8 @@ import MenuOutlined from "@ant-design/icons/MenuOutlined";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import routePaths from "Routes/routePaths";
-import newGif from "assets/new.gif";
+import routePaths from "@/Routes/routePaths";
+import newGif from "@/assets/new.gif";
 
 import "./HeaderContent.scss";
 

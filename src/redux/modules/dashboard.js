@@ -1,6 +1,6 @@
-import call from "api/apiRequest";
-import endpoints from "api/endpoints";
-import { MATCH_STATUS } from "../../../constants";
+import call from "@/apis/apiRequest";
+import endpoints from "@/apis/endpoints";
+import { MATCH_STATUS } from "@/constants";
 
 const SET_MATCHES = "dashboard/SET_MATCHES";
 const SET_USERS = "dashboard/SET_USERS";
@@ -14,7 +14,7 @@ const RESET_DASHBOARD = "dashboard/RESET_DASHBOARD";
 export const DASHBOARD_FILTERS = {
   lifetime: "Lifetime",
   today: "Today",
-  week: "This week"
+  week: "This week",
 };
 
 const initialState = {
@@ -24,10 +24,10 @@ const initialState = {
   completedMatches: {},
   isMatchesLoading: false,
   isUsersLoading: false,
-  filter: DASHBOARD_FILTERS.lifetime
+  filter: DASHBOARD_FILTERS.lifetime,
 };
 
-const generateParams = filter => {
+const generateParams = (filter) => {
   const params = {};
   const currentDate = new Date();
   const oneDayDiff = 24 * 60 * 60 * 1000;
@@ -46,12 +46,12 @@ export const getMatchesStats = () => async (dispatch, getState) => {
   dispatch({ type: SET_IS_MATCHES_LOADING, payload: true });
   try {
     const {
-      dashboard: { filter }
+      dashboard: { filter },
     } = getState();
     const params = generateParams(filter);
     const res = await call({
       url: `${endpoints.matchesStats}`,
-      params
+      params,
     });
     const { data } = res.data;
     const totalMatches = data.reduce((acc, current) => {
@@ -62,7 +62,7 @@ export const getMatchesStats = () => async (dispatch, getState) => {
       return acc;
     }, {});
     const completedMatches =
-      data.find(item => item._id === MATCH_STATUS.completed) || {};
+      data.find((item) => item._id === MATCH_STATUS.completed) || {};
     dispatch({ type: SET_COMPLETED_MATCHES, payload: completedMatches });
     dispatch({ type: SET_TOTAL_MATCHES, payload: totalMatches });
     dispatch({ type: SET_MATCHES, payload: data });
@@ -79,12 +79,12 @@ export const getUsersStats = () => async (dispatch, getState) => {
   dispatch({ type: SET_IS_USERS_LOADING, payload: true });
   try {
     const {
-      dashboard: { filter }
+      dashboard: { filter },
     } = getState();
     const params = generateParams(filter);
     const res = await call({
       url: `${endpoints.usersStats}`,
-      params
+      params,
     });
     const { data } = res.data;
     dispatch({ type: SET_USERS, payload: data[0] });
@@ -97,40 +97,40 @@ export const getUsersStats = () => async (dispatch, getState) => {
   }
 };
 
-export const setFilter = filter => ({ type: SET_FILTER, payload: filter });
+export const setFilter = (filter) => ({ type: SET_FILTER, payload: filter });
 
 export const resetDashboard = () => ({ type: RESET_DASHBOARD });
 
 const getReducer = {
   [SET_MATCHES]: ({ state, action: { payload } }) => ({
     ...state,
-    matches: payload
+    matches: payload,
   }),
   [SET_IS_MATCHES_LOADING]: ({ state, action: { payload } }) => ({
     ...state,
-    isMatchesLoading: payload
+    isMatchesLoading: payload,
   }),
   [SET_USERS]: ({ state, action: { payload } }) => ({
     ...state,
-    users: payload
+    users: payload,
   }),
   [SET_IS_USERS_LOADING]: ({ state, action: { payload } }) => ({
     ...state,
-    isUsersLoading: payload
+    isUsersLoading: payload,
   }),
   [SET_TOTAL_MATCHES]: ({ state, action: { payload } }) => ({
     ...state,
-    totalMatches: payload
+    totalMatches: payload,
   }),
   [SET_FILTER]: ({ state, action: { payload } }) => ({
     ...state,
-    filter: payload
+    filter: payload,
   }),
   [SET_COMPLETED_MATCHES]: ({ state, action: { payload } }) => ({
     ...state,
-    completedMatches: payload
+    completedMatches: payload,
   }),
-  [RESET_DASHBOARD]: () => ({ ...initialState })
+  [RESET_DASHBOARD]: () => ({ ...initialState }),
 };
 
 export default function (state = initialState, action) {

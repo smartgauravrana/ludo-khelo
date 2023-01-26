@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Button } from "antd";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import TextInput from "components/TextInput";
+import TextInput from "@/components/TextInput";
 import "firebase/auth";
 
 export default function Verification(props) {
@@ -15,19 +15,19 @@ export default function Verification(props) {
       <Formik
         initialValues={{
           phone: "",
-          otp: ""
+          otp: "",
         }}
         validationSchema={Yup.object({
           phone: Yup.string()
             .required("Required!")
-            .length(10, "Mobile should be of 10 digits")
+            .length(10, "Mobile should be of 10 digits"),
           // otp: Yup.string().required("Required!")
         })}
-        onSubmit={values => {
+        onSubmit={(values) => {
           // signIn(values.phone, window.recaptchaVerifier);
         }}
       >
-        {props => {
+        {(props) => {
           return (
             <Form>
               <div>
@@ -51,5 +51,5 @@ export default function Verification(props) {
 
 Verification.propTypes = {
   isValid: PropTypes.bool,
-  submitForm: PropTypes.func
+  submitForm: PropTypes.func,
 };

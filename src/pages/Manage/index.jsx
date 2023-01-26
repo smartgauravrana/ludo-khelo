@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ManageTable from "components/ManageTable";
+import ManageTable from "@/components/ManageTable";
 
 import "./Manage.scss";
 

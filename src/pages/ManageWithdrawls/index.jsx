@@ -6,13 +6,13 @@ import { Button } from "antd";
 import {
   getSellRequests,
   resetManageWithdrawls,
-  updateSellRequest
-} from "redux/modules/manageWithdrawls";
-import routePaths from "Routes/routePaths";
-import { SELLING_STATUS } from "../../../constants";
-import DisplayTable from "components/DisplayTable";
-import CopyData from "components/CopyData";
-import Filter from "components/Filter";
+  updateSellRequest,
+} from "@/redux/modules/manageWithdrawls";
+import routePaths from "@/Routes/routePaths";
+import { SELLING_STATUS } from "@/constants";
+import DisplayTable from "@/components/DisplayTable";
+import CopyData from "@/components/CopyData";
+import Filter from "@/components/Filter";
 
 import "./ManageWithdrawls.scss";
 
@@ -21,7 +21,7 @@ class ManageWithdrawls extends Component {
     super(props);
     this.state = {
       filter: "all",
-      isUpdating: false
+      isUpdating: false,
     };
   }
 
@@ -60,21 +60,21 @@ class ManageWithdrawls extends Component {
     {
       title: "Paytm Number",
       dataIndex: "phone",
-      render: phone => (
+      render: (phone) => (
         <div>
           <div>{phone}</div>
           <CopyData data={phone} title="Copy No" />
         </div>
-      )
+      ),
     },
     {
       title: "Amount",
-      dataIndex: "amount"
+      dataIndex: "amount",
     },
     {
       title: "Status",
       dataIndex: "status",
-      render: status => status.toUpperCase()
+      render: (status) => status.toUpperCase(),
     },
     {
       title: "Action",
@@ -97,15 +97,15 @@ class ManageWithdrawls extends Component {
                 },
                 cbError: () => {
                   this.setState({ isUpdating: false });
-                }
+                },
               });
             }}
           >
             Mark done
           </Button>
         );
-      }
-    }
+      },
+    },
   ];
 
   render() {
@@ -116,7 +116,7 @@ class ManageWithdrawls extends Component {
         Sell Requests
         <Filter
           initialValue={this.state.filter}
-          onChange={value => {
+          onChange={(value) => {
             this.setState({ filter: value });
           }}
           options={{ all: "all", ...SELLING_STATUS }}
@@ -129,13 +129,13 @@ class ManageWithdrawls extends Component {
           location={location}
           paginationProps={{
             total: total,
-            onChange: currentPage => {
+            onChange: (currentPage) => {
               history.push(
                 `${routePaths.ADMIN.manageWithdrawls}${
                   currentPage !== 1 ? "?page=" + currentPage : ""
                 }`
               );
-            }
+            },
           }}
         />
       </div>
@@ -145,12 +145,12 @@ class ManageWithdrawls extends Component {
 
 export default connect(
   ({ manageWithdrawls }) => ({
-    manageWithdrawls
+    manageWithdrawls,
   }),
   {
     getSellRequests,
     resetManageWithdrawls,
-    updateSellRequest
+    updateSellRequest,
   }
 )(ManageWithdrawls);
 
@@ -160,5 +160,5 @@ ManageWithdrawls.propTypes = {
   resetManageWithdrawls: PropTypes.func,
   updateSellRequest: PropTypes.func,
   location: PropTypes.func,
-  history: PropTypes.object
+  history: PropTypes.object,
 };
