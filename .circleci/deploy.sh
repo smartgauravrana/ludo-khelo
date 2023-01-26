@@ -31,5 +31,5 @@ cd ../
 echo "prsent directory"
 pwd
 ls
-cp OneSignalSDKUpdateWorker.js ./ludo-khelo/build
+cp OneSignalSDKUpdaterWorker.js ./ludo-khelo/build
 cp OneSignalSDKWorker.js ./ludo-khelo/build
