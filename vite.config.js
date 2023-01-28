@@ -1,30 +1,37 @@
 import { defineConfig } from "vite";
+import viteCompression from "vite-plugin-compression";
 import path from "path";
 
-console.log("Path: ", __dirname, path.resolve(__dirname, "src"));
+const config = (() => {
+  const configs = {
+    root: "src",
 
-export default defineConfig({
-  root: "src",
-
-  build: {
-    // Relative to the root
-    outDir: "./build",
-  },
-  resolve: {
-    alias: {
-      //   find: "@",
-      //   replacement: path.resolve(__dirname, "/src"),
-      "@": path.resolve(__dirname, "src"),
+    build: {
+      // Relative to the root
+      outDir: "./build",
     },
-  },
-  server: {
-    proxy: {
-      "/api/": {
-        target: "http://localhost:3001",
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "src"),
       },
     },
-    port: 3000,
-    strictPort: true,
-    open: true,
-  },
-});
+    server: {
+      proxy: {
+        "/api/": {
+          target: "http://localhost:3001",
+        },
+      },
+      port: 3000,
+      strictPort: true,
+      open: true,
+    },
+    plugins: [viteCompression()],
+  };
+
+  if (process.env.NODE_ENV === "production") {
+    configs.plugins;
+  }
+  return defineConfig(configs);
+})();
+
+export default config;

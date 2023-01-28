@@ -67,7 +67,7 @@ function HeaderContent({ onMenuClick, drawerVisible, userDetails, settings }) {
         placement="top"
         closable={true}
         onClose={onMenuClick}
-        visible={drawerVisible}
+        open={drawerVisible}
         bodyStyle={{ height: "unset", padding: "20px" }}
         height={390}
       >
