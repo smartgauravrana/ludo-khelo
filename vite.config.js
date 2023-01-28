@@ -8,7 +8,7 @@ const config = (() => {
 
     build: {
       // Relative to the root
-      outDir: "./build",
+      outDir: "../build",
     },
     resolve: {
       alias: {
