@@ -4,13 +4,13 @@ import { connect } from "react-redux";
 import { Button, Modal, message } from "antd";
 import { withRouter } from "react-router-dom";
 
-import { MATCH_STATUS, RESULT_OPTIONS } from "../../../constants";
-import routePaths from "Routes/routePaths";
-import { getMatches, updateMatches } from "redux/modules/manage";
-import { postResult } from "redux/modules/matchDetails";
-import DisplayTable from "components/DisplayTable";
-import CopyData from "components/CopyData";
-import Filter from "components/Filter";
+import { MATCH_STATUS, RESULT_OPTIONS } from "@/constants";
+import routePaths from "@/Routes/routePaths";
+import { getMatches, updateMatches } from "@/redux/modules/manage";
+import { postResult } from "@/redux/modules/matchDetails";
+import DisplayTable from "@/components/DisplayTable";
+import CopyData from "@/components/CopyData";
+import Filter from "@/components/Filter";
 import "./ManageTable.scss";
 
 class ManageTable extends Component {
@@ -21,7 +21,7 @@ class ManageTable extends Component {
       showModal: false,
       selectedWinnerId: null,
       modalError: "",
-      matchFilter: MATCH_STATUS.onHold
+      matchFilter: MATCH_STATUS.onHold,
     };
     this.toBeCancelled = "toBeCancelled";
   }
@@ -31,7 +31,7 @@ class ManageTable extends Component {
     const { matchFilter } = this.state;
     const options = {
       "status[eq]": matchFilter,
-      page: location.search.split("?page=").pop() || 1
+      page: location.search.split("?page=").pop() || 1,
     };
     getMatches({ options });
   }
@@ -45,7 +45,7 @@ class ManageTable extends Component {
     ) {
       const options = {
         "status[eq]": matchFilter,
-        page: location.search.split("?page=").pop() || 1
+        page: location.search.split("?page=").pop() || 1,
       };
       getMatches({ options });
     }
@@ -56,12 +56,12 @@ class ManageTable extends Component {
       title: "Match ID",
       dataIndex: "_id",
       ellipsis: true,
-      render: _id => (
+      render: (_id) => (
         <div>
           <div>{_id}</div>
           <CopyData data={_id} title="Copy Match ID" />
         </div>
-      )
+      ),
     },
     {
       title: "Title VS",
@@ -82,24 +82,24 @@ class ManageTable extends Component {
             <strong>&#8377;{record.amount}</strong>
           </div>
         );
-      }
+      },
     },
     {
       title: "Status",
-      dataIndex: "status"
+      dataIndex: "status",
     },
     {
       title: "Proof",
       dataIndex: "resultsPosted",
       render: (results, record) => {
         const { createdBy, joinee } = record;
-        return Object.keys(results).map(resultType => (
+        return Object.keys(results).map((resultType) => (
           <>
             <div>
               <strong>{resultType}:</strong>
             </div>
             <ul key={resultType}>
-              {results[resultType].map(result => (
+              {results[resultType].map((result) => (
                 <li key={result.postedBy}>
                   {result.postedBy === createdBy._id
                     ? createdBy.username
@@ -121,7 +121,7 @@ class ManageTable extends Component {
             </ul>
           </>
         ));
-      }
+      },
     },
     {
       title: "Action",
@@ -140,25 +140,25 @@ class ManageTable extends Component {
         ) : (
           <div style={{ color: "#1890ff" }}>NA</div>
         );
-      }
-    }
+      },
+    },
   ];
 
   closeModal = () =>
     this.setState({
-      showModal: false
+      showModal: false,
     });
 
   afterClose = () =>
     this.setState({
       selectedRecord: null,
       selectedWinnerId: null,
-      modalError: ""
+      modalError: "",
     });
 
-  selectWinner = id => this.setState({ selectedWinnerId: id });
+  selectWinner = (id) => this.setState({ selectedWinnerId: id });
 
-  cancelMatch = () => this.setState({toBeCancelled: true});
+  cancelMatch = () => this.setState({ toBeCancelled: true });
 
   onOkHandler = () => {
     const { selectedRecord, selectedWinnerId } = this.state;
@@ -169,15 +169,19 @@ class ManageTable extends Component {
     this.props.postResult(
       {
         matchId: selectedRecord._id,
-        winner: selectedWinnerId !== this.toBeCancelled ? selectedWinnerId : null,
-        resultType: selectedWinnerId === this.toBeCancelled ? RESULT_OPTIONS.cancel : "completed"
+        winner:
+          selectedWinnerId !== this.toBeCancelled ? selectedWinnerId : null,
+        resultType:
+          selectedWinnerId === this.toBeCancelled
+            ? RESULT_OPTIONS.cancel
+            : "completed",
       },
-      data => {
+      (data) => {
         this.setState({ showModal: false });
         this.props.updateMatches(data);
         message.success("Action completed");
       },
-      err => {
+      (err) => {
         const { data } = err.response;
         message.error(data.error);
       }
@@ -191,13 +195,13 @@ class ManageTable extends Component {
       showModal,
       modalError,
       selectedWinnerId,
-      toBeCancelled
+      toBeCancelled,
     } = this.state;
     return (
       <div className="ManageTable">
         <Filter
           initialValue={this.state.matchFilter}
-          onChange={value => {
+          onChange={(value) => {
             this.setState({ matchFilter: value });
           }}
         />
@@ -209,13 +213,13 @@ class ManageTable extends Component {
           location={location}
           paginationProps={{
             total: total,
-            onChange: currentPage => {
+            onChange: (currentPage) => {
               history.push(
                 `${routePaths.ADMIN.manage}${
                   currentPage !== 1 ? "?page=" + currentPage : ""
                 }`
               );
-            }
+            },
           }}
         />
         <Modal
@@ -263,17 +267,20 @@ class ManageTable extends Component {
                   selectedRecord.joinee &&
                   selectedRecord.joinee.username}
               </label>
-            </div><br />
+            </div>
+            <br />
             <hr />
-            <br/>
-            <strong><p>Or do you want to cancel?</p></strong>
+            <br />
+            <strong>
+              <p>Or do you want to cancel?</p>
+            </strong>
             <div className="winner-choice">
               <input
                 type="radio"
                 name="winnerId"
                 value="cancel"
                 onChange={() => this.selectWinner(this.toBeCancelled)}
-                checked={selectedWinnerId == this.toBeCancelled }
+                checked={selectedWinnerId == this.toBeCancelled}
               />
               <label>Cancel Match</label>
             </div>
@@ -290,12 +297,12 @@ export default withRouter(
     ({ manage: { matches, isMatchesLoading, total } }) => ({
       matches,
       isMatchesLoading,
-      total
+      total,
     }),
     {
       getMatches,
       postResult,
-      updateMatches
+      updateMatches,
     }
   )(ManageTable)
 );
@@ -308,5 +315,5 @@ ManageTable.propTypes = {
   postResult: PropTypes.func,
   updateMatches: PropTypes.func,
   location: PropTypes.object,
-  history: PropTypes.object
+  history: PropTypes.object,
 };

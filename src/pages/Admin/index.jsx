@@ -5,9 +5,9 @@ import { Button, Modal, message } from "antd";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import TextInput from "components/TextInput";
-import { postMatch } from "redux/modules/matchDetails";
-import Matches from "components/Matches";
+import TextInput from "@/components/TextInput";
+import { postMatch } from "@/redux/modules/matchDetails";
+import Matches from "@/components/Matches";
 import "./Admin.scss";
 
 class Admin extends Component {
@@ -15,7 +15,7 @@ class Admin extends Component {
     super();
     this.state = {
       visible: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   }
 
@@ -27,7 +27,7 @@ class Admin extends Component {
     this.setState({ visible: false, confirmLoading: false });
   };
 
-  okHandler = values => {
+  okHandler = (values) => {
     this.setState({ confirmLoading: true });
     this.props.postMatch(values, () => {
       this.handleCancel();
@@ -46,14 +46,14 @@ class Admin extends Component {
           </Button>
           <Formik
             initialValues={{
-              amount: ""
+              amount: "",
             }}
             validationSchema={Yup.object({
-              amount: Yup.number().required("Required!")
+              amount: Yup.number().required("Required!"),
             })}
-            onSubmit={values => this.okHandler(values)}
+            onSubmit={(values) => this.okHandler(values)}
           >
-            {props => (
+            {(props) => (
               <Modal
                 title="Match Joining Fee"
                 visible={visible}
@@ -81,5 +81,5 @@ class Admin extends Component {
 export default connect(null, { postMatch })(Admin);
 
 Admin.propTypes = {
-  postMatch: PropTypes.func
+  postMatch: PropTypes.func,
 };

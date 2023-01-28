@@ -7,49 +7,49 @@ import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import queryString from "query-string";
 
-import { register } from "redux/modules/userDetails";
-import TextInput from "components/TextInput";
-import routePaths from "Routes/routePaths";
-import Loader from "components/Loader";
+import { register } from "@/redux/modules/userDetails";
+import TextInput from "@/components/TextInput";
+import routePaths from "@/Routes/routePaths";
+import Loader from "@/components/Loader";
 import "./RegisterForm.scss";
 
 const registerFields = [
   {
     name: "name",
     type: "text",
-    placeholder: "Full Name"
+    placeholder: "Full Name",
     // label: "Full Name"
   },
   {
     name: "username",
     type: "text",
-    placeholder: "Username"
+    placeholder: "Username",
     // label: "Username"
   },
   {
     name: "phone",
     type: "text",
-    placeholder: "Whatsapp Number"
+    placeholder: "Whatsapp Number",
     // label: "Whatsapp Number"
   },
   {
     name: "password",
     type: "password",
-    placeholder: "Password"
+    placeholder: "Password",
     // label: "Password"
   },
   {
     name: "confirmPassword",
     type: "password",
-    placeholder: "Confirm Password"
+    placeholder: "Confirm Password",
     // label: "Confrim Password"
   },
   {
     name: "referrer",
     type: "text",
     placeholder: "Referral Code",
-    label: "Referral Code"
-  }
+    label: "Referral Code",
+  },
 ];
 
 function RegisterForm({ register }) {
@@ -66,7 +66,7 @@ function RegisterForm({ register }) {
           password: "",
           confirmPassword: "",
           referrer: params.refer_code || "",
-          agreeToTerms: false
+          agreeToTerms: false,
         }}
         validationSchema={Yup.object({
           name: Yup.string().required("Required!"),
@@ -84,9 +84,9 @@ function RegisterForm({ register }) {
           agreeToTerms: Yup.bool().oneOf(
             [true],
             "Accept Terms & Conditions is required"
-          )
+          ),
         })}
-        onSubmit={values => {
+        onSubmit={(values) => {
           setIsLoading(true);
           register(
             values,
@@ -94,7 +94,7 @@ function RegisterForm({ register }) {
               setIsLoading(false);
               history.push(routePaths.LOGIN);
             },
-            err => {
+            (err) => {
               setIsLoading(false);
               const { data } = err.response;
               message.error(data.error);
@@ -102,10 +102,14 @@ function RegisterForm({ register }) {
           );
         }}
       >
-        {props => (
+        {(props) => (
           <Form>
-            {registerFields.map(field => (
-              <TextInput key={field.name} {...field} disabled={field.name === "referrer" && params.refer_code} />
+            {registerFields.map((field) => (
+              <TextInput
+                key={field.name}
+                {...field}
+                disabled={field.name === "referrer" && params.refer_code}
+              />
             ))}
             <div className="termsCheckbox">
               <Field type="checkbox" name="agreeToTerms" />
@@ -136,5 +140,5 @@ RegisterForm.propTypes = {
   submitForm: PropTypes.func,
   register: PropTypes.func,
   isValid: PropTypes.bool,
-  errors: PropTypes.object
+  errors: PropTypes.object,
 };

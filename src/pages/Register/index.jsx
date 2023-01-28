@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import routePaths from "Routes/routePaths";
-import RegisterForm from "components/RegisterForm";
+import routePaths from "@/Routes/routePaths";
+import RegisterForm from "@/components/RegisterForm";
 
 import "./Register.scss";
 

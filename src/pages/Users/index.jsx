@@ -3,18 +3,18 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Button, Modal } from "antd";
 
-import { getAllUsers, addChips, resetUsers } from "redux/modules/users";
-import routePaths from "Routes/routePaths";
-import DisplayTable from "components/DisplayTable";
-import SearchInput from "components/SearchInput";
-import Loader from "components/Loader";
-import Filter from "components/Filter";
+import { getAllUsers, addChips, resetUsers } from "@/redux/modules/users";
+import routePaths from "@/Routes/routePaths";
+import DisplayTable from "@/components/DisplayTable";
+import SearchInput from "@/components/SearchInput";
+import Loader from "@/components/Loader";
+import Filter from "@/components/Filter";
 import "./Users.scss";
 
 const userSearchFields = {
   phone: "phone",
-  username: "username"
-}
+  username: "username",
+};
 
 class Users extends Component {
   constructor() {
@@ -25,19 +25,22 @@ class Users extends Component {
       showModal: false,
       chips: 0,
       updatingUser: false,
-      searchValue: ""
+      searchValue: "",
     };
   }
 
   componentDidMount() {
-    const {location} = this.props;
+    const { location } = this.props;
     this.fetchAllUsers();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { location } = this.props;
-    const {searchValue} = this.state;
-    if (prevProps.location.search !== location.search || prevState.searchValue !== searchValue ) {
+    const { searchValue } = this.state;
+    if (
+      prevProps.location.search !== location.search ||
+      prevState.searchValue !== searchValue
+    ) {
       this.fetchAllUsers();
     }
   }
@@ -52,10 +55,10 @@ class Users extends Component {
     const { searchField, searchValue } = this.state;
     const options = {};
     options.page = location.search.split("?page=").pop() || 1;
-    if (searchValue){ 
-      options.search = {field: searchField};
+    if (searchValue) {
+      options.search = { field: searchField };
       options.search.value = searchValue;
-    };
+    }
     getAllUsers(options);
   };
 
@@ -71,32 +74,33 @@ class Users extends Component {
         >
           <a>{phone}</a>
         </div>
-      )
+      ),
     },
     {
       title: "Username",
       dataIndex: "username",
-      ellipsis: true
+      ellipsis: true,
     },
     {
       title: "Chips",
-      dataIndex: "chips"
-    }
+      dataIndex: "chips",
+    },
   ];
 
-  handleChipsInput = e => this.setState({ chips: e.target.value });
+  handleChipsInput = (e) => this.setState({ chips: e.target.value });
 
   closeModal = () =>
     this.setState({
       showModal: false,
       selectedUser: null,
       updatingUser: false,
-      chips: 0
+      chips: 0,
     });
 
   render() {
     const { users, history, getAllUsers, addChips, location } = this.props;
-    const { selectedUser, showModal, chips, updatingUser, searchField } = this.state;
+    const { selectedUser, showModal, chips, updatingUser, searchField } =
+      this.state;
     const { usersList, total, isUsersLoading } = users;
     return (
       <div className="Users">
@@ -104,17 +108,17 @@ class Users extends Component {
           <h1>Manage Users</h1>
           <Filter
             initialValue={searchField}
-            onChange={value => {
-              this.setState({ searchField: value });            
+            onChange={(value) => {
+              this.setState({ searchField: value });
             }}
-            options= {userSearchFields}
+            options={userSearchFields}
           />
-          </div>
-        
+        </div>
+
         <SearchInput
           placeholder="Search by phone"
-          onClick={val => {
-            this.setState({searchValue: val});
+          onClick={(val) => {
+            this.setState({ searchValue: val });
             history.replace(location.pathname);
           }}
         />
@@ -125,13 +129,13 @@ class Users extends Component {
           loading={isUsersLoading}
           paginationProps={{
             total: total,
-            onChange: currentPage => {
+            onChange: (currentPage) => {
               history.push(
                 `${routePaths.ADMIN.users}${
                   currentPage !== 1 ? "?page=" + currentPage : ""
                 }`
               );
-            }
+            },
           }}
           location={location}
         />
@@ -185,5 +189,5 @@ class Users extends Component {
 export default connect(({ users }) => ({ users }), {
   getAllUsers,
   addChips,
-  resetUsers
+  resetUsers,
 })(Users);

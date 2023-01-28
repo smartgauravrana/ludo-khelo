@@ -2,17 +2,17 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import Match from "components/Match";
+import Match from "@/components/Match";
 import {
   getAllMatches,
   resetMatches,
   updateMatchStatus,
   getMatch,
-  removeMatch
-} from "redux/modules/matchDetails";
-import SocketContext from "context/socket-context";
-import ListingWithInfiniteScroll from "components/ListingWithInfiniteScroll";
-import { SOCKET_EVENTS } from "../../../constants";
+  removeMatch,
+} from "@/redux/modules/matchDetails";
+import SocketContext from "@/context/socket-context";
+import ListingWithInfiniteScroll from "@/components/ListingWithInfiniteScroll";
+import { SOCKET_EVENTS } from "@/constants";
 import "./Matches.scss";
 
 function Matches({
@@ -25,19 +25,19 @@ function Matches({
   socket,
   removeMatch,
   hasMore,
-  isLoading
+  isLoading,
 }) {
   useEffect(() => {
-    socket.on(SOCKET_EVENTS.serverPlayRequested, data => {
+    socket.on(SOCKET_EVENTS.serverPlayRequested, (data) => {
       console.log("play requested for my match");
       getMatch(data.matchId);
     });
 
-    socket.on(SOCKET_EVENTS.serverPlayAccepted, data => {
+    socket.on(SOCKET_EVENTS.serverPlayAccepted, (data) => {
       console.log("play accepted for my match: ", getMatch);
       getMatch(data.matchId);
     });
-    socket.on(SOCKET_EVENTS.serverMatchDeleted, data => {
+    socket.on(SOCKET_EVENTS.serverMatchDeleted, (data) => {
       console.log("Match deleted with id ", data.matchId);
       removeMatch(data.matchId);
     });
@@ -59,7 +59,7 @@ function Matches({
           loadMore={() => getAllMatches()}
           settings={{ initialLoad: true }}
         >
-          {matchList.map(match => (
+          {matchList.map((match) => (
             <Match
               key={match._id}
               content={match}
@@ -73,9 +73,9 @@ function Matches({
   );
 }
 
-const MatchesWithSocket = props => (
+const MatchesWithSocket = (props) => (
   <SocketContext.Consumer>
-    {socket => <Matches {...props} socket={socket} />}
+    {(socket) => <Matches {...props} socket={socket} />}
   </SocketContext.Consumer>
 );
 
@@ -84,14 +84,14 @@ export default connect(
     matchList,
     userDetails,
     hasMore,
-    isLoading
+    isLoading,
   }),
   {
     getAllMatches,
     resetMatches,
     updateMatchStatus,
     getMatch,
-    removeMatch
+    removeMatch,
   }
 )(MatchesWithSocket);
 
@@ -105,5 +105,5 @@ Matches.propTypes = {
   getMatch: PropTypes.func,
   removeMatch: PropTypes.func,
   hasMore: PropTypes.bool,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
 };

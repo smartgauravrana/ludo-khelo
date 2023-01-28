@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import OneSignal from "react-onesignal";
 
-import { ONESIGNAL_CONFIG } from "../config";
+import config from "@/config";
+
+const { ONESIGNAL_CONFIG } = config;
 
 const { appId, safariWebId } = ONESIGNAL_CONFIG;
 
@@ -12,11 +14,11 @@ export default function useWebPush({ userDetails, addDevice }) {
   useEffect(() => {
     if (!isInitialised && userId) {
       OneSignal.initialize(appId, {
-        safari_web_id: safariWebId
+        safari_web_id: safariWebId,
       });
       setTimeout(() => {
         OneSignal.getPlayerId()
-          .then(playerId => {
+          .then((playerId) => {
             if (
               playerId &&
               (!notificationDevices || !notificationDevices.includes(playerId))
@@ -24,7 +26,7 @@ export default function useWebPush({ userDetails, addDevice }) {
               addDevice(playerId);
             }
           })
-          .catch(err => console.log("player Id error: ", err));
+          .catch((err) => console.log("player Id error: ", err));
       }, 3000);
       setIsInitialised(true);
     }

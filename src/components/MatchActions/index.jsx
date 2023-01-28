@@ -3,15 +3,15 @@ import PropTypes from "prop-types";
 import { Button } from "antd";
 import { useHistory } from "react-router-dom";
 
-import { MATCH_STATUS } from "../../../constants";
-import { isResultPosted, isParticipant } from "client-utils";
+import { MATCH_STATUS } from "@/constants";
+import { isResultPosted, isParticipant } from "@/client-utils";
 
 export default function MatchActions({
   content,
   playRequest,
   cancelRequest,
   deleteMatch,
-  user
+  user,
 }) {
   const history = useHistory();
   if (content.status === MATCH_STATUS.created) {
@@ -106,5 +106,5 @@ MatchActions.propTypes = {
   playRequest: PropTypes.func,
   cancelRequest: PropTypes.func,
   user: PropTypes.object,
-  deleteMatch: PropTypes.func
+  deleteMatch: PropTypes.func,
 };

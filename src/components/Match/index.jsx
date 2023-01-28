@@ -9,13 +9,13 @@ import {
   deleteMatch,
   sendInvite,
   updateMatchStatus,
-  leaveMatch
-} from "redux/modules/matchDetails";
-import { MATCH_STATUS, SOCKET_EVENTS } from "../../../constants";
-import { checkLogin } from "redux/modules/userDetails";
-// import { isResultPosted } from "client-utils";
-import MatchActions from "components/MatchActions";
-import routePaths from "Routes/routePaths";
+  leaveMatch,
+} from "@/redux/modules/matchDetails";
+import { MATCH_STATUS, SOCKET_EVENTS } from "@/constants";
+import { checkLogin } from "@/redux/modules/userDetails";
+// import { isResultPosted } from "@/client-utils";
+import MatchActions from "@/components/MatchActions";
+import routePaths from "@/Routes/routePaths";
 import "./Match.scss";
 import CopyData from "../CopyData";
 
@@ -27,7 +27,7 @@ function Match({
   socket,
   leaveMatch,
   updateMatchStatus,
-  checkLogin
+  checkLogin,
 }) {
   const history = useHistory();
 
@@ -41,10 +41,10 @@ function Match({
         content,
         () => {
           socket.emit(SOCKET_EVENTS.clientPlayRequested, {
-            matchId: content._id
+            matchId: content._id,
           });
         },
-        err => {
+        (err) => {
           const { data } = err.response;
           message.error(data.error);
         }
@@ -58,7 +58,7 @@ function Match({
     leaveMatch(
       content,
       () => checkLogin(),
-      err => {
+      (err) => {
         const { data } = err.response;
         message.error(data.error);
       }
@@ -159,8 +159,11 @@ function Match({
         </div> */}
         <div className="Match__info">
           <p>
-            {content.createdBy.username} {content.status !== MATCH_STATUS.created ? `vs ${content.joinee && content.joinee.username}` : `have set a challenge`} for{" "}
-            <strong>&#8377;{content.amount}</strong>
+            {content.createdBy.username}{" "}
+            {content.status !== MATCH_STATUS.created
+              ? `vs ${content.joinee && content.joinee.username}`
+              : `have set a challenge`}{" "}
+            for <strong>&#8377;{content.amount}</strong>
           </p>
           {/* <p>Match Amount: Rs.{content.amount}</p> */}
 
@@ -169,9 +172,9 @@ function Match({
             <MatchActions
               playRequest={playRequest}
               cancelRequest={cancelRequest}
-              deleteMatch={match => {
+              deleteMatch={(match) => {
                 socket.emit(SOCKET_EVENTS.clientMatchDeleted, {
-                  matchId: match._id
+                  matchId: match._id,
                 });
                 deleteMatch(match);
               }}
@@ -191,7 +194,7 @@ export default connect(null, {
   sendInvite,
   updateMatchStatus,
   checkLogin,
-  leaveMatch
+  leaveMatch,
 })(Match);
 
 Match.propTypes = {
@@ -202,5 +205,5 @@ Match.propTypes = {
   socket: PropTypes.object,
   updateMatchStatus: PropTypes.func,
   checkLogin: PropTypes.func,
-  leaveMatch: PropTypes.func
+  leaveMatch: PropTypes.func,
 };

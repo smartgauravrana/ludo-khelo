@@ -7,10 +7,10 @@ import {
   getUsersStats,
   resetDashboard,
   setFilter,
-  DASHBOARD_FILTERS
-} from "redux/modules/dashboard";
-import Filter from "components/Filter";
-import Loader from "components/Loader";
+  DASHBOARD_FILTERS,
+} from "@/redux/modules/dashboard";
+import Filter from "@/components/Filter";
+import Loader from "@/components/Loader";
 import "./Dashboard.scss";
 
 class Dashboard extends Component {
@@ -41,14 +41,14 @@ class Dashboard extends Component {
       isUsersLoading,
       isMatchesLoading,
       filter,
-      setFilter
+      setFilter,
     } = this.props;
     return (
       <div className="Dashboard">
         <h1>Dashboard</h1>
         <Filter
           initialValue={filter}
-          onChange={val => setFilter(DASHBOARD_FILTERS[val])}
+          onChange={(val) => setFilter(DASHBOARD_FILTERS[val])}
           options={DASHBOARD_FILTERS}
         />
         {isUsersLoading || isMatchesLoading ? (
@@ -116,21 +116,21 @@ export default connect(
       completedMatches,
       isUsersLoading,
       isMatchesLoading,
-      filter
-    }
+      filter,
+    },
   }) => ({
     users,
     totalMatches,
     completedMatches,
     isUsersLoading,
     isMatchesLoading,
-    filter
+    filter,
   }),
   {
     getMatchesStats,
     getUsersStats,
     resetDashboard,
-    setFilter
+    setFilter,
   }
 )(Dashboard);
 
@@ -144,5 +144,5 @@ Dashboard.propTypes = {
   isMatchesLoading: PropTypes.bool,
   resetDashboard: PropTypes.func,
   filter: PropTypes.string,
-  setFilter: PropTypes.func
+  setFilter: PropTypes.func,
 };

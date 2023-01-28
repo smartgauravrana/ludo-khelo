@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import { MATCH_STATUS } from "../../../constants";
+import { MATCH_STATUS } from "@/constants";
 import "./Filter.scss";
 
 export default function Filter({ initialValue, onChange, options }) {
   const [value, setValue] = useState(initialValue);
-  const handleChange = event => {
+  const handleChange = (event) => {
     const selectedValue = event.target.value;
     setValue(selectedValue);
     onChange(selectedValue);
@@ -16,7 +16,7 @@ export default function Filter({ initialValue, onChange, options }) {
       <div>
         Filter
         <select value={value} onChange={handleChange}>
-          {Object.keys(options).map(key => (
+          {Object.keys(options).map((key) => (
             <option key={key} value={key}>
               {options[key]}
             </option>
@@ -30,10 +30,10 @@ export default function Filter({ initialValue, onChange, options }) {
 Filter.propTypes = {
   initialValue: PropTypes.string,
   onChange: PropTypes.func,
-  options: PropTypes.object
+  options: PropTypes.object,
 };
 
 Filter.defaultProps = {
   initialValue: "",
-  options: MATCH_STATUS
+  options: MATCH_STATUS,
 };

@@ -1,56 +1,67 @@
 import React, { useState, useEffect } from "react";
-import PaytmCheckout from "components/PaytmCheckout"
-import call from "api/apiRequest";
+import PaytmCheckout from "@/components/PaytmCheckout";
+import call from "@/apis/apiRequest";
 
-export default function Billing({ }) {
+export default function Billing({}) {
+  const [txn, setTxn] = useState(null);
 
-    const [txn, setTxn] = useState(null);
-
-    useEffect(() => {
-      async function getTxnToken(){
-        const res = await call({
-          method: 'POST',
-          url: '/create-transaction',
-          data: { amount: 10.0}
-        });
-        const {data} = res.data;
-        setTxn(data);
-        console.log("res: ", res)
-      }
-      getTxnToken();
-    }, []);
-
-    const config = {
-        "root": "#checkout-hook",
-        "flow": "DEFAULT",
-        "data": {
-        "orderId": "", /* update order id */
-        "token": "", /* update token value */
-        "tokenType": "TXN_TOKEN",
-        "amount": "10" /* update amount */
-        },
-        merchant: {
-            mid: "CJzXZD97345717198751",
-            name: "Ludokhelo"
-        },
-        "handler": {
-          "notifyMerchant": function(eventName,data){
-            console.log("notifyMerchant handler function called");
-            console.log("eventName => ",eventName);
-            console.log("data => ",data);
-          } 
-        }
+  useEffect(() => {
+    async function getTxnToken() {
+      const res = await call({
+        method: "POST",
+        url: "/create-transaction",
+        data: { amount: 10.0 },
+      });
+      const { data } = res.data;
+      setTxn(data);
+      console.log("res: ", res);
     }
+    getTxnToken();
+  }, []);
 
- return <div>Billing
-     <div>
-         {txn && <PaytmCheckout config={{...config, data: {...config.data, token: txn.txnToken, orderId: txn.orderId}}}/>}
-     </div>
-     <div id="#checkout-hook"></div>
- </div>
+  const config = {
+    root: "#checkout-hook",
+    flow: "DEFAULT",
+    data: {
+      orderId: "" /* update order id */,
+      token: "" /* update token value */,
+      tokenType: "TXN_TOKEN",
+      amount: "10" /* update amount */,
+    },
+    merchant: {
+      mid: "CJzXZD97345717198751",
+      name: "Ludokhelo",
+    },
+    handler: {
+      notifyMerchant: function (eventName, data) {
+        console.log("notifyMerchant handler function called");
+        console.log("eventName => ", eventName);
+        console.log("data => ", data);
+      },
+    },
+  };
+
+  return (
+    <div>
+      Billing
+      <div>
+        {txn && (
+          <PaytmCheckout
+            config={{
+              ...config,
+              data: {
+                ...config.data,
+                token: txn.txnToken,
+                orderId: txn.orderId,
+              },
+            }}
+          />
+        )}
+      </div>
+      <div id="#checkout-hook"></div>
+    </div>
+  );
 }
-
-
 
 // Buy.propTypes = {
 //   userDetails: PropTypes.object,

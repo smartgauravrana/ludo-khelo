@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Layout } from "antd";
 import PropTypes from "prop-types";
-import HeaderContent from "components/HeaderContent";
+import HeaderContent from "@/components/HeaderContent";
 import "./AppLayout.scss";
 
 const { Header, Content } = Layout;
@@ -25,5 +25,5 @@ export default function AppLayout(props) {
 }
 
 AppLayout.propTypes = {
-  children: PropTypes.object
+  children: PropTypes.object,
 };

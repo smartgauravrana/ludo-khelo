@@ -5,24 +5,26 @@ import PropTypes from "prop-types";
 import socketIOClient from "socket.io-client";
 import TagManager from "react-gtm-module";
 
-import AppLayout from "components/AppLayout";
-import PrivateRoute from "components/PrivateRoute";
-import { publicRoutes, privateRoutes } from "Routes";
-import { checkLogin, addDevice } from "redux/modules/userDetails";
-import { fetchSettings } from "redux/modules/settings";
-import SocketContext from "context/socket-context";
-import Loader from "components/Loader";
-import { SOCKET_CONFIG, GTM_ID } from "config";
+import AppLayout from "@/components/AppLayout";
+import PrivateRoute from "@/components/PrivateRoute";
+import { publicRoutes, privateRoutes } from "@/Routes";
+import { checkLogin, addDevice } from "@/redux/modules/userDetails";
+import { fetchSettings } from "@/redux/modules/settings";
+import SocketContext from "@/context/socket-context";
+import Loader from "@/components/Loader";
+import config from "@/config";
 import "./App.scss";
 import routePaths from "../Routes/routePaths";
 import useWebPush from "../hooks/useWebPush";
+
+const { SOCKET_CONFIG, GTM_ID } = config;
 
 const ENDPOINT = SOCKET_CONFIG.endpoint;
 const socket = socketIOClient(ENDPOINT);
 
 // GTM working
 const tagManagerArgs = {
-  gtmId: GTM_ID
+  gtmId: GTM_ID,
 };
 
 TagManager.initialize(tagManagerArgs);
@@ -36,7 +38,7 @@ function App(props) {
 
   useEffect(() => {
     checkLogin(
-      user => {
+      (user) => {
         setIsUserFetching(false);
         if (!user._id && history.location.pathname !== routePaths.REGISTER) {
           history.replace(routePaths.HOME);
@@ -48,17 +50,17 @@ function App(props) {
 
     // setInterval(checkLogin, 11500);
   }, []);
-  
+
   return (
     <SocketContext.Provider value={socket}>
       <div className="App">
         {!isUserFetching ? (
           <AppLayout>
             <Switch>
-              {publicRoutes.map(route => (
+              {publicRoutes.map((route) => (
                 <Route key={route.path} {...route} />
               ))}
-              {privateRoutes.map(route => (
+              {privateRoutes.map((route) => (
                 <PrivateRoute key={route.path} {...route} />
               ))}
             </Switch>
@@ -74,12 +76,12 @@ function App(props) {
 export default connect(({ userDetails }) => ({ userDetails }), {
   checkLogin,
   fetchSettings,
-  addDevice
+  addDevice,
 })(App);
 
 App.propTypes = {
   userDetails: PropTypes.object,
   checkLogin: PropTypes.func,
   fetchSettings: PropTypes.func,
-  addDevice: PropTypes.func
+  addDevice: PropTypes.func,
 };

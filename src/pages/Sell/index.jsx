@@ -5,24 +5,24 @@ import { Button, message } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import CustomTitle from "components/CustomTitle";
-import SelectInput from "components/SelectInput";
-import TextInput from "components/TextInput";
-import { sellChips } from "redux/modules/userDetails";
+import CustomTitle from "@/components/CustomTitle";
+import SelectInput from "@/components/SelectInput";
+import TextInput from "@/components/TextInput";
+import { sellChips } from "@/redux/modules/userDetails";
 import "./Sell.scss";
-import TermsCheckbox from "components/TermsCheckbox";
+import TermsCheckbox from "@/components/TermsCheckbox";
 
 const sellFields = [
   {
     name: "phone",
     type: "number",
-    placeholder: "Paytm Number"
+    placeholder: "Paytm Number",
   },
   {
     name: "amount",
     type: "number",
-    placeholder: "Chips Amount"
-  }
+    placeholder: "Chips Amount",
+  },
 ];
 
 function Sell({ userDetails, sellChips }) {
@@ -62,7 +62,7 @@ function Sell({ userDetails, sellChips }) {
             walletType: "Paytm",
             phone: "",
             amount: "",
-            agreeToTerms: false
+            agreeToTerms: false,
           }}
           validationSchema={Yup.object({
             phone: Yup.string()
@@ -75,7 +75,7 @@ function Sell({ userDetails, sellChips }) {
             agreeToTerms: Yup.bool().oneOf(
               [true],
               "Accept Terms & Conditions is required"
-            )
+            ),
           })}
           onSubmit={(values, { resetForm }) => {
             sellChips(
@@ -84,7 +84,7 @@ function Sell({ userDetails, sellChips }) {
                 resetForm();
                 message.success("Success");
               },
-              err => {
+              (err) => {
                 resetForm();
                 const { data } = err.response;
                 message.error(data.error);
@@ -92,10 +92,10 @@ function Sell({ userDetails, sellChips }) {
             );
           }}
         >
-          {props => (
+          {(props) => (
             <Form>
               <SelectInput name="walletType" options={["Paytm"]} />
-              {sellFields.map(field => (
+              {sellFields.map((field) => (
                 <TextInput key={field.name} {...field} />
               ))}
               <TermsCheckbox name="agreeToTerms" type="checkbox" />
@@ -116,12 +116,12 @@ function Sell({ userDetails, sellChips }) {
 }
 
 export default connect(({ userDetails }) => ({ userDetails }), {
-  sellChips
+  sellChips,
 })(Sell);
 
 Sell.propTypes = {
   userDetails: PropTypes.object,
   isValid: PropTypes.bool,
   submitForm: PropTypes.func,
-  sellChips: PropTypes.func
+  sellChips: PropTypes.func,
 };
